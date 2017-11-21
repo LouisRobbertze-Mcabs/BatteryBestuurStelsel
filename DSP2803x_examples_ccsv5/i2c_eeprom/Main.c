@@ -25,6 +25,8 @@ void main(void)
 
 			ServiceDog();
 
+			Calculate_SOC();
+
 			Read_Temperatures();
 			Balance(5,Vbalance);
 

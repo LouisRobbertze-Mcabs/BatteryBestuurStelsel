@@ -564,3 +564,65 @@ Uint32 ChgCalculator(float Voltage, float Current)
 	return answer;
 }
 
+/**
+* Returns the interpolated y-value.
+* Saturates to y0 or y1 if x outside interval [x0, x1].
+*/
+float interpolate_segment(float x0, float y0, float x1, float y1, float x)
+{
+    float t;
+
+    if (x <= y0) { return x0; }
+    if (x >= y1) { return x1; }
+
+    t =  (x-y0);
+    t /= (y1-y0);
+
+    return x0 + t*(x1-x0);
+}
+/******************************************************************************/
+
+float interpolate_table_1d(struct table_1d *table, float x)
+/* 1D Table lookup with interpolation */
+{
+    Uint16 segment;
+
+    /* Check input bounds and saturate if out-of-bounds */
+    if (x > (table->y_values[table->x_length-1])) {
+       /* x-value too large, saturate to max y-value */
+        return table->x_values[table->x_length-1];
+    }
+    else if (x < (table->y_values[0])) {
+       /* x-value too small, saturate to min y-value */
+        return table->x_values[0];
+    }
+
+    /* Find the segment that holds x */
+    for (segment = 0; segment<(table->x_length-1); segment++)
+    {
+        if ((table->y_values[segment]   <= x) &&
+            (table->y_values[segment+1] >= x))
+        {
+            /* Found the correct segment */
+            /* Interpolate */
+            return interpolate_segment(table->x_values[segment],   /* x0 */
+                                       table->y_values[segment],   /* y0 */
+                                       table->x_values[segment+1], /* x1 */
+                                       table->y_values[segment+1], /* y1 */
+                                       x);                         /* x  */
+        }
+    }
+
+    /* Something with the data was wrong if we get here */
+    /* Saturate to the max value */
+    return table->x_values[table->x_length-1];
+}
+/******************************************************************************/
+
+void Calculate_SOC()
+{
+	float SOCv;
+
+	SOCv = interpolate_table_1d(&sine_table, Voltage_low);
+	SOC = SOCv;
+}

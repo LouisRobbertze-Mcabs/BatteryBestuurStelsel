@@ -20,6 +20,10 @@ extern struct I2CMSG I2cMsgIn1;
 
 extern struct I2CMSG *CurrentMsgPtr;               // Used in interrupts
 
+
+
+
+
 extern volatile Uint16 DataOut;
 extern volatile Uint16 DataOut2;
 extern volatile Uint16 Received;
@@ -96,6 +100,8 @@ extern volatile float Ifilter;
 extern volatile float Tmax;
 extern volatile float Tmin;
 
+extern volatile float SOC;
+
 extern volatile float Vauxmin;
 extern volatile float AuxChargeTime;
 
@@ -106,5 +112,15 @@ extern volatile float kp_constant;
 extern volatile float kp_multiplier;
 extern volatile float balancing_upper_level;
 extern volatile float balancing_bottom_level;
+
+
+
+/* Declare variable using above structure and the function datapoints */
+/* These coordinates correspond to the points illustrated in the above graph */
+extern  float sine_x[11];
+extern  float sine_y[11];
+
+extern  struct table_1d sine_table;
+
 
 #endif /* USER_GLOBALS_H_ */
