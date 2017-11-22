@@ -116,11 +116,11 @@ volatile float balancing_bottom_level = 3.475;
 
 /* Declare variable using above structure and the function datapoints */
 /* These coordinates correspond to the points illustrated in the above graph */
- float sine_x[11] = {0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1};
- float sine_y[11] = {2.88, 3.202, 3.238,  3.27, 3.286, 3.289, 3.293, 3.311, 3.33, 3.335, 3.376};
+ float sine_x[11] = {0, 0.1, 0.3, 0.6, 1};
+ float sine_y[11] = {2.88, 3.202, 3.27, 3.293, 3.376};
 
  struct table_1d sine_table = {
-    11,      /* Number of data points */
+    5,      /* Number of data points */
     sine_x, /* Array of x-coordinates */
     sine_y  /* Array of y-coordinates */
 };

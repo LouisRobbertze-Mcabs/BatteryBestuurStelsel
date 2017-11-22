@@ -302,7 +302,7 @@ void CANSlaveReception(void)
 
 	case 17: {TxData.asFloat=Temperatures[4]; CANTransmit(0, 17, TxData.asUint,5); break;}
 	case 18: {TxData.asFloat=Temperatures[9]; CANTransmit(0, 18, TxData.asUint,5); break;}
-	case 19: {TxData.asFloat=Temperature_avg; CANTransmit(0, 19, TxData.asUint, 5); break;}
+	case 19: {TxData.asFloat=SOC; CANTransmit(0, 19, TxData.asUint, 5); break;}
 
 	case 20: {TxData.asFloat=Auxilliary_Voltage; CANTransmit(0, 20, TxData.asUint, 5); break;}
 	}

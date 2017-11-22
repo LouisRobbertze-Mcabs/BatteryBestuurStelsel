@@ -622,7 +622,20 @@ float interpolate_table_1d(struct table_1d *table, float x)
 void Calculate_SOC()
 {
 	float SOCv;
+	static float SOCc;
+	static float t=0;							//time since current activity
+	float Wsoc;									//weighting parameter
 
 	SOCv = interpolate_table_1d(&sine_table, Voltage_low);
-	SOC = SOCv;
+
+	t++;
+
+	if(Current>5 || Current<-5)
+	{
+		t = 0;
+	}
+	SOCc = SOC - Current*0.0000037;				//coulomb counter
+
+	Wsoc = exp(-t*0.000833);
+	SOC = Wsoc*SOCv + (1-Wsoc)*SOCc;
 }
