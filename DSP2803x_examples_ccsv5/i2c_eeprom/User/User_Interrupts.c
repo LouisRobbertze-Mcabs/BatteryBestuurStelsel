@@ -9,7 +9,6 @@
 
 __interrupt void  adc_isr(void)
 {
-	//gee aandag hieraan. doen 'n stroom meting conversion teen 1 Hz soos spanning
 	//Sit dit dalk deur 'n laag deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^WcTs
 
 	static float Filter_100HZ;
@@ -32,7 +31,12 @@ __interrupt void  adc_isr(void)
 		//sit uittree af
 		ContactorOut = 0;       //turn off contactor
 		flagCurrent = 1;
-	}                                                               					////////////////////////////////////////////////
+	} 																	////////////////////////////////////////////////
+
+
+	Current_Sum = Current_Sum + AdcResult.ADCRESULT1;
+	Current_Counter++;
+
 
 	AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
 	PieCtrlRegs.PIEACK.bit.ACK10 = 1;   // Acknowledge interrupt to PIE

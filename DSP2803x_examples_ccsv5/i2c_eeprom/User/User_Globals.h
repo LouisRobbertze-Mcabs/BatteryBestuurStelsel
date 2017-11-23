@@ -122,5 +122,8 @@ extern  float sine_y[11];
 
 extern  struct table_1d sine_table;
 
+extern volatile float Current_CAL;
+extern volatile float Current_Sum;
+extern volatile Uint16 Current_Counter;
 
 #endif /* USER_GLOBALS_H_ */

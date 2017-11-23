@@ -15,7 +15,6 @@ void Initialise_BMS(void)
 	InitI2CGpio();
 	Init_Gpio();
 	InitAdc();
-	//	InitSpiaGpio();
 
 	DINT;
 
@@ -68,10 +67,9 @@ void Initialise_BMS(void)
 	CAN_Init();
 	configADC();
 	Bq76940_Init();
-	//  Shut_D_BQ();
+	// Shut_D_BQ();
 
-	// Reset the watchdog counter
-	ServiceDog();
+	Calibrate_Current();
 
 	// Enable the watchdog
 	EALLOW;
@@ -132,10 +130,12 @@ void Init_Gpio(void)
 
 	EDIS;
 
-	//turn on contactor
-	ContactorOut = 1;
-
 	CSControl = 0;  //turn CScontrol on for current measurement
+
+	//turn off contactor
+	ContactorOut = 0;
+	//turn off PreCharge
+	PreCharge = 0;
 }
 
 void Toggle_LED(void)
@@ -227,6 +227,7 @@ void Process_Voltages(void)
 		Aux_Control = 0;
 		flagDischarged = 2;
 		led3 = 1;               //turn on red led
+		PreCharge = 0;
 	}
 
 	if(Voltage_high<Vchargedflagreset )
@@ -242,7 +243,7 @@ void Process_Voltages(void)
 
 void Calculate_Current(void)
 {
-	Current = (test_current-2090)* 0.122;                   //2035    maal, moenie deel nie!!!!     0.0982--200/2048
+	Current = (test_current-Current_CAL)* 0.122;                   //2090    maal, moenie deel nie!!!!     0.0982--200/2048
 }
 
 void Read_System_Status(void)
@@ -565,57 +566,57 @@ Uint32 ChgCalculator(float Voltage, float Current)
 }
 
 /**
-* Returns the interpolated y-value.
-* Saturates to y0 or y1 if x outside interval [x0, x1].
-*/
+ * Returns the interpolated y-value.
+ * Saturates to y0 or y1 if x outside interval [x0, x1].
+ */
 float interpolate_segment(float x0, float y0, float x1, float y1, float x)
 {
-    float t;
+	float t;
 
-    if (x <= y0) { return x0; }
-    if (x >= y1) { return x1; }
+	if (x <= y0) { return x0; }
+	if (x >= y1) { return x1; }
 
-    t =  (x-y0);
-    t /= (y1-y0);
+	t =  (x-y0);
+	t /= (y1-y0);
 
-    return x0 + t*(x1-x0);
+	return x0 + t*(x1-x0);
 }
 /******************************************************************************/
 
 float interpolate_table_1d(struct table_1d *table, float x)
 /* 1D Table lookup with interpolation */
 {
-    Uint16 segment;
+	Uint16 segment;
 
-    /* Check input bounds and saturate if out-of-bounds */
-    if (x > (table->y_values[table->x_length-1])) {
-       /* x-value too large, saturate to max y-value */
-        return table->x_values[table->x_length-1];
-    }
-    else if (x < (table->y_values[0])) {
-       /* x-value too small, saturate to min y-value */
-        return table->x_values[0];
-    }
+	/* Check input bounds and saturate if out-of-bounds */
+	if (x > (table->y_values[table->x_length-1])) {
+		/* x-value too large, saturate to max y-value */
+		return table->x_values[table->x_length-1];
+	}
+	else if (x < (table->y_values[0])) {
+		/* x-value too small, saturate to min y-value */
+		return table->x_values[0];
+	}
 
-    /* Find the segment that holds x */
-    for (segment = 0; segment<(table->x_length-1); segment++)
-    {
-        if ((table->y_values[segment]   <= x) &&
-            (table->y_values[segment+1] >= x))
-        {
-            /* Found the correct segment */
-            /* Interpolate */
-            return interpolate_segment(table->x_values[segment],   /* x0 */
-                                       table->y_values[segment],   /* y0 */
-                                       table->x_values[segment+1], /* x1 */
-                                       table->y_values[segment+1], /* y1 */
-                                       x);                         /* x  */
-        }
-    }
+	/* Find the segment that holds x */
+	for (segment = 0; segment<(table->x_length-1); segment++)
+	{
+		if ((table->y_values[segment]   <= x) &&
+				(table->y_values[segment+1] >= x))
+		{
+			/* Found the correct segment */
+			/* Interpolate */
+			return interpolate_segment(table->x_values[segment],   /* x0 */
+					table->y_values[segment],   /* y0 */
+					table->x_values[segment+1], /* x1 */
+					table->y_values[segment+1], /* y1 */
+					x);                         /* x  */
+		}
+	}
 
-    /* Something with the data was wrong if we get here */
-    /* Saturate to the max value */
-    return table->x_values[table->x_length-1];
+	/* Something with the data was wrong if we get here */
+	/* Saturate to the max value */
+	return table->x_values[table->x_length-1];
 }
 /******************************************************************************/
 
@@ -638,4 +639,20 @@ void Calculate_SOC()
 
 	Wsoc = exp(-t*0.000833);
 	SOC = Wsoc*SOCv + (1-Wsoc)*SOCc;
+}
+
+void Calibrate_Current()
+{
+	// Reset the watchdog counter
+	ServiceDog();
+
+	Current_Sum = 0;
+	Current_Counter = 0;
+
+	while(Current_Sum < 500);
+
+	Current_CAL = Current_Sum * 0.002;
+	PreCharge = 1;                          //turn on precharge resistor
+	// Reset the watchdog counter
+	ServiceDog();
 }

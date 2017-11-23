@@ -202,7 +202,7 @@ void CANChargerReception(void)
 	if(ChgStatus == 0)                                                                  //Charger ready to charge. No flags set
 	{
 		Charger_status = 1;//charger connected
-		if(flagCurrent == 0 && flagTemp == 0 && flagCharged == 0 && KeySwitch == 0)     //check flags to ensure charging is allowed   haal flagvoltage uit
+		if(flagCurrent == 0 && flagTemp == 0 && flagCharged == 0 && KeySwitch == 0)     //check flags to ensure charging is allowed
 		{
 			if(delay == 0)                                                              //sit miskien check in om met die charger Vbat te meet
 			{
@@ -233,7 +233,8 @@ void CANChargerReception(void)
 					flagCharged = 1;
 				}
 
-				CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8);               //charging started
+				CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8);             //charging started
+				PreCharge = 1;                          								//turn on precharge resistor
 			}
 		}
 		else																			//BMS flag high. Stop charging and disconnect blah blah

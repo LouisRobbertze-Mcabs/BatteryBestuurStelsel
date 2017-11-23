@@ -41,6 +41,8 @@ void Calculate_SOC();
 float interpolate_segment(float x0, float y0, float x1, float y1, float x);
 float interpolate_table_1d(struct table_1d *table, float x);
 
+void Calibrate_Current(void);
+
 void Balance(int period, float reference);
 
 unsigned char CRC8(unsigned char *ptr, unsigned char len,unsigned char key);
