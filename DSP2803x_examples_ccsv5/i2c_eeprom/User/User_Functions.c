@@ -624,21 +624,28 @@ void Calculate_SOC()
 {
 	float SOCv;
 	static float SOCc;
-	static float t=0;							//time since current activity
-	float Wsoc;									//weighting parameter
+//	static Uint16 t=1000;							//time since current activity
+	float Wsoc;										//weighting parameter
 
 	SOCv = interpolate_table_1d(&sine_table, Voltage_low);
 
-	t++;
+	SOC_t++;
 
-	if(Current>5 || Current<-5)
+	if(Current>4 || Current<-4)
 	{
-		t = 0;
+		SOC_t = 0;
 	}
-	SOCc = SOC - Current*0.0000037;				//coulomb counter
+	SOCc = SOC - Current*0.00000185;				//coulomb counter      Ampere sec -> Ampere huur						1/150A*3600s
 
-	Wsoc = exp(-t*0.000833);
-	SOC = Wsoc*SOCv + (1-Wsoc)*SOCc;
+
+	Wsoc = exp(-SOC_t*0.000463);						//halfuur inplaas van 2 ure?	0.000833		     0.002778 - 30 min
+
+	SOC = Wsoc*SOCc + (1-Wsoc)*SOCv;
+
+	if(SOC>1)
+		SOC = 1;
+	else if(SOC<0)
+		SOC = 0;
 }
 
 void Calibrate_Current()
@@ -649,7 +656,7 @@ void Calibrate_Current()
 	Current_Sum = 0;
 	Current_Counter = 0;
 
-	while(Current_Sum < 500);
+	while(Current_Counter <= 500);
 
 	Current_CAL = Current_Sum * 0.002;
 	PreCharge = 1;                          //turn on precharge resistor

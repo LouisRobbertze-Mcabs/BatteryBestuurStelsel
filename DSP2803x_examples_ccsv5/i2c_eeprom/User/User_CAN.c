@@ -227,7 +227,7 @@ void CANChargerReception(void)
 				{
 					balance = 1;
 				}
-				else if(Voltage_high> balancing_upper_level && Voltage_low > balancing_bottom_level)
+				else if(Voltage_high> balancing_upper_level && Voltage_low > balancing_bottom_level && Current > -2)
 				{
 					//balance = 0;
 					flagCharged = 1;

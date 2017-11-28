@@ -116,8 +116,8 @@ volatile float balancing_bottom_level = 3.475;
 
 /* Declare variable using above structure and the function datapoints */
 /* These coordinates correspond to the points illustrated in the above graph */
- float sine_x[11] = {0, 0.1, 0.3, 0.6, 1};
- float sine_y[11] = {2.88, 3.202, 3.27, 3.293, 3.376};
+ float sine_x[5] = {0, 0.1, 0.3, 0.6, 1};
+ float sine_y[5] = {2.88, 3.202, 3.27, 3.293, 3.376};
 
  struct table_1d sine_table = {
     5,      /* Number of data points */
@@ -128,3 +128,7 @@ volatile float balancing_bottom_level = 3.475;
  volatile float Current_CAL;
  volatile float Current_Sum;
  volatile Uint16 Current_Counter;
+
+
+ float SOC_t;
+ //float Wsoc_test;

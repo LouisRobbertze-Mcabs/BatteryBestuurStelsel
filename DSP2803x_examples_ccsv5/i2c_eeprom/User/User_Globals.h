@@ -117,13 +117,17 @@ extern volatile float balancing_bottom_level;
 
 /* Declare variable using above structure and the function datapoints */
 /* These coordinates correspond to the points illustrated in the above graph */
-extern  float sine_x[11];
-extern  float sine_y[11];
+extern  float sine_x[5];
+extern  float sine_y[5];
 
 extern  struct table_1d sine_table;
 
 extern volatile float Current_CAL;
 extern volatile float Current_Sum;
 extern volatile Uint16 Current_Counter;
+
+
+extern float SOC_t;
+//extern float Wsoc_test;
 
 #endif /* USER_GLOBALS_H_ */
