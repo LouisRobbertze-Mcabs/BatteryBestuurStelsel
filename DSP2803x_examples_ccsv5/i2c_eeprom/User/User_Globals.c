@@ -131,4 +131,7 @@ volatile float balancing_bottom_level = 3.475;
 
 
  float SOC_t;
- //float Wsoc_test;
+
+ float Wsoc;
+ float SOCv;
+ float SOCc;

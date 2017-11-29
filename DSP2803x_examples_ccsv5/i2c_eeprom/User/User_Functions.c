@@ -243,7 +243,7 @@ void Process_Voltages(void)
 
 void Calculate_Current(void)
 {
-	Current = (test_current-Current_CAL)* 0.122;                   //2090    maal, moenie deel nie!!!!     0.0982--200/2048
+	Current = (test_current-2100 )* 0.122;                   //2090    maal, moenie deel nie!!!!     0.0982--200/2048          /*Current_CAL/*
 }
 
 void Read_System_Status(void)
@@ -622,10 +622,10 @@ float interpolate_table_1d(struct table_1d *table, float x)
 
 void Calculate_SOC()
 {
-	float SOCv;
-	static float SOCc;
+//	float SOCv;
+//	static float SOCc;
 //	static Uint16 t=1000;							//time since current activity
-	float Wsoc;										//weighting parameter
+//	float Wsoc;										//weighting parameter
 
 	SOCv = interpolate_table_1d(&sine_table, Voltage_low);
 
@@ -635,10 +635,23 @@ void Calculate_SOC()
 	{
 		SOC_t = 0;
 	}
-	SOCc = SOC - Current*0.00000185;				//coulomb counter      Ampere sec -> Ampere huur						1/150A*3600s
+	SOCc = SOC - (Current*0.00000185);				//coulomb counter      Ampere sec -> Ampere huur						1/150A*3600s
+
+	if(SOC_t > 600)					//delay of 10 min
+	{
+		//ln(2)/afsnytydperk(s)
+		Wsoc = 2 - (exp((SOC_t-600)*0.00018));		//sny af na halfuur....
+	}
+	else
+	{
+		Wsoc = 1;
+	}
 
 
-	Wsoc = exp(-SOC_t*0.000463);						//halfuur inplaas van 2 ure?	0.000833		     0.002778 - 30 min
+	if(Wsoc>1)
+		Wsoc = 1;
+	else if(Wsoc<0)
+		Wsoc = 0;
 
 	SOC = Wsoc*SOCc + (1-Wsoc)*SOCv;
 
@@ -656,6 +669,9 @@ void Calibrate_Current()
 	Current_Sum = 0;
 	Current_Counter = 0;
 
+	while(Current_Counter <= 100);
+	Current_Sum = 0;
+	Current_Counter = 0;
 	while(Current_Counter <= 500);
 
 	Current_CAL = Current_Sum * 0.002;

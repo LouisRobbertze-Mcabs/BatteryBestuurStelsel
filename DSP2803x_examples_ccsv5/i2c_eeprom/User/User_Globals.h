@@ -128,6 +128,8 @@ extern volatile Uint16 Current_Counter;
 
 
 extern float SOC_t;
-//extern float Wsoc_test;
+extern float Wsoc;
+extern float SOCv;
+extern float SOCc;
 
 #endif /* USER_GLOBALS_H_ */
