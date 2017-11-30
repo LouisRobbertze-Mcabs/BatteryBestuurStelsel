@@ -243,7 +243,7 @@ void Process_Voltages(void)
 
 void Calculate_Current(void)
 {
-	Current = (test_current-2100 )* 0.122;                   //2090    maal, moenie deel nie!!!!     0.0982--200/2048          /*Current_CAL/*
+	Current = (test_current-2095 )* 0.122;                   //2090    maal, moenie deel nie!!!!     0.0982--200/2048          /*Current_CAL/*
 }
 
 void Read_System_Status(void)
@@ -637,16 +637,15 @@ void Calculate_SOC()
 	}
 	SOCc = SOC - (Current*0.00000185);				//coulomb counter      Ampere sec -> Ampere huur						1/150A*3600s
 
-	if(SOC_t > 600)					//delay of 10 min
+	if(SOC_t > 5400)					//delay of 90 min
 	{
 		//ln(2)/afsnytydperk(s)
-		Wsoc = 2 - (exp((SOC_t-600)*0.00018));		//sny af na halfuur....
+		Wsoc = 2 - (exp((SOC_t-5400)*0.000556));		//sny af na halfuur....
 	}
 	else
 	{
 		Wsoc = 1;
 	}
-
 
 	if(Wsoc>1)
 		Wsoc = 1;

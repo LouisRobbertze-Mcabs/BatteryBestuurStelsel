@@ -132,6 +132,6 @@ volatile float balancing_bottom_level = 3.475;
 
  float SOC_t;
 
- float Wsoc;
- float SOCv;
- float SOCc;
+ float Wsoc = 1;
+ float SOCv = 0.5;
+ float SOCc = 0;
