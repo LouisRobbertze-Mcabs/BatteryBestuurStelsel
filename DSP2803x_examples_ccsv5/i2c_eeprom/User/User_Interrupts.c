@@ -34,8 +34,8 @@ __interrupt void  adc_isr(void)
 	} 																	////////////////////////////////////////////////
 
 
-	Current_Sum = Current_Sum + AdcResult.ADCRESULT1;
-	Current_Counter++;
+//	Current_Sum = Current_Sum + AdcResult.ADCRESULT1;
+//	Current_Counter++;
 
 
 	AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC

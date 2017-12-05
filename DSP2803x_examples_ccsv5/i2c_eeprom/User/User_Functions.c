@@ -249,7 +249,6 @@ void Calculate_Current(void)
 void Read_System_Status(void)
 {
 	system_status = I2CA_ReadData(&I2cMsgIn1,0x00, 1);
-
 }
 
 void Process_System_Status(void)
@@ -637,7 +636,7 @@ void Calculate_SOC()
 	}
 	SOCc = SOC - (Current*0.00000185);				//coulomb counter      Ampere sec -> Ampere huur						1/150A*3600s
 
-	if(SOC_t > 5400)					//delay of 90 min
+	if(SOC_t > 5400)					//delay of 90 min maybe do 60 min?
 	{
 		//ln(2)/afsnytydperk(s)
 		Wsoc = 2 - (exp((SOC_t-5400)*0.000556));		//sny af na halfuur....

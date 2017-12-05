@@ -21,17 +21,18 @@ void main(void)
 
 			Read_Cell_Voltages();
 			Process_Voltages();
-			Calculate_Current();
 
 			ServiceDog();
-
-			Calculate_SOC();
 
 			Read_Temperatures();
 			Balance(5,Vbalance);
 
 			Read_System_Status();
 			Process_System_Status();
+
+			Calculate_Current();
+
+			Calculate_SOC();
 
 			counter_2Hz = 0;
 			Reset_ADC();
