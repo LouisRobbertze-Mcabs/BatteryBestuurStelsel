@@ -123,8 +123,11 @@ extern  float sine_y[5];
 extern  struct table_1d sine_table;
 
 extern volatile float Current_CAL;
-extern volatile float Current_Sum;
+extern volatile Uint16 Current_Sum;
 extern volatile Uint16 Current_Counter;
+
+
+extern volatile Uint16 Toets_current_sum[10];
 
 
 extern float SOC_t;

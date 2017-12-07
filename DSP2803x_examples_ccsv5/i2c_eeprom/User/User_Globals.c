@@ -126,8 +126,11 @@ volatile float balancing_bottom_level = 3.475;
 };
 
  volatile float Current_CAL;
- volatile float Current_Sum;
+ volatile Uint16 Current_Sum;
  volatile Uint16 Current_Counter;
+
+
+ volatile Uint16 Toets_current_sum[10];
 
 
  float SOC_t;

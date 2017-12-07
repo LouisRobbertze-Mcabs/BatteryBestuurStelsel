@@ -98,7 +98,7 @@ void Init_Gpio(void)
 
 	GpioCtrlRegs.GPAMUX1.bit.GPIO15 = 0;    //12 Aux drive
 	GpioCtrlRegs.GPADIR.bit.GPIO15 = 1;     // 12 Aux drive (verander miskien)
-	Aux_Control = 1;
+	Aux_Control = 0;
 
 	//	GpioCtrlRegs.GPAPUD.bit.GPIO19 = 1;    // Enable pull-up for GPIO19
 	GpioCtrlRegs.GPAMUX2.bit.GPIO19 = 0;    //KeyDrive
@@ -243,7 +243,7 @@ void Process_Voltages(void)
 
 void Calculate_Current(void)
 {
-	Current = (test_current-2095 )* 0.122;                   //2090    maal, moenie deel nie!!!!     0.0982--200/2048          /*Current_CAL/*
+	Current = (test_current-Current_CAL )* 0.122;                   //2095    maal, moenie deel nie!!!!     0.0982--200/2048          /*Current_CAL/*
 }
 
 void Read_System_Status(void)
@@ -621,10 +621,10 @@ float interpolate_table_1d(struct table_1d *table, float x)
 
 void Calculate_SOC()
 {
-//	float SOCv;
-//	static float SOCc;
-//	static Uint16 t=1000;							//time since current activity
-//	float Wsoc;										//weighting parameter
+	//	float SOCv;
+	//	static float SOCc;
+	//	static Uint16 t=1000;							//time since current activity
+	//	float Wsoc;										//weighting parameter
 
 	SOCv = interpolate_table_1d(&sine_table, Voltage_low);
 
@@ -667,12 +667,17 @@ void Calibrate_Current()
 	Current_Sum = 0;
 	Current_Counter = 0;
 
-	while(Current_Counter <= 100);
+	while(Current_Counter <= 500);
+	ServiceDog();
 	Current_Sum = 0;
 	Current_Counter = 0;
-	while(Current_Counter <= 500);
+	/*while(Current_Counter <= 500);
+	ServiceDog();
+	Current_Sum = 0;
+	Current_Counter = 0;*/
+	while(Current_Counter < 20);
 
-	Current_CAL = Current_Sum * 0.002;
+	Current_CAL = Current_Sum/20;
 	PreCharge = 1;                          //turn on precharge resistor
 	// Reset the watchdog counter
 	ServiceDog();

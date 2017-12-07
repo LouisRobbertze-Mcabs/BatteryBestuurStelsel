@@ -33,15 +33,16 @@ __interrupt void  adc_isr(void)
 		flagCurrent = 1;
 	} 																	////////////////////////////////////////////////
 
+	if(Current_Counter<10)
+		Toets_current_sum[Current_Counter] = AdcResult.ADCRESULT1;
 
-//	Current_Sum = Current_Sum + AdcResult.ADCRESULT1;
-//	Current_Counter++;
+	Current_Sum = Current_Sum + AdcResult.ADCRESULT1;
+	Current_Counter++;
 
+	led2 = 0x01^led2;                   //toggle led
 
 	AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
 	PieCtrlRegs.PIEACK.bit.ACK10 = 1;   // Acknowledge interrupt to PIE
-
-	led2 = 0x01^led2;                   //toggle led
 }
 
 __interrupt void cpu_timer0_isr(void)
@@ -103,15 +104,13 @@ __interrupt void cpu_timer0_isr(void)
 __interrupt void cpu_timer1_isr(void)
 {
 	//check status of all flags as well as the key switch
-	counter_50Hz++;
 	static float Aux_Voltage_temp = 0;
 
 	//Deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^WcTs
-
 	//adc/4096 *3.3* 10.51/10.51      12.2/2.2
 
 
-	Auxilliary_Voltage = Aux_Voltage_temp + (0.0609*(((AdcResult.ADCRESULT2)* 0.00442)-Aux_Voltage_temp));					//maak miskien gebruik van die config leer
+	Auxilliary_Voltage = Aux_Voltage_temp + (0.0125*(((AdcResult.ADCRESULT2)* 0.00442)-Aux_Voltage_temp));					//50hz sny af op 0.1hz
 	Aux_Voltage_temp = Auxilliary_Voltage;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////// testing
@@ -226,7 +225,6 @@ __interrupt void can_tx_isr(void)
     {
         ECanaRegs.CANTA.all = 0xFFFFFFFF;           // Reset tranmission flags
     }*/
-
 
 	ECanaRegs.CANTA.all = 0xFFFFFFFF;           // Reset tranmission flags
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9
