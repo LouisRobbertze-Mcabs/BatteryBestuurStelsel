@@ -324,13 +324,32 @@ void Read_Temperatures(void)
 	}
 	Temperature_avg = temperature_avg*0.0667;
 
+/*
+		if(Temperatures_resistance[4]<100)					//old bms version      -- gekoppel aan grond so verwag iets klein uit 4096
+		{
+			Temperature_avg = Temperatures[4];
+			Temperature_high = Temperatures[9];
+			Temperatures[15] = 0;
+		}
+		else												//new bms version
+		{
+			Temperature_avg = temperature_avg;
+			Temperature_high = temp_Temperature_high;
+			Temperature_low = temp_Temperature_low;
 
-	//	if(temp_Temperature_high>70)					//old system filter
-	//	{
-	//		Temperature_avg = Temperatures[4];
-	//		Temperature_high = Temperatures[9];
-	//		Temperatures[15] = 0;
+			if(Temperature_high> Tmax || Temperature_low<Tmin)
+			{
+				flagTemp = 1;
+			}
 
+			if((Temperature_avg - Temperatures[15])> 5)
+			{
+				Fan_Control = 1;
+			}
+			else
+				Fan_Control = 0;
+		}
+*/
 	if(Temperatures[4]> Tmax || Temperatures[4]<Tmin)
 	{
 		flag = 1;
@@ -340,26 +359,7 @@ void Read_Temperatures(void)
 	{
 		flag = 1;
 	}
-	/*	}
-	else											//system normal
-	{
-		Temperature_avg = temperature_avg;
-		Temperature_high = temp_Temperature_high;
-		Temperature_low = temp_Temperature_low;
 
-		if(Temperature_high> Tmax || Temperature_low<Tmin)
-		{
-			flagTemp = 1;
-		}
-
-		if((Temperature_avg - Temperatures[15])> 5)
-		{
-			Fan_Control = 1;
-		}
-		else
-			Fan_Control = 0;
-	}
-	 */
 	if(flag == 1)
 		flagTemp = 1;
 	else if(flag == 0)

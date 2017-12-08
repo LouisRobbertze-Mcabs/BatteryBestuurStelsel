@@ -67,7 +67,7 @@ void configADC(void)
 	AdcRegs.ADCSOC9CTL.bit.TRIGSEL  = 0x01;
 	AdcRegs.ADCSOC9CTL.bit.ACQPS    = 20;
 
-	//channel B0 - SOC10
+	//channel B0 - SOC10									//possibly also use for BMS model detection
 	AdcRegs.ADCSOC10CTL.bit.CHSEL    = 0x08;
 	AdcRegs.ADCSOC10CTL.bit.TRIGSEL  = 0x01;
 	AdcRegs.ADCSOC10CTL.bit.ACQPS    = 20;
@@ -96,6 +96,7 @@ void configADC(void)
 	AdcRegs.ADCSOC15CTL.bit.CHSEL    = 0x0F;
 	AdcRegs.ADCSOC15CTL.bit.TRIGSEL  = 0x01;
 	AdcRegs.ADCSOC15CTL.bit.ACQPS    = 20;
+
 
 	EDIS;
 }
