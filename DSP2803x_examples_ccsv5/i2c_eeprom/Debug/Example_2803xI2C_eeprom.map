@@ -1,7 +1,7 @@
 ******************************************************************************
              TMS320C2000 Linker PC v6.2.5                      
 ******************************************************************************
->> Linked Fri Dec 08 15:56:27 2017
+>> Linked Tue Jan 09 09:06:57 2018
 
 OUTPUT FILE NAME:   <Example_2803xI2C_eeprom.out>
 ENTRY POINT SYMBOL: "code_start"  address: 003f7ff6
@@ -21,7 +21,7 @@ PAGE 0:
   FLASHE                003ee000   00002000  00000000  00002000  RWIX
   FLASHD                003f0000   00002000  00000004  00001ffc  RWIX
   FLASHC                003f2000   00002000  00000144  00001ebc  RWIX
-  FLASHA                003f6000   00001f80  00001f5d  00000023  RWIX
+  FLASHA                003f6000   00001f80  00001f61  0000001f  RWIX
   CSM_RSVD              003f7f80   00000076  00000000  00000076  RWIX
   BEGIN                 003f7ff6   00000002  00000002  00000000  RWIX
   CSM_PWL_P0            003f7ff8   00000008  00000000  00000008  RWIX
@@ -102,49 +102,49 @@ ramfuncs   0    003f0000    00000004     RUN ADDR = 00008000
                   003f2100    00000028     User_CAN.obj (.switch:_CANSlaveReception)
                   003f2128    0000001c     User_CAN.obj (.switch:_CANSlaveConfig)
 
-.text      0    003f6000    00001e17     
+.text      0    003f6000    00001e1b     
                   003f6000    00000953     User_Functions.obj (.text)
                   003f6953    00000524     User_CAN.obj (.text)
                   003f6e77    00000365     User_Interrupts.obj (.text:retain)
                   003f71dc    000001a9     DSP2803x_Adc.obj (.text)
                   003f7385    0000017c     DSP2803x_DefaultIsr.obj (.text:retain)
                   003f7501    0000013b     DSP2803x_SysCtrl.obj (.text)
-                  003f763c    000000fe     User_ADC.obj (.text)
-                  003f773a    000000e6     User_I2C.obj (.text)
-                  003f7820    000000cd     User_BQ.obj (.text)
-                  003f78ed    000000aa     rts2800_ml.lib : log.obj (.text)
-                  003f7997    0000009d                    : exp.obj (.text)
-                  003f7a34    00000083                    : fs_div.obj (.text)
-                  003f7ab7    00000078                    : fs_add.obj (.text)
-                  003f7b2f    00000076     DSP2803x_CpuTimers.obj (.text)
-                  003f7ba5    0000005a     rts2800_ml.lib : fs_mpy.obj (.text)
-                  003f7bff    00000044                    : boot.obj (.text)
-                  003f7c43    0000003f                    : ldexp.obj (.text)
-                  003f7c82    0000002c     Main.obj (.text)
-                  003f7cae    00000029     rts2800_ml.lib : fs_tol.obj (.text)
-                  003f7cd7    00000028     DSP2803x_PieCtrl.obj (.text)
-                  003f7cff    00000025     DSP2803x_PieVect.obj (.text)
-                  003f7d24    00000025     rts2800_ml.lib : fs_toi.obj (.text)
-                  003f7d49    0000001d                    : fs_tou.obj (.text)
-                  003f7d66    0000001a                    : i_tofs.obj (.text)
-                  003f7d80    00000019     DSP2803x_I2C.obj (.text)
-                  003f7d99    00000019     rts2800_ml.lib : args_main.obj (.text)
-                  003f7db2    00000019                    : exit.obj (.text)
-                  003f7dcb    00000017                    : fs_cmp.obj (.text)
-                  003f7de2    00000014                    : frexp.obj (.text)
-                  003f7df6    00000010                    : u_tofs.obj (.text)
-                  003f7e06    00000009                    : _lock.obj (.text)
-                  003f7e0f    00000008     DSP2803x_CodeStartBranch.obj (.text)
+                  003f763c    00000102     User_ADC.obj (.text)
+                  003f773e    000000e6     User_I2C.obj (.text)
+                  003f7824    000000cd     User_BQ.obj (.text)
+                  003f78f1    000000aa     rts2800_ml.lib : log.obj (.text)
+                  003f799b    0000009d                    : exp.obj (.text)
+                  003f7a38    00000083                    : fs_div.obj (.text)
+                  003f7abb    00000078                    : fs_add.obj (.text)
+                  003f7b33    00000076     DSP2803x_CpuTimers.obj (.text)
+                  003f7ba9    0000005a     rts2800_ml.lib : fs_mpy.obj (.text)
+                  003f7c03    00000044                    : boot.obj (.text)
+                  003f7c47    0000003f                    : ldexp.obj (.text)
+                  003f7c86    0000002c     Main.obj (.text)
+                  003f7cb2    00000029     rts2800_ml.lib : fs_tol.obj (.text)
+                  003f7cdb    00000028     DSP2803x_PieCtrl.obj (.text)
+                  003f7d03    00000025     DSP2803x_PieVect.obj (.text)
+                  003f7d28    00000025     rts2800_ml.lib : fs_toi.obj (.text)
+                  003f7d4d    0000001d                    : fs_tou.obj (.text)
+                  003f7d6a    0000001a                    : i_tofs.obj (.text)
+                  003f7d84    00000019     DSP2803x_I2C.obj (.text)
+                  003f7d9d    00000019     rts2800_ml.lib : args_main.obj (.text)
+                  003f7db6    00000019                    : exit.obj (.text)
+                  003f7dcf    00000017                    : fs_cmp.obj (.text)
+                  003f7de6    00000014                    : frexp.obj (.text)
+                  003f7dfa    00000010                    : u_tofs.obj (.text)
+                  003f7e0a    00000009                    : _lock.obj (.text)
+                  003f7e13    00000008     DSP2803x_CodeStartBranch.obj (.text)
 
-.cinit     0    003f7e17    00000146     
-                  003f7e17    00000114     User_Globals.obj (.cinit)
-                  003f7f2b    0000000a     User_Interrupts.obj (.cinit)
-                  003f7f35    0000000a     rts2800_ml.lib : _lock.obj (.cinit)
-                  003f7f3f    0000000a                    : exit.obj (.cinit)
-                  003f7f49    00000009     User_CAN.obj (.cinit)
-                  003f7f52    00000005     User_Functions.obj (.cinit)
-                  003f7f57    00000004     rts2800_ml.lib : errno.obj (.cinit)
-                  003f7f5b    00000002     --HOLE-- [fill = 0]
+.cinit     0    003f7e1b    00000146     
+                  003f7e1b    00000114     User_Globals.obj (.cinit)
+                  003f7f2f    0000000a     User_Interrupts.obj (.cinit)
+                  003f7f39    0000000a     rts2800_ml.lib : _lock.obj (.cinit)
+                  003f7f43    0000000a                    : exit.obj (.cinit)
+                  003f7f4d    00000009     User_CAN.obj (.cinit)
+                  003f7f56    00000005     User_Functions.obj (.cinit)
+                  003f7f5b    00000004     rts2800_ml.lib : errno.obj (.cinit)
+                  003f7f5f    00000002     --HOLE-- [fill = 0]
 
 codestart 
 *          0    003f7ff6    00000002     
@@ -548,17 +548,17 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 address    name
 --------   ----
 003f6000   .text
-003f7db2   C$$EXIT
-003f7abc   FS$$ADD
-003f7dcb   FS$$CMP
-003f7a34   FS$$DIV
-003f7ba5   FS$$MPY
-003f7ab7   FS$$SUB
-003f7d24   FS$$TOI
-003f7cae   FS$$TOL
-003f7d49   FS$$TOU
-003f7d66   I$$TOFS
-003f7df6   U$$TOFS
+003f7db6   C$$EXIT
+003f7ac0   FS$$ADD
+003f7dcf   FS$$CMP
+003f7a38   FS$$DIV
+003f7ba9   FS$$MPY
+003f7abb   FS$$SUB
+003f7d28   FS$$TOI
+003f7cb2   FS$$TOL
+003f7d4d   FS$$TOU
+003f7d6a   I$$TOFS
+003f7dfa   U$$TOFS
 003f73e4   _ADCINT1_ISR
 003f73e9   _ADCINT2_ISR
 003f749d   _ADCINT3_ISR
@@ -580,7 +580,7 @@ address    name
 00008c6a   _Auxilliary_Voltage
 00008c08   _Auxilliary_counter
 003f655a   _Balance
-003f7831   _Bq76940_Init
+003f7835   _Bq76940_Init
 003f6a50   _CANChargerReception
 003f6a32   _CANInterruptConfig
 003f69f1   _CANMailboxConfig
@@ -611,7 +611,7 @@ address    name
 00006400   _Comp1Regs
 00006420   _Comp2Regs
 00006440   _Comp3Regs
-003f7b70   _ConfigCpuTimer
+003f7b74   _ConfigCpuTimer
 00008d30   _CpuTimer0
 00000c00   _CpuTimer0Regs
 00008d20   _CpuTimer1
@@ -668,7 +668,7 @@ address    name
 00006b00   _EQep1Regs
 00000d01   _EmuBMode
 00000d00   _EmuKey
-003f7cf6   _EnableInterrupts
+003f7cfa   _EnableInterrupts
 003f7626   _ExtOscSel
 00000a80   _FlashRegs
 00000d04   _Flash_CPUScaleFactor
@@ -681,9 +681,9 @@ address    name
 00006ac0   _HRCap1Regs
 00006ae0   _HRCap2Regs
 00008c48   _I
-003f773a   _I2CA_Init
-003f7793   _I2CA_ReadData
-003f774d   _I2CA_WriteData
+003f773e   _I2CA_Init
+003f7797   _I2CA_ReadData
+003f7751   _I2CA_WriteData
 003f7475   _I2CINT1A_ISR
 003f747a   _I2CINT2A_ISR
 00008c89   _I2cMsgIn1
@@ -697,12 +697,12 @@ address    name
 00008c18   _Imin
 003f71dc   _InitAdc
 003f7202   _InitAdcAio
-003f7b2f   _InitCpuTimers
-003f7d80   _InitI2C
-003f7d81   _InitI2CGpio
+003f7b33   _InitCpuTimers
+003f7d84   _InitI2C
+003f7d85   _InitI2CGpio
 003f7581   _InitPeripheralClocks
-003f7cd7   _InitPieCtrl
-003f7cff   _InitPieVectTable
+003f7cdb   _InitPieCtrl
+003f7d03   _InitPieVectTable
 003f752d   _InitPll
 003f7501   _InitSysCtrl
 003f608b   _Init_Gpio
@@ -745,7 +745,7 @@ address    name
 003f7470   _SPITXINTB_ISR
 00007050   _SciaRegs
 003f751b   _ServiceDog
-003f7820   _Shut_D_BQ
+003f7824   _Shut_D_BQ
 00007040   _SpiaRegs
 00007740   _SpibRegs
 00007010   _SysCtrlRegs
@@ -798,23 +798,23 @@ address    name
 00008d66   ___TI_dtors_ptr
 ffffffff   ___binit__
 ffffffff   ___c_args__
-003f7e17   ___cinit__
-003f7e17   ___etext__
+003f7e1b   ___cinit__
+003f7e1b   ___etext__
 ffffffff   ___pinit__
 003f6000   ___text__
-003f7d99   __args_main
+003f7d9d   __args_main
 00008d3e   __lock
-003f7e0e   __nop
-003f7e0a   __register_lock
-003f7e06   __register_unlock
+003f7e12   __nop
+003f7e0e   __register_lock
+003f7e0a   __register_unlock
 00000050   __stack
 00008d3c   __unlock
-003f7db2   _abort
+003f7db6   _abort
 003f6e77   _adc_isr
 00008c15   _balance
 00008c30   _balancing_bottom_level
 00008c32   _balancing_upper_level
-003f7bff   _c_int00
+003f7c03   _c_int00
 003f719a   _can_rx_isr
 003f71ce   _can_tx_isr
 003f763c   _configADC
@@ -826,22 +826,22 @@ ffffffff   ___pinit__
 00008c0a   _current_int
 00008c5a   _current_reference
 00008d6a   _errno
-003f7db4   _exit
-003f7997   _exp
+003f7db8   _exit
+003f799b   _exp
 00008c0f   _flagCharged
 00008c0d   _flagCurrent
 00008c14   _flagDischarged
 00008c0e   _flagTemp
 00008c12   _flagVoltage
-003f7de2   _frexp
+003f7de6   _frexp
 003f7156   _i2c_int1a_isr
 003f679e   _interpolate_segment
 003f67d1   _interpolate_table_1d
 00008c2a   _kp_constant
 00008c2e   _kp_multiplier
-003f7c43   _ldexp
-003f78ed   _log
-003f7c82   _main
+003f7c47   _ldexp
+003f78f1   _log
+003f7c86   _main
 00008c68   _ref
 003f74fc   _rsvd_ISR
 00008c00   _rus
@@ -854,9 +854,9 @@ ffffffff   ___pinit__
 00008c56   _toets
 00008c66   _toets2
 ffffffff   binit
-003f7e17   cinit
+003f7e1b   cinit
 003f7ff6   code_start
-003f7e17   etext
+003f7e1b   etext
 ffffffff   pinit
 
 
@@ -1129,45 +1129,45 @@ address    name
 003f7626   _ExtOscSel
 003f763c   _configADC
 003f7731   _Reset_ADC
-003f773a   _I2CA_Init
-003f774d   _I2CA_WriteData
-003f7793   _I2CA_ReadData
-003f7820   _Shut_D_BQ
-003f7831   _Bq76940_Init
-003f78ed   _log
-003f7997   _exp
-003f7a34   FS$$DIV
-003f7ab7   FS$$SUB
-003f7abc   FS$$ADD
-003f7b2f   _InitCpuTimers
-003f7b70   _ConfigCpuTimer
-003f7ba5   FS$$MPY
-003f7bff   _c_int00
-003f7c43   _ldexp
-003f7c82   _main
-003f7cae   FS$$TOL
-003f7cd7   _InitPieCtrl
-003f7cf6   _EnableInterrupts
-003f7cff   _InitPieVectTable
-003f7d24   FS$$TOI
-003f7d49   FS$$TOU
-003f7d66   I$$TOFS
-003f7d80   _InitI2C
-003f7d81   _InitI2CGpio
-003f7d99   __args_main
-003f7db2   C$$EXIT
-003f7db2   _abort
-003f7db4   _exit
-003f7dcb   FS$$CMP
-003f7de2   _frexp
-003f7df6   U$$TOFS
-003f7e06   __register_unlock
-003f7e0a   __register_lock
-003f7e0e   __nop
-003f7e17   ___cinit__
-003f7e17   ___etext__
-003f7e17   cinit
-003f7e17   etext
+003f773e   _I2CA_Init
+003f7751   _I2CA_WriteData
+003f7797   _I2CA_ReadData
+003f7824   _Shut_D_BQ
+003f7835   _Bq76940_Init
+003f78f1   _log
+003f799b   _exp
+003f7a38   FS$$DIV
+003f7abb   FS$$SUB
+003f7ac0   FS$$ADD
+003f7b33   _InitCpuTimers
+003f7b74   _ConfigCpuTimer
+003f7ba9   FS$$MPY
+003f7c03   _c_int00
+003f7c47   _ldexp
+003f7c86   _main
+003f7cb2   FS$$TOL
+003f7cdb   _InitPieCtrl
+003f7cfa   _EnableInterrupts
+003f7d03   _InitPieVectTable
+003f7d28   FS$$TOI
+003f7d4d   FS$$TOU
+003f7d6a   I$$TOFS
+003f7d84   _InitI2C
+003f7d85   _InitI2CGpio
+003f7d9d   __args_main
+003f7db6   C$$EXIT
+003f7db6   _abort
+003f7db8   _exit
+003f7dcf   FS$$CMP
+003f7de6   _frexp
+003f7dfa   U$$TOFS
+003f7e0a   __register_unlock
+003f7e0e   __register_lock
+003f7e12   __nop
+003f7e1b   ___cinit__
+003f7e1b   ___etext__
+003f7e1b   cinit
+003f7e1b   etext
 003f7ff6   code_start
 003f7ff8   _CsmPwl
 ffffffff   ___binit__

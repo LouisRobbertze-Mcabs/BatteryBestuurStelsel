@@ -14,6 +14,7 @@ void main(void)
 		if(counter_2Hz == 1)
 		{
 			ServiceDog();
+
 		}
 		if(counter_2Hz == 2)
 		{

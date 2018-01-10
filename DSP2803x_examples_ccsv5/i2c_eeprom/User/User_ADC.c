@@ -105,4 +105,6 @@ void Reset_ADC(void)
 {
 	I2CA_WriteData(0x04,0x8);
 	I2CA_WriteData(0x04,0x18);
+
+	I2CA_WriteData(0x05,0x03);			//testing
 }
