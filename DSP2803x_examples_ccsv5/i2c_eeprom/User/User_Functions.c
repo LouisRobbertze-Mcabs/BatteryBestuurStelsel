@@ -190,6 +190,8 @@ void  Read_Cell_Voltages(void)
 
 	Voltage_high = temp_Voltage_high;
 	Voltage_low = temp_Voltage_low;
+
+	ServiceDog();
 }
 
 void Process_Voltages(void)
@@ -220,7 +222,7 @@ void Process_Voltages(void)
 		Aux_Control = 0;
 		flagDischarged = 1;
 		led3 = 1;               //turn on red led
-		ContactorOut = 0;       //turn off contactor            //turn off output
+		ContactorOut = 0;       //turn off contactor
 	}
 	else if(Voltage_low < Vcritical && Charger_status == 0)
 	{
@@ -228,6 +230,7 @@ void Process_Voltages(void)
 		flagDischarged = 2;
 		led3 = 1;               //turn on red led
 		PreCharge = 0;
+		ContactorOut = 0;       //turn off contactor
 	}
 
 	if(Voltage_high<Vchargedflagreset )
@@ -239,6 +242,41 @@ void Process_Voltages(void)
 		led3 = 0;               //turn off red led
 	}
 
+}
+
+void Calculate_SOH(void)
+{
+	int i;
+
+
+
+	dI = fabs(Current - Current_old);
+
+	if(dI>5)
+	{
+		resistance = 0;
+
+		for(i = 0; i<15; i++)
+		{
+			resistance_temp = fabs(Voltages[i]-Voltages_old[i]) / dI;
+
+			if(resistance_temp>resistance)
+			{
+				resistance = resistance_temp;
+			}
+		}
+		SOH = resistance;
+	}
+
+
+	//1 + ((0.001 - resistance)/0.001);
+
+	for(i = 0; i<15; i++)
+	{
+		Voltages_old[i] = Voltages[i];
+	}
+
+	Current_old = Current;
 }
 
 void Calculate_Current(void)
@@ -324,7 +362,7 @@ void Read_Temperatures(void)
 	}
 	Temperature_avg = temperature_avg*0.0667;
 
-/*
+	/*
 		if(Temperatures_resistance[4]<100)					//old bms version      -- gekoppel aan grond so verwag iets klein uit 4096
 		{
 			Temperature_avg = Temperatures[4];
@@ -349,7 +387,7 @@ void Read_Temperatures(void)
 			else
 				Fan_Control = 0;
 		}
-*/
+	 */
 	if(Temperatures[4]> Tmax || Temperatures[4]<Tmin)
 	{
 		flag = 1;

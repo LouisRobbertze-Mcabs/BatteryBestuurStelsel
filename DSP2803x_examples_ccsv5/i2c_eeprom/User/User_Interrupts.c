@@ -215,6 +215,8 @@ __interrupt void can_rx_isr(void)
 		CANSlaveConfig();
 	}
 
+	ServiceDog();
+
 	ECanaRegs.CANRMP.all = 0xFFFFFFFF;          // Reset receive mailbox flags
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9
 }
@@ -225,6 +227,8 @@ __interrupt void can_tx_isr(void)
     {
         ECanaRegs.CANTA.all = 0xFFFFFFFF;           // Reset tranmission flags
     }*/
+
+	ServiceDog();
 
 	ECanaRegs.CANTA.all = 0xFFFFFFFF;           // Reset tranmission flags
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9

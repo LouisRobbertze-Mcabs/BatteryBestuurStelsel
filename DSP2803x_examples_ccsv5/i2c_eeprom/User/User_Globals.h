@@ -101,6 +101,7 @@ extern volatile float Tmax;
 extern volatile float Tmin;
 
 extern volatile float SOC;
+extern volatile float SOH;
 
 extern volatile float Vauxmin;
 extern volatile float AuxChargeTime;
@@ -134,5 +135,18 @@ extern float SOC_t;
 extern float Wsoc;
 extern float SOCv;
 extern float SOCc;
+
+
+
+
+
+
+
+extern volatile float Voltages_old[15];
+extern volatile float Current_old;
+extern volatile	float resistance;
+extern volatile	float resistance_temp;
+extern volatile float dI;
+
 
 #endif /* USER_GLOBALS_H_ */

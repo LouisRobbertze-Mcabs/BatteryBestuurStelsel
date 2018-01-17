@@ -21,6 +21,7 @@ void main(void)
 			Toggle_LED();
 
 			Read_Cell_Voltages();
+			Calculate_Current();
 			Process_Voltages();
 
 			ServiceDog();
@@ -28,12 +29,15 @@ void main(void)
 			Read_Temperatures();
 			Balance(5,Vbalance);
 
-			Read_System_Status();
-			Process_System_Status();
 
 			Calculate_Current();
 
+			Read_System_Status();
+			Process_System_Status();
+
 			Calculate_SOC();
+
+			Calculate_SOH();
 
 			counter_2Hz = 0;
 			Reset_ADC();
