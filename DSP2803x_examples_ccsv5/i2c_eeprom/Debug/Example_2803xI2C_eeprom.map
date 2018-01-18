@@ -1,7 +1,7 @@
 ******************************************************************************
              TMS320C2000 Linker PC v6.2.5                      
 ******************************************************************************
->> Linked Thu Jan 18 10:11:01 2018
+>> Linked Thu Jan 18 12:16:31 2018
 
 OUTPUT FILE NAME:   <Example_2803xI2C_eeprom.out>
 ENTRY POINT SYMBOL: "code_start"  address: 003f7ff6
@@ -21,7 +21,7 @@ PAGE 0:
   FLASHE                003ee000   00002000  00000000  00002000  RWIX
   FLASHD                003f0000   00002000  00000004  00001ffc  RWIX
   FLASHC                003f2000   00002000  0000014a  00001eb6  RWIX
-  FLASHA                003f4000   00003f80  0000203b  00001f45  RWIX
+  FLASHA                003f4000   00003f80  00002039  00001f47  RWIX
   CSM_RSVD              003f7f80   00000076  00000000  00000076  RWIX
   BEGIN                 003f7ff6   00000002  00000002  00000000  RWIX
   CSM_PWL_P0            003f7ff8   00000008  00000000  00000008  RWIX
@@ -101,49 +101,49 @@ ramfuncs   0    003f0000    00000004     RUN ADDR = 00008000
                   003f2100    0000002e     User_CAN.obj (.switch:_CANSlaveReception)
                   003f212e    0000001c     User_CAN.obj (.switch:_CANSlaveConfig)
 
-.text      0    003f4000    00001ef5     
+.text      0    003f4000    00001ef3     
                   003f4000    000009ef     User_Functions.obj (.text)
-                  003f49ef    0000054d     User_CAN.obj (.text)
-                  003f4f3c    00000376     User_Interrupts.obj (.text:retain)
-                  003f52b2    000001a9     DSP2803x_Adc.obj (.text)
-                  003f545b    0000017c     DSP2803x_DefaultIsr.obj (.text:retain)
-                  003f55d7    0000013b     DSP2803x_SysCtrl.obj (.text)
-                  003f5712    00000102     User_ADC.obj (.text)
-                  003f5814    000000e6     User_I2C.obj (.text)
-                  003f58fa    000000cd     User_BQ.obj (.text)
-                  003f59c7    000000aa     rts2800_ml.lib : log.obj (.text)
-                  003f5a71    0000009d                    : exp.obj (.text)
-                  003f5b0e    00000083                    : fs_div.obj (.text)
-                  003f5b91    00000078                    : fs_add.obj (.text)
-                  003f5c09    00000076     DSP2803x_CpuTimers.obj (.text)
-                  003f5c7f    0000005a     rts2800_ml.lib : fs_mpy.obj (.text)
-                  003f5cd9    00000044                    : boot.obj (.text)
-                  003f5d1d    0000003f                    : ldexp.obj (.text)
-                  003f5d5c    00000030     Main.obj (.text)
-                  003f5d8c    00000029     rts2800_ml.lib : fs_tol.obj (.text)
-                  003f5db5    00000028     DSP2803x_PieCtrl.obj (.text)
-                  003f5ddd    00000025     DSP2803x_PieVect.obj (.text)
-                  003f5e02    00000025     rts2800_ml.lib : fs_toi.obj (.text)
-                  003f5e27    0000001d                    : fs_tou.obj (.text)
-                  003f5e44    0000001a                    : i_tofs.obj (.text)
-                  003f5e5e    00000019     DSP2803x_I2C.obj (.text)
-                  003f5e77    00000019     rts2800_ml.lib : args_main.obj (.text)
-                  003f5e90    00000019                    : exit.obj (.text)
-                  003f5ea9    00000017                    : fs_cmp.obj (.text)
-                  003f5ec0    00000014                    : frexp.obj (.text)
-                  003f5ed4    00000010                    : u_tofs.obj (.text)
-                  003f5ee4    00000009                    : _lock.obj (.text)
-                  003f5eed    00000008     DSP2803x_CodeStartBranch.obj (.text)
+                  003f49ef    0000054b     User_CAN.obj (.text)
+                  003f4f3a    00000376     User_Interrupts.obj (.text:retain)
+                  003f52b0    000001a9     DSP2803x_Adc.obj (.text)
+                  003f5459    0000017c     DSP2803x_DefaultIsr.obj (.text:retain)
+                  003f55d5    0000013b     DSP2803x_SysCtrl.obj (.text)
+                  003f5710    00000102     User_ADC.obj (.text)
+                  003f5812    000000e6     User_I2C.obj (.text)
+                  003f58f8    000000cd     User_BQ.obj (.text)
+                  003f59c5    000000aa     rts2800_ml.lib : log.obj (.text)
+                  003f5a6f    0000009d                    : exp.obj (.text)
+                  003f5b0c    00000083                    : fs_div.obj (.text)
+                  003f5b8f    00000078                    : fs_add.obj (.text)
+                  003f5c07    00000076     DSP2803x_CpuTimers.obj (.text)
+                  003f5c7d    0000005a     rts2800_ml.lib : fs_mpy.obj (.text)
+                  003f5cd7    00000044                    : boot.obj (.text)
+                  003f5d1b    0000003f                    : ldexp.obj (.text)
+                  003f5d5a    00000030     Main.obj (.text)
+                  003f5d8a    00000029     rts2800_ml.lib : fs_tol.obj (.text)
+                  003f5db3    00000028     DSP2803x_PieCtrl.obj (.text)
+                  003f5ddb    00000025     DSP2803x_PieVect.obj (.text)
+                  003f5e00    00000025     rts2800_ml.lib : fs_toi.obj (.text)
+                  003f5e25    0000001d                    : fs_tou.obj (.text)
+                  003f5e42    0000001a                    : i_tofs.obj (.text)
+                  003f5e5c    00000019     DSP2803x_I2C.obj (.text)
+                  003f5e75    00000019     rts2800_ml.lib : args_main.obj (.text)
+                  003f5e8e    00000019                    : exit.obj (.text)
+                  003f5ea7    00000017                    : fs_cmp.obj (.text)
+                  003f5ebe    00000014                    : frexp.obj (.text)
+                  003f5ed2    00000010                    : u_tofs.obj (.text)
+                  003f5ee2    00000009                    : _lock.obj (.text)
+                  003f5eeb    00000008     DSP2803x_CodeStartBranch.obj (.text)
 
-.cinit     0    003f5ef5    00000146     
-                  003f5ef5    00000114     User_Globals.obj (.cinit)
-                  003f6009    0000000a     User_Interrupts.obj (.cinit)
-                  003f6013    0000000a     rts2800_ml.lib : _lock.obj (.cinit)
-                  003f601d    0000000a                    : exit.obj (.cinit)
-                  003f6027    00000009     User_CAN.obj (.cinit)
-                  003f6030    00000005     User_Functions.obj (.cinit)
-                  003f6035    00000004     rts2800_ml.lib : errno.obj (.cinit)
-                  003f6039    00000002     --HOLE-- [fill = 0]
+.cinit     0    003f5ef3    00000146     
+                  003f5ef3    00000114     User_Globals.obj (.cinit)
+                  003f6007    0000000a     User_Interrupts.obj (.cinit)
+                  003f6011    0000000a     rts2800_ml.lib : _lock.obj (.cinit)
+                  003f601b    0000000a                    : exit.obj (.cinit)
+                  003f6025    00000009     User_CAN.obj (.cinit)
+                  003f602e    00000005     User_Functions.obj (.cinit)
+                  003f6033    00000004     rts2800_ml.lib : errno.obj (.cinit)
+                  003f6037    00000002     --HOLE-- [fill = 0]
 
 codestart 
 *          0    003f7ff6    00000002     
@@ -556,31 +556,31 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 address    name
 --------   ----
 003f4000   .text
-003f5e90   C$$EXIT
-003f5b96   FS$$ADD
-003f5ea9   FS$$CMP
-003f5b0e   FS$$DIV
-003f5c7f   FS$$MPY
-003f5b91   FS$$SUB
-003f5e02   FS$$TOI
-003f5d8c   FS$$TOL
-003f5e27   FS$$TOU
-003f5e44   I$$TOFS
-003f5ed4   U$$TOFS
-003f54ba   _ADCINT1_ISR
-003f54bf   _ADCINT2_ISR
-003f5573   _ADCINT3_ISR
-003f5578   _ADCINT4_ISR
-003f557d   _ADCINT5_ISR
-003f5582   _ADCINT6_ISR
-003f5587   _ADCINT7_ISR
-003f558c   _ADCINT8_ISR
-003f54ce   _ADCINT9_ISR
+003f5e8e   C$$EXIT
+003f5b94   FS$$ADD
+003f5ea7   FS$$CMP
+003f5b0c   FS$$DIV
+003f5c7d   FS$$MPY
+003f5b8f   FS$$SUB
+003f5e00   FS$$TOI
+003f5d8a   FS$$TOL
+003f5e25   FS$$TOU
+003f5e42   I$$TOFS
+003f5ed2   U$$TOFS
+003f54b8   _ADCINT1_ISR
+003f54bd   _ADCINT2_ISR
+003f5571   _ADCINT3_ISR
+003f5576   _ADCINT4_ISR
+003f557b   _ADCINT5_ISR
+003f5580   _ADCINT6_ISR
+003f5585   _ADCINT7_ISR
+003f558a   _ADCINT8_ISR
+003f54cc   _ADCINT9_ISR
 00008c50   _ADCgain
 00008c54   _ADCoffset
-003f5321   _AdcChanSelect
-003f5334   _AdcConversion
-003f52fa   _AdcOffsetSelfCal
+003f531f   _AdcChanSelect
+003f5332   _AdcConversion
+003f52f8   _AdcOffsetSelfCal
 00007100   _AdcRegs
 00000b00   _AdcResult
 00008c6e   _Ah
@@ -588,24 +588,24 @@ address    name
 00008c78   _Auxilliary_Voltage
 00008c06   _Auxilliary_counter
 003f45f6   _Balance
-003f590b   _Bq76940_Init
+003f5909   _Bq76940_Init
 003f4aec   _CANChargerReception
 003f4ace   _CANInterruptConfig
 003f4a8d   _CANMailboxConfig
 003f49f6   _CANSetup
-003f4d8f   _CANSlaveConfig
+003f4d8d   _CANSlaveConfig
 003f4c53   _CANSlaveReception
-003f4f1b   _CANTransmit
+003f4f19   _CANTransmit
 003f49ef   _CAN_Init
 00008c00   _CANcounter
-003f5591   _CLA1_INT1_ISR
-003f5596   _CLA1_INT2_ISR
-003f559b   _CLA1_INT3_ISR
-003f55a0   _CLA1_INT4_ISR
-003f55a5   _CLA1_INT5_ISR
-003f55aa   _CLA1_INT6_ISR
-003f55af   _CLA1_INT7_ISR
-003f55b4   _CLA1_INT8_ISR
+003f558f   _CLA1_INT1_ISR
+003f5594   _CLA1_INT2_ISR
+003f5599   _CLA1_INT3_ISR
+003f559e   _CLA1_INT4_ISR
+003f55a3   _CLA1_INT5_ISR
+003f55a8   _CLA1_INT6_ISR
+003f55ad   _CLA1_INT7_ISR
+003f55b2   _CLA1_INT8_ISR
 003f47d3   _CRC8
 003f4324   _Calculate_Current
 003f48f0   _Calculate_SOC
@@ -620,7 +620,7 @@ address    name
 00006400   _Comp1Regs
 00006420   _Comp2Regs
 00006440   _Comp3Regs
-003f5c4a   _ConfigCpuTimer
+003f5c48   _ConfigCpuTimer
 00008d74   _CpuTimer0
 00000c00   _CpuTimer0Regs
 00008d64   _CpuTimer1
@@ -629,44 +629,44 @@ address    name
 00000c10   _CpuTimer2Regs
 003f7ff8   _CsmPwl
 00000ae0   _CsmRegs
-003f5693   _CsmUnlock
+003f5691   _CsmUnlock
 00008c70   _Current
 00008c64   _CurrentMsgPtr
 00008c48   _Current_CAL
 00008c08   _Current_Counter
 00008c0b   _Current_Sum
 00008c38   _Current_old
-003f5465   _DATALOG_ISR
+003f5463   _DATALOG_ISR
 00008000   _DSP28x_usDelay
 00008c0f   _DataOut
 00008c12   _DataOut2
 00000880   _DevEmuRegs
-003f55fb   _DisableDog
-003f5569   _ECAN0INTA_ISR
-003f556e   _ECAN1INTA_ISR
-003f5523   _ECAP1_INT_ISR
+003f55f9   _DisableDog
+003f5567   _ECAN0INTA_ISR
+003f556c   _ECAN1INTA_ISR
+003f5521   _ECAP1_INT_ISR
 00006040   _ECanaLAMRegs
 000060c0   _ECanaMOTORegs
 00006080   _ECanaMOTSRegs
 00006100   _ECanaMboxes
 00006000   _ECanaRegs
 00006a00   _ECap1Regs
-003f55c8   _EMPTY_ISR
-003f546f   _EMUINT_ISR
-003f5500   _EPWM1_INT_ISR
-003f54dd   _EPWM1_TZINT_ISR
-003f5505   _EPWM2_INT_ISR
-003f54e2   _EPWM2_TZINT_ISR
-003f550a   _EPWM3_INT_ISR
-003f54e7   _EPWM3_TZINT_ISR
-003f550f   _EPWM4_INT_ISR
-003f54ec   _EPWM4_TZINT_ISR
-003f5514   _EPWM5_INT_ISR
-003f54f1   _EPWM5_TZINT_ISR
-003f5519   _EPWM6_INT_ISR
-003f54f6   _EPWM6_TZINT_ISR
-003f551e   _EPWM7_INT_ISR
-003f54fb   _EPWM7_TZINT_ISR
+003f55c6   _EMPTY_ISR
+003f546d   _EMUINT_ISR
+003f54fe   _EPWM1_INT_ISR
+003f54db   _EPWM1_TZINT_ISR
+003f5503   _EPWM2_INT_ISR
+003f54e0   _EPWM2_TZINT_ISR
+003f5508   _EPWM3_INT_ISR
+003f54e5   _EPWM3_TZINT_ISR
+003f550d   _EPWM4_INT_ISR
+003f54ea   _EPWM4_TZINT_ISR
+003f5512   _EPWM5_INT_ISR
+003f54ef   _EPWM5_TZINT_ISR
+003f5517   _EPWM6_INT_ISR
+003f54f4   _EPWM6_TZINT_ISR
+003f551c   _EPWM7_INT_ISR
+003f54f9   _EPWM7_TZINT_ISR
 00006800   _EPwm1Regs
 00006840   _EPwm2Regs
 00006880   _EPwm3Regs
@@ -674,67 +674,67 @@ address    name
 00006900   _EPwm5Regs
 00006940   _EPwm6Regs
 00006980   _EPwm7Regs
-003f5532   _EQEP1_INT_ISR
+003f5530   _EQEP1_INT_ISR
 00006b00   _EQep1Regs
 00000d01   _EmuBMode
 00000d00   _EmuKey
-003f5dd4   _EnableInterrupts
-003f56fc   _ExtOscSel
+003f5dd2   _EnableInterrupts
+003f56fa   _ExtOscSel
 00000a80   _FlashRegs
 00000d04   _Flash_CPUScaleFactor
 00000d02   _Flash_CallbackPtr
 00006f80   _GpioCtrlRegs
 00006fc0   _GpioDataRegs
 00006fe0   _GpioIntRegs
-003f5528   _HRCAP1_INT_ISR
-003f552d   _HRCAP2_INT_ISR
+003f5526   _HRCAP1_INT_ISR
+003f552b   _HRCAP2_INT_ISR
 00006ac0   _HRCap1Regs
 00006ae0   _HRCap2Regs
 00008c52   _I
-003f5814   _I2CA_Init
-003f586d   _I2CA_ReadData
-003f5827   _I2CA_WriteData
-003f554b   _I2CINT1A_ISR
-003f5550   _I2CINT2A_ISR
+003f5812   _I2CA_Init
+003f586b   _I2CA_ReadData
+003f5825   _I2CA_WriteData
+003f5549   _I2CINT1A_ISR
+003f554e   _I2CINT2A_ISR
 00008c86   _I2cMsgIn1
 00008c8f   _I2cMsgOut1
 00007900   _I2caRegs
-003f5479   _ILLEGAL_ISR
-003f545b   _INT13_ISR
-003f5460   _INT14_ISR
+003f5477   _ILLEGAL_ISR
+003f5459   _INT13_ISR
+003f545e   _INT14_ISR
 00008c28   _Ifilter
 00008c26   _Imax
 00008c2a   _Imin
-003f52b2   _InitAdc
-003f52d8   _InitAdcAio
-003f5c09   _InitCpuTimers
-003f5e5e   _InitI2C
-003f5e5f   _InitI2CGpio
-003f5657   _InitPeripheralClocks
-003f5db5   _InitPieCtrl
-003f5ddd   _InitPieVectTable
-003f5603   _InitPll
-003f55d7   _InitSysCtrl
+003f52b0   _InitAdc
+003f52d6   _InitAdcAio
+003f5c07   _InitCpuTimers
+003f5e5c   _InitI2C
+003f5e5d   _InitI2CGpio
+003f5655   _InitPeripheralClocks
+003f5db3   _InitPieCtrl
+003f5ddb   _InitPieVectTable
+003f5601   _InitPll
+003f55d5   _InitSysCtrl
 003f408b   _Init_Gpio
 003f4000   _Initialise_BMS
-003f56c4   _IntOsc1Sel
-003f56d4   _IntOsc2Sel
-003f555f   _LIN0INTA_ISR
-003f5564   _LIN1INTA_ISR
-003f55c3   _LUF_ISR
-003f55be   _LVF_ISR
+003f56c2   _IntOsc1Sel
+003f56d2   _IntOsc2Sel
+003f555d   _LIN0INTA_ISR
+003f5562   _LIN1INTA_ISR
+003f55c1   _LUF_ISR
+003f55bc   _LVF_ISR
 00006c00   _LinaRegs
-003f5474   _NMI_ISR
+003f5472   _NMI_ISR
 00007060   _NmiIntruptRegs
 00008c0c   _NodeID
-003f55cd   _PIE_RESERVED
+003f55cb   _PIE_RESERVED
 003d7e80   _PartIdRegs
 00000ce0   _PieCtrlRegs
 00000d00   _PieVectTable
 003f2000   _PieVectTableInit
 003f4346   _Process_System_Status
 003f41c2   _Process_Voltages
-003f546a   _RTOSINT_ISR
+003f5468   _RTOSINT_ISR
 003f0004   _RamfuncsLoadEnd
 003f0000   _RamfuncsLoadStart
 00008000   _RamfuncsRunStart
@@ -742,9 +742,9 @@ address    name
 003f433c   _Read_System_Status
 003f434f   _Read_Temperatures
 00008c0d   _Received
-003f5807   _Reset_ADC
-003f5555   _SCIRXINTA_ISR
-003f555a   _SCITXINTA_ISR
+003f5805   _Reset_ADC
+003f5553   _SCIRXINTA_ISR
+003f5558   _SCITXINTA_ISR
 00008c24   _SOC
 00008c4a   _SOC_t
 00008c30   _SOCc
@@ -752,18 +752,18 @@ address    name
 00008c32   _SOH_avg
 00008c2c   _SOH_max
 00008c2e   _SOH_max_cell
-003f5537   _SPIRXINTA_ISR
-003f5541   _SPIRXINTB_ISR
-003f553c   _SPITXINTA_ISR
-003f5546   _SPITXINTB_ISR
+003f5535   _SPIRXINTA_ISR
+003f553f   _SPIRXINTB_ISR
+003f553a   _SPITXINTA_ISR
+003f5544   _SPITXINTB_ISR
 00007050   _SciaRegs
-003f55f1   _ServiceDog
-003f58fa   _Shut_D_BQ
+003f55ef   _ServiceDog
+003f58f8   _Shut_D_BQ
 00007040   _SpiaRegs
 00007740   _SpibRegs
 00007010   _SysCtrlRegs
 00000985   _SysPwrCtrlRegs
-003f54d3   _TINT0_ISR
+003f54d1   _TINT0_ISR
 00008c58   _Temperature_avg
 00008c5a   _Temperature_high
 00008c5e   _Temperature_low
@@ -773,18 +773,18 @@ address    name
 00008c20   _Tmin
 00008ca2   _Toets_current_sum
 003f40eb   _Toggle_LED
-003f54ab   _USER10_ISR
-003f54b0   _USER11_ISR
-003f54b5   _USER12_ISR
-003f547e   _USER1_ISR
-003f5483   _USER2_ISR
-003f5488   _USER3_ISR
-003f548d   _USER4_ISR
-003f5492   _USER5_ISR
-003f5497   _USER6_ISR
-003f549c   _USER7_ISR
-003f54a1   _USER8_ISR
-003f54a6   _USER9_ISR
+003f54a9   _USER10_ISR
+003f54ae   _USER11_ISR
+003f54b3   _USER12_ISR
+003f547c   _USER1_ISR
+003f5481   _USER2_ISR
+003f5486   _USER3_ISR
+003f548b   _USER4_ISR
+003f5490   _USER5_ISR
+003f5495   _USER6_ISR
+003f549a   _USER7_ISR
+003f549f   _USER8_ISR
+003f54a4   _USER9_ISR
 00008c18   _Vauxmin
 00008c1a   _Vbalance
 00008c68   _Vcharge
@@ -798,13 +798,13 @@ address    name
 00008c56   _Voltage_total
 00008cdc   _Voltages
 00008d00   _Voltages_old
-003f54d8   _WAKEINT_ISR
+003f54d6   _WAKEINT_ISR
 00008c44   _Wsoc
-003f54c4   _XINT1_ISR
-003f54c9   _XINT2_ISR
-003f55b9   _XINT3_ISR
+003f54c2   _XINT1_ISR
+003f54c7   _XINT2_ISR
+003f55b7   _XINT3_ISR
 00007070   _XIntruptRegs
-003f56e8   _XtalOscSel
+003f56e6   _XtalOscSel
 000003d0   __STACK_END
 00000380   __STACK_SIZE
 00000001   __TI_args_main
@@ -812,55 +812,55 @@ address    name
 00008d86   ___TI_dtors_ptr
 ffffffff   ___binit__
 ffffffff   ___c_args__
-003f5ef5   ___cinit__
-003f5ef5   ___etext__
+003f5ef3   ___cinit__
+003f5ef3   ___etext__
 ffffffff   ___pinit__
 003f4000   ___text__
-003f5e77   __args_main
+003f5e75   __args_main
 00008d82   __lock
-003f5eec   __nop
-003f5ee8   __register_lock
-003f5ee4   __register_unlock
+003f5eea   __nop
+003f5ee6   __register_lock
+003f5ee2   __register_unlock
 00000050   __stack
 00008d80   __unlock
-003f5e90   _abort
-003f4f3c   _adc_isr
+003f5e8e   _abort
+003f4f3a   _adc_isr
 00008c15   _balance
 00008c3e   _balancing_bottom_level
 00008c3c   _balancing_upper_level
-003f5cd9   _c_int00
-003f525f   _can_rx_isr
-003f5295   _can_tx_isr
-003f5712   _configADC
+003f5cd7   _c_int00
+003f525d   _can_rx_isr
+003f5293   _can_tx_isr
+003f5710   _configADC
 00008c16   _counter_2Hz
 00008c07   _counter_50Hz
-003f4fd2   _cpu_timer0_isr
-003f51a4   _cpu_timer1_isr
-003f520f   _cpu_timer2_isr
+003f4fd0   _cpu_timer0_isr
+003f51a2   _cpu_timer1_isr
+003f520d   _cpu_timer2_isr
 00008c0a   _current_int
 00008c74   _current_reference
 00008c36   _dI
 00008d88   _errno
-003f5e92   _exit
-003f5a71   _exp
+003f5e90   _exit
+003f5a6f   _exp
 00008c11   _flagCharged
 00008c13   _flagCurrent
 00008c14   _flagDischarged
 00008c0e   _flagTemp
 00008c10   _flagVoltage
-003f5ec0   _frexp
-003f521b   _i2c_int1a_isr
+003f5ebe   _frexp
+003f5219   _i2c_int1a_isr
 003f483a   _interpolate_segment
 003f486d   _interpolate_table_1d
 00008c40   _kp_constant
 00008c42   _kp_multiplier
-003f5d1d   _ldexp
-003f59c7   _log
-003f5d5c   _main
+003f5d1b   _ldexp
+003f59c5   _log
+003f5d5a   _main
 00008c72   _ref
 00008c3a   _resistance
 00008c34   _resistance_temp
-003f55d2   _rsvd_ISR
+003f55d0   _rsvd_ISR
 00008c01   _rus
 00008c80   _sine_table
 00008c98   _sine_x
@@ -871,9 +871,9 @@ ffffffff   ___pinit__
 00008c4c   _toets
 00008c4e   _toets2
 ffffffff   binit
-003f5ef5   cinit
+003f5ef3   cinit
 003f7ff6   code_start
-003f5ef5   etext
+003f5ef3   etext
 ffffffff   pinit
 
 
@@ -1053,147 +1053,147 @@ address    name
 003f4ace   _CANInterruptConfig
 003f4aec   _CANChargerReception
 003f4c53   _CANSlaveReception
-003f4d8f   _CANSlaveConfig
-003f4f1b   _CANTransmit
-003f4f3c   _adc_isr
-003f4fd2   _cpu_timer0_isr
-003f51a4   _cpu_timer1_isr
-003f520f   _cpu_timer2_isr
-003f521b   _i2c_int1a_isr
-003f525f   _can_rx_isr
-003f5295   _can_tx_isr
-003f52b2   _InitAdc
-003f52d8   _InitAdcAio
-003f52fa   _AdcOffsetSelfCal
-003f5321   _AdcChanSelect
-003f5334   _AdcConversion
-003f545b   _INT13_ISR
-003f5460   _INT14_ISR
-003f5465   _DATALOG_ISR
-003f546a   _RTOSINT_ISR
-003f546f   _EMUINT_ISR
-003f5474   _NMI_ISR
-003f5479   _ILLEGAL_ISR
-003f547e   _USER1_ISR
-003f5483   _USER2_ISR
-003f5488   _USER3_ISR
-003f548d   _USER4_ISR
-003f5492   _USER5_ISR
-003f5497   _USER6_ISR
-003f549c   _USER7_ISR
-003f54a1   _USER8_ISR
-003f54a6   _USER9_ISR
-003f54ab   _USER10_ISR
-003f54b0   _USER11_ISR
-003f54b5   _USER12_ISR
-003f54ba   _ADCINT1_ISR
-003f54bf   _ADCINT2_ISR
-003f54c4   _XINT1_ISR
-003f54c9   _XINT2_ISR
-003f54ce   _ADCINT9_ISR
-003f54d3   _TINT0_ISR
-003f54d8   _WAKEINT_ISR
-003f54dd   _EPWM1_TZINT_ISR
-003f54e2   _EPWM2_TZINT_ISR
-003f54e7   _EPWM3_TZINT_ISR
-003f54ec   _EPWM4_TZINT_ISR
-003f54f1   _EPWM5_TZINT_ISR
-003f54f6   _EPWM6_TZINT_ISR
-003f54fb   _EPWM7_TZINT_ISR
-003f5500   _EPWM1_INT_ISR
-003f5505   _EPWM2_INT_ISR
-003f550a   _EPWM3_INT_ISR
-003f550f   _EPWM4_INT_ISR
-003f5514   _EPWM5_INT_ISR
-003f5519   _EPWM6_INT_ISR
-003f551e   _EPWM7_INT_ISR
-003f5523   _ECAP1_INT_ISR
-003f5528   _HRCAP1_INT_ISR
-003f552d   _HRCAP2_INT_ISR
-003f5532   _EQEP1_INT_ISR
-003f5537   _SPIRXINTA_ISR
-003f553c   _SPITXINTA_ISR
-003f5541   _SPIRXINTB_ISR
-003f5546   _SPITXINTB_ISR
-003f554b   _I2CINT1A_ISR
-003f5550   _I2CINT2A_ISR
-003f5555   _SCIRXINTA_ISR
-003f555a   _SCITXINTA_ISR
-003f555f   _LIN0INTA_ISR
-003f5564   _LIN1INTA_ISR
-003f5569   _ECAN0INTA_ISR
-003f556e   _ECAN1INTA_ISR
-003f5573   _ADCINT3_ISR
-003f5578   _ADCINT4_ISR
-003f557d   _ADCINT5_ISR
-003f5582   _ADCINT6_ISR
-003f5587   _ADCINT7_ISR
-003f558c   _ADCINT8_ISR
-003f5591   _CLA1_INT1_ISR
-003f5596   _CLA1_INT2_ISR
-003f559b   _CLA1_INT3_ISR
-003f55a0   _CLA1_INT4_ISR
-003f55a5   _CLA1_INT5_ISR
-003f55aa   _CLA1_INT6_ISR
-003f55af   _CLA1_INT7_ISR
-003f55b4   _CLA1_INT8_ISR
-003f55b9   _XINT3_ISR
-003f55be   _LVF_ISR
-003f55c3   _LUF_ISR
-003f55c8   _EMPTY_ISR
-003f55cd   _PIE_RESERVED
-003f55d2   _rsvd_ISR
-003f55d7   _InitSysCtrl
-003f55f1   _ServiceDog
-003f55fb   _DisableDog
-003f5603   _InitPll
-003f5657   _InitPeripheralClocks
-003f5693   _CsmUnlock
-003f56c4   _IntOsc1Sel
-003f56d4   _IntOsc2Sel
-003f56e8   _XtalOscSel
-003f56fc   _ExtOscSel
-003f5712   _configADC
-003f5807   _Reset_ADC
-003f5814   _I2CA_Init
-003f5827   _I2CA_WriteData
-003f586d   _I2CA_ReadData
-003f58fa   _Shut_D_BQ
-003f590b   _Bq76940_Init
-003f59c7   _log
-003f5a71   _exp
-003f5b0e   FS$$DIV
-003f5b91   FS$$SUB
-003f5b96   FS$$ADD
-003f5c09   _InitCpuTimers
-003f5c4a   _ConfigCpuTimer
-003f5c7f   FS$$MPY
-003f5cd9   _c_int00
-003f5d1d   _ldexp
-003f5d5c   _main
-003f5d8c   FS$$TOL
-003f5db5   _InitPieCtrl
-003f5dd4   _EnableInterrupts
-003f5ddd   _InitPieVectTable
-003f5e02   FS$$TOI
-003f5e27   FS$$TOU
-003f5e44   I$$TOFS
-003f5e5e   _InitI2C
-003f5e5f   _InitI2CGpio
-003f5e77   __args_main
-003f5e90   C$$EXIT
-003f5e90   _abort
-003f5e92   _exit
-003f5ea9   FS$$CMP
-003f5ec0   _frexp
-003f5ed4   U$$TOFS
-003f5ee4   __register_unlock
-003f5ee8   __register_lock
-003f5eec   __nop
-003f5ef5   ___cinit__
-003f5ef5   ___etext__
-003f5ef5   cinit
-003f5ef5   etext
+003f4d8d   _CANSlaveConfig
+003f4f19   _CANTransmit
+003f4f3a   _adc_isr
+003f4fd0   _cpu_timer0_isr
+003f51a2   _cpu_timer1_isr
+003f520d   _cpu_timer2_isr
+003f5219   _i2c_int1a_isr
+003f525d   _can_rx_isr
+003f5293   _can_tx_isr
+003f52b0   _InitAdc
+003f52d6   _InitAdcAio
+003f52f8   _AdcOffsetSelfCal
+003f531f   _AdcChanSelect
+003f5332   _AdcConversion
+003f5459   _INT13_ISR
+003f545e   _INT14_ISR
+003f5463   _DATALOG_ISR
+003f5468   _RTOSINT_ISR
+003f546d   _EMUINT_ISR
+003f5472   _NMI_ISR
+003f5477   _ILLEGAL_ISR
+003f547c   _USER1_ISR
+003f5481   _USER2_ISR
+003f5486   _USER3_ISR
+003f548b   _USER4_ISR
+003f5490   _USER5_ISR
+003f5495   _USER6_ISR
+003f549a   _USER7_ISR
+003f549f   _USER8_ISR
+003f54a4   _USER9_ISR
+003f54a9   _USER10_ISR
+003f54ae   _USER11_ISR
+003f54b3   _USER12_ISR
+003f54b8   _ADCINT1_ISR
+003f54bd   _ADCINT2_ISR
+003f54c2   _XINT1_ISR
+003f54c7   _XINT2_ISR
+003f54cc   _ADCINT9_ISR
+003f54d1   _TINT0_ISR
+003f54d6   _WAKEINT_ISR
+003f54db   _EPWM1_TZINT_ISR
+003f54e0   _EPWM2_TZINT_ISR
+003f54e5   _EPWM3_TZINT_ISR
+003f54ea   _EPWM4_TZINT_ISR
+003f54ef   _EPWM5_TZINT_ISR
+003f54f4   _EPWM6_TZINT_ISR
+003f54f9   _EPWM7_TZINT_ISR
+003f54fe   _EPWM1_INT_ISR
+003f5503   _EPWM2_INT_ISR
+003f5508   _EPWM3_INT_ISR
+003f550d   _EPWM4_INT_ISR
+003f5512   _EPWM5_INT_ISR
+003f5517   _EPWM6_INT_ISR
+003f551c   _EPWM7_INT_ISR
+003f5521   _ECAP1_INT_ISR
+003f5526   _HRCAP1_INT_ISR
+003f552b   _HRCAP2_INT_ISR
+003f5530   _EQEP1_INT_ISR
+003f5535   _SPIRXINTA_ISR
+003f553a   _SPITXINTA_ISR
+003f553f   _SPIRXINTB_ISR
+003f5544   _SPITXINTB_ISR
+003f5549   _I2CINT1A_ISR
+003f554e   _I2CINT2A_ISR
+003f5553   _SCIRXINTA_ISR
+003f5558   _SCITXINTA_ISR
+003f555d   _LIN0INTA_ISR
+003f5562   _LIN1INTA_ISR
+003f5567   _ECAN0INTA_ISR
+003f556c   _ECAN1INTA_ISR
+003f5571   _ADCINT3_ISR
+003f5576   _ADCINT4_ISR
+003f557b   _ADCINT5_ISR
+003f5580   _ADCINT6_ISR
+003f5585   _ADCINT7_ISR
+003f558a   _ADCINT8_ISR
+003f558f   _CLA1_INT1_ISR
+003f5594   _CLA1_INT2_ISR
+003f5599   _CLA1_INT3_ISR
+003f559e   _CLA1_INT4_ISR
+003f55a3   _CLA1_INT5_ISR
+003f55a8   _CLA1_INT6_ISR
+003f55ad   _CLA1_INT7_ISR
+003f55b2   _CLA1_INT8_ISR
+003f55b7   _XINT3_ISR
+003f55bc   _LVF_ISR
+003f55c1   _LUF_ISR
+003f55c6   _EMPTY_ISR
+003f55cb   _PIE_RESERVED
+003f55d0   _rsvd_ISR
+003f55d5   _InitSysCtrl
+003f55ef   _ServiceDog
+003f55f9   _DisableDog
+003f5601   _InitPll
+003f5655   _InitPeripheralClocks
+003f5691   _CsmUnlock
+003f56c2   _IntOsc1Sel
+003f56d2   _IntOsc2Sel
+003f56e6   _XtalOscSel
+003f56fa   _ExtOscSel
+003f5710   _configADC
+003f5805   _Reset_ADC
+003f5812   _I2CA_Init
+003f5825   _I2CA_WriteData
+003f586b   _I2CA_ReadData
+003f58f8   _Shut_D_BQ
+003f5909   _Bq76940_Init
+003f59c5   _log
+003f5a6f   _exp
+003f5b0c   FS$$DIV
+003f5b8f   FS$$SUB
+003f5b94   FS$$ADD
+003f5c07   _InitCpuTimers
+003f5c48   _ConfigCpuTimer
+003f5c7d   FS$$MPY
+003f5cd7   _c_int00
+003f5d1b   _ldexp
+003f5d5a   _main
+003f5d8a   FS$$TOL
+003f5db3   _InitPieCtrl
+003f5dd2   _EnableInterrupts
+003f5ddb   _InitPieVectTable
+003f5e00   FS$$TOI
+003f5e25   FS$$TOU
+003f5e42   I$$TOFS
+003f5e5c   _InitI2C
+003f5e5d   _InitI2CGpio
+003f5e75   __args_main
+003f5e8e   C$$EXIT
+003f5e8e   _abort
+003f5e90   _exit
+003f5ea7   FS$$CMP
+003f5ebe   _frexp
+003f5ed2   U$$TOFS
+003f5ee2   __register_unlock
+003f5ee6   __register_lock
+003f5eea   __nop
+003f5ef3   ___cinit__
+003f5ef3   ___etext__
+003f5ef3   cinit
+003f5ef3   etext
 003f7ff6   code_start
 003f7ff8   _CsmPwl
 ffffffff   ___binit__

@@ -267,7 +267,7 @@ void Calculate_SOH(void)
 				temp_SOC_max_cell = i +1;
 			}
 		}
-		r_avg = r_avg*0.66667;
+		r_avg = r_avg*0.066667;
 		SOH_avg = r_avg;
 		SOH_max_cell = temp_SOC_max_cell ;
 		SOH_max = resistance;

@@ -307,11 +307,9 @@ void CANSlaveReception(void)
 
 	case 20: {TxData.asFloat=Auxilliary_Voltage; CANTransmit(0, 20, TxData.asUint, 5); break;}
 
-
-
-	case 21: {TxData.asFloat=5.0; CANTransmit(0, 21, TxData.asUint,5); break;}
-	case 22: {TxData.asFloat=4.1; CANTransmit(0, 22, TxData.asUint,5); break;}
-	case 23: {TxData.asFloat=3.594; CANTransmit(0, 23, TxData.asUint, 5); break;}
+	case 21: {TxData.asFloat= SOH_avg ; CANTransmit(0, 21, TxData.asUint,5); break;}				//r_avg
+	case 22: {TxData.asFloat=SOH_max; CANTransmit(0, 22, TxData.asUint,5); break;}					//rmaks
+	case 23: {TxData.asFloat=SOH_max_cell; CANTransmit(0, 23, TxData.asUint, 5); break;}				//rcell
 	}
 }
 
