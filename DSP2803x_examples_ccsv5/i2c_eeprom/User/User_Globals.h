@@ -101,7 +101,7 @@ extern volatile float Tmax;
 extern volatile float Tmin;
 
 extern volatile float SOC;
-extern volatile float SOH;
+//extern volatile float SOH;
 
 extern volatile float Vauxmin;
 extern volatile float AuxChargeTime;
@@ -139,7 +139,9 @@ extern float SOCc;
 
 
 
-
+extern volatile float SOH_avg;
+extern volatile float SOH_max;
+extern volatile float SOH_max_cell;
 
 
 extern volatile float Voltages_old[15];

@@ -102,7 +102,7 @@ volatile float Tmax = 60;
 volatile float Tmin = 0;
 
 volatile float SOC;
-volatile float SOH;
+
 
 volatile float Vauxmin = 12.3;
 volatile float AuxChargeTime = 1800;
@@ -142,11 +142,12 @@ volatile float balancing_bottom_level = 3.475;
 
 
 
-
-
+ volatile float SOH_avg;
+ volatile float SOH_max;
+ volatile float SOH_max_cell;
 
  volatile float Voltages_old[15];
  volatile float Current_old;
- volatile	float resistance;
- volatile	float resistance_temp;
+ volatile float resistance;
+ volatile float resistance_temp;
  volatile float dI;

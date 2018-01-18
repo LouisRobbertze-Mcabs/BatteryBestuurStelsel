@@ -247,25 +247,30 @@ void Process_Voltages(void)
 void Calculate_SOH(void)
 {
 	int i;
-
-
+	int temp_SOC_max_cell = 0;
+	float r_avg = 0;
 
 	dI = fabs(Current - Current_old);
 
-	if(dI>5)
+	if(dI>10)
 	{
 		resistance = 0;
 
 		for(i = 0; i<15; i++)
 		{
 			resistance_temp = fabs(Voltages[i]-Voltages_old[i]) / dI;
+			r_avg = resistance_temp + r_avg;
 
 			if(resistance_temp>resistance)
 			{
 				resistance = resistance_temp;
+				temp_SOC_max_cell = i +1;
 			}
 		}
-		SOH = resistance;
+		r_avg = r_avg*0.66667;
+		SOH_avg = r_avg;
+		SOH_max_cell = temp_SOC_max_cell ;
+		SOH_max = resistance;
 	}
 
 
