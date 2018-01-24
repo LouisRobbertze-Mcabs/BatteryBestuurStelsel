@@ -29,7 +29,6 @@ void main(void)
 			Read_Temperatures();
 			Balance(5,Vbalance);
 
-
 			Calculate_Current();
 
 			Read_System_Status();

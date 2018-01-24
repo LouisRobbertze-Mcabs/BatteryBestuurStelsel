@@ -108,7 +108,7 @@ volatile float Vauxmin = 12.3;
 volatile float AuxChargeTime = 1800;
 
 volatile float Vchargedflagreset = 3.35;
-volatile float Vdischargedflagreset = 2.7;
+volatile float Vdischargedflagreset = 3;
 
 volatile float kp_constant = 3.5;								//charger
 volatile float kp_multiplier = 30;								//charger
