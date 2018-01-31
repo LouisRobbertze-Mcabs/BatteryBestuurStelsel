@@ -89,8 +89,8 @@ volatile Uint16 Auxilliary_counter = 0;
 
 //defines:
 volatile float Vmax = 3.65;
-volatile float Vmin = 2.9;
-volatile float Vcritical = 2.8;
+volatile float Vmin = 2.8;
+volatile float Vcritical = 2.7;
 volatile float Vcharge = 3.5;
 volatile float Vbalance = 3.48;
 
@@ -126,7 +126,7 @@ volatile float balancing_bottom_level = 3.475;
     sine_y  /* Array of y-coordinates */
 };
 
- volatile float Current_CAL;
+ volatile float Current_CAL;			//=2095
  volatile Uint16 Current_Sum;
  volatile Uint16 Current_Counter;
 
@@ -140,7 +140,7 @@ volatile float balancing_bottom_level = 3.475;
  float SOCv = 0.5;
  float SOCc = 0;
 
-
+float ChgCurrent = 0;
 
  volatile float SOH_avg;
  volatile float SOH_max;

@@ -45,6 +45,8 @@ float interpolate_table_1d(struct table_1d *table, float x);
 
 void Calibrate_Current(void);
 
+void Calibrate_Current_charger(void);
+
 void Balance(int period, float reference);
 
 unsigned char CRC8(unsigned char *ptr, unsigned char len,unsigned char key);

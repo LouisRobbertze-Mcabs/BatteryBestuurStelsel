@@ -31,6 +31,8 @@ void main(void)
 
 			Calculate_Current();
 
+		//	Calibrate_Current_charger;			//testing phase
+
 			Read_System_Status();
 			Process_System_Status();
 

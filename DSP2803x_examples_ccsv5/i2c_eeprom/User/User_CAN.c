@@ -168,7 +168,7 @@ void CANChargerReception(void)
 	Uint32 RxDataL = 0;
 	Uint32 RxDataH = 0;
 	float ChgVoltage = 0;
-	float ChgCurrent = 0;
+
 	Uint16 ChgStatus = 0;
 	Uint16 temp = 0;
 	Uint16 temp2 = 0;
@@ -193,7 +193,8 @@ void CANChargerReception(void)
 	temp = (RxDataL& 0xFFFF0000)>>16;
 	temp2    = (temp & 0xFF) << 8;
 	temp2 = ((temp &0xFF00)>>8) | temp2;
-	ChgCurrent = (float)temp2*0.1;
+	temp2 = (((temp &0xFF00)>>8) | temp2)*0.1;
+	ChgCurrent = (float)temp2;
 
 	//Read Charger Status
 	ChgStatus = RxDataH & 0xFF;
@@ -310,6 +311,8 @@ void CANSlaveReception(void)
 	case 21: {TxData.asFloat= SOH_avg ; CANTransmit(0, 21, TxData.asUint,5); break;}				//r_avg
 	case 22: {TxData.asFloat=SOH_max; CANTransmit(0, 22, TxData.asUint,5); break;}					//rmaks
 	case 23: {TxData.asFloat=SOH_max_cell; CANTransmit(0, 23, TxData.asUint, 5); break;}				//rcell
+
+	case 24: {TxData.asFloat=SOH_max_cell; CANTransmit(0, 23, TxData.asUint, 5); break;}				//SOC
 	}
 }
 

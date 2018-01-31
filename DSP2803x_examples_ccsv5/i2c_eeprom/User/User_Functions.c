@@ -725,3 +725,20 @@ void Calibrate_Current()
 	// Reset the watchdog counter
 	ServiceDog();
 }
+
+void Calibrate_Current_charger()
+{
+	//Reset the watchdog counter
+	ServiceDog();
+	float error;
+
+	if(Charger_status == 0)
+	{
+		if(ChgCurrent>=10 && Aux_Control == 0)				//charger busy charging and aux charger turned off
+		{
+			error = (ChgCurrent)/Current;		//as percentage
+			Current_CAL = error * Current_CAL;
+
+		}
+	}
+}
