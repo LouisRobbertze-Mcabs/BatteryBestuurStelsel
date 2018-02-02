@@ -124,6 +124,10 @@ __interrupt void cpu_timer1_isr(void)
 
 			ContactorOut = 1;           //turn on contactor
 		}
+		else
+		{
+			ContactorOut = 0;           //turn off contactor
+		}
 
 	}
 	else if((KeySwitch == 0) && (Charger_status == 0)) //keyswitch == 0
