@@ -302,9 +302,9 @@ void CANSlaveReception(void)
 
 	case 16: {TxData.asFloat=Current; CANTransmit(0, 16, TxData.asUint,5); break;}
 
-	case 17: {TxData.asFloat=Temperatures[4]; CANTransmit(0, 17, TxData.asUint,5); break;}
-	case 18: {TxData.asFloat=Temperatures[9]; CANTransmit(0, 18, TxData.asUint,5); break;}
-	case 19: {TxData.asFloat=SOC; CANTransmit(0, 19, TxData.asUint, 5); break;}					//SOC
+	case 17: {TxData.asFloat=Temperature_avg; CANTransmit(0, 17, TxData.asUint,5); break;}
+	case 18: {TxData.asFloat=Temperature_high; CANTransmit(0, 18, TxData.asUint,5); break;}
+	case 19: {TxData.asFloat=Temperature_high_cell; CANTransmit(0, 19, TxData.asUint, 5); break;}					//SOC
 
 	case 20: {TxData.asFloat=Auxilliary_Voltage; CANTransmit(0, 20, TxData.asUint, 5); break;}
 
@@ -312,7 +312,7 @@ void CANSlaveReception(void)
 	case 22: {TxData.asFloat=SOH_max; CANTransmit(0, 22, TxData.asUint,5); break;}					//rmaks
 	case 23: {TxData.asFloat=SOH_max_cell; CANTransmit(0, 23, TxData.asUint, 5); break;}				//rcell
 
-	case 24: {TxData.asFloat=SOH_max_cell; CANTransmit(0, 23, TxData.asUint, 5); break;}				//SOC
+	case 24: {TxData.asFloat=SOC; CANTransmit(0, 23, TxData.asUint, 5); break;}				//SOC
 	}
 }
 

@@ -311,6 +311,7 @@ void Read_Temperatures(void)
 	float temperature_avg=0;
 	float temp_Temperature_high = 0;
 	float temp_Temperature_low = 71;
+	float temp_high_cell = 0;
 
 	float temp_T = 0;
 
@@ -357,50 +358,49 @@ void Read_Temperatures(void)
 
 	for(i = 0; i<15; i++)
 	{
-		temperature_avg = temperature_avg+Temperatures[i];
+		temperature_avg = temperature_avg+Temperatures[i];					//calculate avg temperature
 
-		if(temp_Temperature_high<Temperatures[i])
+		if(temp_Temperature_high<Temperatures[i])							//calculate highest temperature
+		{
 			temp_Temperature_high = Temperatures[i];
+			temp_high_cell = i ;
+		}
 
-		if(temp_Temperature_low>Temperatures[i])
+		if(temp_Temperature_low>Temperatures[i])							//calculate lowest temperature
 			temp_Temperature_low = Temperatures[i];
 	}
 	Temperature_avg = temperature_avg*0.0667;
 
-	/*
-		if(Temperatures_resistance[4]<100)					//old bms version      -- gekoppel aan grond so verwag iets klein uit 4096
-		{
-			Temperature_avg = Temperatures[4];
-			Temperature_high = Temperatures[9];
-			Temperatures[15] = 0;
-		}
-		else												//new bms version
-		{
-			Temperature_avg = temperature_avg;
-			Temperature_high = temp_Temperature_high;
-			Temperature_low = temp_Temperature_low;
-
-			if(Temperature_high> Tmax || Temperature_low<Tmin)
-			{
-				flagTemp = 1;
-			}
-
-			if((Temperature_avg - Temperatures[15])> 5)
-			{
-				Fan_Control = 1;
-			}
-			else
-				Fan_Control = 0;
-		}
-	 */
-	if(Temperatures[4]> Tmax || Temperatures[4]<Tmin)
+	if(Temperatures_resistance[4]<100)										//old bms version       (tipies 20)
 	{
-		flag = 1;
+		Temperature_avg = Temperatures[4];
+		Temperature_high = Temperatures[9];
+
+		if(Temperatures[4]>Temperatures[9])
+			Temperature_high_cell = 5;
+		else
+			Temperature_high_cell = 10;
+
+		if((Temperatures[4]> Tmax || Temperatures[4]<Tmin) || (Temperatures[9]> Tmax || Temperatures[9]<Tmin))
+			flag = 1;
 	}
-
-	if(Temperatures[9]> Tmax || Temperatures[9]<Tmin)
+	else																	//new bms version
 	{
-		flag = 1;
+		Temperature_avg = temperature_avg;
+		Temperature_high = temp_Temperature_high;
+		Temperature_high_cell = temp_high_cell;
+
+		if(Temperature_high> Tmax || Temperature_low<Tmin)
+		{
+			flag = 1;
+		}
+
+		if((Temperature_avg - Temperatures[15])> 3)
+		{
+			Fan_Control = 1;
+		}
+		else
+			Fan_Control = 0;
 	}
 
 	if(flag == 1)

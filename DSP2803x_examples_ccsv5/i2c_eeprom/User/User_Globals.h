@@ -59,6 +59,7 @@ extern volatile float Temperature_avg;
 extern volatile float Temperatures_resistance[14];
 extern volatile float Temperature_high;
 extern volatile float Temperature_low;
+extern volatile float Temperature_high_cell;
 
 extern volatile float ADCgain;
 extern volatile float ADCoffset;

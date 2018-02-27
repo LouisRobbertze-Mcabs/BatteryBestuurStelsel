@@ -60,6 +60,7 @@ volatile float Temperature_avg;
 volatile float Temperatures_resistance[14];
 volatile float Temperature_high=0;
 volatile float Temperature_low=50;
+volatile float Temperature_high_cell;
 
 volatile float ADCgain;
 volatile float ADCoffset;
@@ -98,7 +99,7 @@ volatile float Imin = 500;
 volatile float Imax = 3800;
 volatile float Ifilter = 0.27;
 
-volatile float Tmax = 60;
+volatile float Tmax = 55;
 volatile float Tmin = 0;
 
 volatile float SOC;
@@ -118,7 +119,7 @@ volatile float balancing_bottom_level = 3.475;
 /* Declare variable using above structure and the function datapoints */
 /* These coordinates correspond to the points illustrated in the above graph */
  float sine_x[5] = {0, 0.1, 0.3, 0.6, 1};
- float sine_y[5] = {2.88, 3.202, 3.27, 3.293, 3.376};
+ float sine_y[5] = {2.88, 3.202, 3.27, 3.293, 3.4};
 
  struct table_1d sine_table = {
     5,      /* Number of data points */

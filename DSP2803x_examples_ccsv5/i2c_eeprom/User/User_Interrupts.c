@@ -69,7 +69,7 @@ __interrupt void cpu_timer0_isr(void)
 	//SOC11 - Cell3
 	Temperatures_resistance[3] = Temperatures_resistance_temp[3] + (0.466*(((AdcResult.ADCRESULT11))-Temperatures_resistance_temp[3]));
 	Temperatures_resistance_temp[3] = Temperatures_resistance[3];
-	//SOC10 - Cell4
+	//SOC10 - Cell5
 	Temperatures_resistance[4] = Temperatures_resistance_temp[4] + (0.466*(((AdcResult.ADCRESULT10))-Temperatures_resistance_temp[4]));		//possibly use for model detection
 	Temperatures_resistance_temp[4] = Temperatures_resistance[4];
 	//SOC9 - Cell6
@@ -81,7 +81,7 @@ __interrupt void cpu_timer0_isr(void)
 	//SOC7 - Cell8
 	Temperatures_resistance[7] = Temperatures_resistance_temp[7] + (0.466*(((AdcResult.ADCRESULT7))-Temperatures_resistance_temp[7]));
 	Temperatures_resistance_temp[7] = Temperatures_resistance[7];
-	//SOC6 - Cell9
+	//SOC6 - Cell10
 	Temperatures_resistance[8] = Temperatures_resistance_temp[8] + (0.466*(((AdcResult.ADCRESULT6))-Temperatures_resistance_temp[8]));
 	Temperatures_resistance_temp[8] = Temperatures_resistance[8];
 	//SOC5 - Cell11
