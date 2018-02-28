@@ -190,11 +190,19 @@ void CANChargerReception(void)
 	ChgVoltage = (float)temp2*0.1;
 
 	//Read Charger Current
-	temp = (RxDataL& 0xFFFF0000)>>16;
+/*	temp = (RxDataL& 0xFFFF0000)>>16;
 	temp2    = (temp & 0xFF) << 8;
 	temp2 = ((temp &0xFF00)>>8) | temp2;
 	temp2 = (((temp &0xFF00)>>8) | temp2)*0.1;
-	ChgCurrent = (float)temp2;
+	ChgCurrent = (float)temp2 * 0.1;
+	*/
+
+	 //Read Charger Current
+    temp = (RxDataL& 0xFFFF0000)>>16;
+    temp2    = (temp & 0xFF) << 8;
+    temp2 = ((temp &0xFF00)>>8) | temp2;
+    ChgCurrent = (float)temp2*0.1;
+
 
 	//Read Charger Status
 	ChgStatus = RxDataH & 0xFF;
@@ -271,8 +279,8 @@ void CANChargerReception(void)
 	}
 
 	//    Charger_status = ChgStatus;
-	toets = ChgVoltage;
-	toets2 = ChgCurrent;
+	ChargerVoltage = ChgVoltage;
+	ChargerCurrent = ChgCurrent;
 }
 
 void CANSlaveReception(void)

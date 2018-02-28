@@ -29,14 +29,12 @@ void main(void)
 			Balance(5,Vbalance);
 
 			Calculate_Current();
-
-		//	Calibrate_Current_charger;			//testing phase
+			Calibrate_Current_charger();
 
 			Read_System_Status();
 			Process_System_Status();
 
 			Calculate_SOC();
-
 			Calculate_SOH();
 
 			counter_2Hz = 0;

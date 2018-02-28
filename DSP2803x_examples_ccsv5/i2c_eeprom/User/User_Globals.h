@@ -45,8 +45,8 @@ extern float Ireference;
 extern volatile Uint16 Charger_status;
 extern volatile int system_status;
 
-extern volatile float toets;
-extern volatile float toets2;
+extern volatile float ChargerVoltage;
+extern volatile float ChargerCurrent;
 extern volatile float Current;
 extern volatile int current_int;
 

@@ -46,8 +46,8 @@ float current_reference;
 volatile Uint16 Charger_status = 0;
 volatile int system_status= 0;
 
-volatile float toets=0;
-volatile float toets2=0;
+volatile float ChargerVoltage=0;
+volatile float ChargerCurrent=0;
 volatile float Current;
 volatile int current_int;
 
@@ -84,7 +84,7 @@ int Cell_B3 = 0;
 Uint16 NodeID = 1;
 volatile Uint16 counter_50Hz = 0;
 
-volatile float Auxilliary_Voltage = 0;
+volatile float Auxilliary_Voltage = 13;
 volatile Uint16 Auxilliary_counter = 0;
 
 
