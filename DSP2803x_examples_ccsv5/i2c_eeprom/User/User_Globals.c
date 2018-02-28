@@ -127,7 +127,7 @@ volatile float balancing_bottom_level = 3.475;
     sine_y  /* Array of y-coordinates */
 };
 
- volatile float Current_CAL;			//=2095
+ volatile float Current_CAL = 2080;			//=2095
  volatile Uint16 Current_Sum;
  volatile Uint16 Current_Counter;
 
