@@ -52,15 +52,18 @@ volatile float Current;
 volatile int current_int;
 
 volatile float Voltages[15];
-
+volatile float Voltage_avg;
 volatile float Voltage_high=0;
+volatile float Voltage_high_cell;
 volatile float Voltage_low=10;
+volatile float Voltage_low_cell;
 volatile float Temperatures[16];
 volatile float Temperature_avg;
 volatile float Temperatures_resistance[14];
 volatile float Temperature_high=0;
 volatile float Temperature_low=50;
 volatile float Temperature_high_cell;
+volatile float Temperature_low_cell;
 
 volatile float ADCgain;
 volatile float ADCoffset;

@@ -190,18 +190,18 @@ void CANChargerReception(void)
 	ChgVoltage = (float)temp2*0.1;
 
 	//Read Charger Current
-/*	temp = (RxDataL& 0xFFFF0000)>>16;
+	/*	temp = (RxDataL& 0xFFFF0000)>>16;
 	temp2    = (temp & 0xFF) << 8;
 	temp2 = ((temp &0xFF00)>>8) | temp2;
 	temp2 = (((temp &0xFF00)>>8) | temp2)*0.1;
 	ChgCurrent = (float)temp2 * 0.1;
-	*/
+	 */
 
-	 //Read Charger Current
-    temp = (RxDataL& 0xFFFF0000)>>16;
-    temp2    = (temp & 0xFF) << 8;
-    temp2 = ((temp &0xFF00)>>8) | temp2;
-    ChgCurrent = (float)temp2*0.1;
+	//Read Charger Current
+	temp = (RxDataL& 0xFFFF0000)>>16;
+	temp2    = (temp & 0xFF) << 8;
+	temp2 = ((temp &0xFF00)>>8) | temp2;
+	ChgCurrent = (float)temp2*0.1;
 
 
 	//Read Charger Status
@@ -292,35 +292,66 @@ void CANSlaveReception(void)
 
 	switch (RxData)
 	{
-	case 1: {TxData.asFloat=Voltages[0]; CANTransmit(0, 1, TxData.asUint,5); break;}
-	case 2: {TxData.asFloat=Voltages[1]; CANTransmit(0, 2, TxData.asUint,5); break;}
-	case 3: {TxData.asFloat=Voltages[2]; CANTransmit(0, 3, TxData.asUint,5); break;}
-	case 4: {TxData.asFloat=Voltages[3]; CANTransmit(0, 4, TxData.asUint,5); break;}
-	case 5: {TxData.asFloat=Voltages[4]; CANTransmit(0, 5, TxData.asUint,5); break;}
-	case 6: {TxData.asFloat=Voltages[5]; CANTransmit(0, 6, TxData.asUint,5); break;}
-	case 7: {TxData.asFloat=Voltages[6]; CANTransmit(0, 7, TxData.asUint,5); break;}
-	case 8: {TxData.asFloat=Voltages[7]; CANTransmit(0, 8, TxData.asUint,5); break;}
-	case 9: {TxData.asFloat=Voltages[8]; CANTransmit(0, 9, TxData.asUint,5); break;}
-	case 10: {TxData.asFloat=Voltages[9]; CANTransmit(0, 10, TxData.asUint,5); break;}
-	case 11: {TxData.asFloat=Voltages[10]; CANTransmit(0, 11, TxData.asUint,5); break;}
-	case 12: {TxData.asFloat=Voltages[11]; CANTransmit(0, 12, TxData.asUint,5); break;}
-	case 13: {TxData.asFloat=Voltages[12]; CANTransmit(0, 13, TxData.asUint,5); break;}
-	case 14: {TxData.asFloat=Voltages[13]; CANTransmit(0, 14, TxData.asUint,5); break;}
-	case 15: {TxData.asFloat=Voltages[14]; CANTransmit(0, 15, TxData.asUint,5); break;}
+	case 4: {TxData.asFloat=Voltage_total; CANTransmit(0, 4, TxData.asUint,5); break;}
+	case 5: {TxData.asFloat=Current; CANTransmit(0, 5, TxData.asUint,5); break;}
 
-	case 16: {TxData.asFloat=Current; CANTransmit(0, 16, TxData.asUint,5); break;}
+	case 6: {TxData.asFloat=Voltage_low; CANTransmit(0, 6, TxData.asUint,5); break;}
+	case 7: {TxData.asFloat=Voltage_low_cell; CANTransmit(0, 7, TxData.asUint,5); break;}
 
-	case 17: {TxData.asFloat=Temperature_avg; CANTransmit(0, 17, TxData.asUint,5); break;}
-	case 18: {TxData.asFloat=Temperature_high; CANTransmit(0, 18, TxData.asUint,5); break;}
-	case 19: {TxData.asFloat=Temperature_high_cell; CANTransmit(0, 19, TxData.asUint, 5); break;}					//SOC
+	case 8: {TxData.asFloat=Voltage_high; CANTransmit(0, 8, TxData.asUint,5); break;}
+	case 9: {TxData.asFloat=Voltage_high_cell; CANTransmit(0, 9, TxData.asUint,5); break;}
 
-	case 20: {TxData.asFloat=Auxilliary_Voltage; CANTransmit(0, 20, TxData.asUint, 5); break;}
+	case 10: {TxData.asFloat=Voltage_avg; CANTransmit(0, 10, TxData.asUint,5); break;}
 
-	case 21: {TxData.asFloat= SOH_avg ; CANTransmit(0, 21, TxData.asUint,5); break;}				//r_avg
-	case 22: {TxData.asFloat=SOH_max; CANTransmit(0, 22, TxData.asUint,5); break;}					//rmaks
-	case 23: {TxData.asFloat=SOH_max_cell; CANTransmit(0, 23, TxData.asUint, 5); break;}				//rcell
+	case 11: {TxData.asFloat=Temperature_high; CANTransmit(0, 11, TxData.asUint,5); break;}
+	case 12: {TxData.asFloat=Temperature_high_cell; CANTransmit(0, 12, TxData.asUint, 5); break;}
 
-	case 24: {TxData.asFloat=SOC; CANTransmit(0, 23, TxData.asUint, 5); break;}				//SOC
+	case 13: {TxData.asFloat=Temperature_low; CANTransmit(0, 13, TxData.asUint,5); break;}
+	case 14: {TxData.asFloat=Temperature_low_cell; CANTransmit(0, 14, TxData.asUint, 5); break;}
+
+	case 15: {TxData.asFloat=Temperature_avg; CANTransmit(0, 15, TxData.asUint,5); break;}
+
+	case 16: {TxData.asFloat=Auxilliary_Voltage; CANTransmit(0, 16, TxData.asUint, 5); break;}
+	case 17: {TxData.asFloat=SOC*100; CANTransmit(0, 17, TxData.asUint, 5); break;}
+
+	case 18: {TxData.asFloat= SOH_avg ; CANTransmit(0, 18, TxData.asUint,5); break;}					//r_avg
+	case 19: {TxData.asFloat=SOH_max; CANTransmit(0, 19, TxData.asUint,5); break;}						//rmaks
+	case 20: {TxData.asFloat=SOH_max_cell; CANTransmit(0, 20, TxData.asUint, 5); break;}				//rcell
+
+	//cell voltage values
+	case 21: {TxData.asFloat=Voltages[0]; CANTransmit(0, 21, TxData.asUint,5); break;}
+	case 22: {TxData.asFloat=Voltages[1]; CANTransmit(0, 22, TxData.asUint,5); break;}
+	case 23: {TxData.asFloat=Voltages[2]; CANTransmit(0, 23, TxData.asUint,5); break;}
+	case 24: {TxData.asFloat=Voltages[3]; CANTransmit(0, 24, TxData.asUint,5); break;}
+	case 25: {TxData.asFloat=Voltages[4]; CANTransmit(0, 25, TxData.asUint,5); break;}
+	case 26: {TxData.asFloat=Voltages[5]; CANTransmit(0, 26, TxData.asUint,5); break;}
+	case 27: {TxData.asFloat=Voltages[6]; CANTransmit(0, 27, TxData.asUint,5); break;}
+	case 28: {TxData.asFloat=Voltages[7]; CANTransmit(0, 28, TxData.asUint,5); break;}
+	case 29: {TxData.asFloat=Voltages[8]; CANTransmit(0, 29, TxData.asUint,5); break;}
+	case 30: {TxData.asFloat=Voltages[9]; CANTransmit(0, 30, TxData.asUint,5); break;}
+	case 31: {TxData.asFloat=Voltages[10]; CANTransmit(0, 31, TxData.asUint,5); break;}
+	case 32: {TxData.asFloat=Voltages[11]; CANTransmit(0, 32, TxData.asUint,5); break;}
+	case 33: {TxData.asFloat=Voltages[12]; CANTransmit(0, 33, TxData.asUint,5); break;}
+	case 34: {TxData.asFloat=Voltages[13]; CANTransmit(0, 34, TxData.asUint,5); break;}
+	case 35: {TxData.asFloat=Voltages[14]; CANTransmit(0, 35, TxData.asUint,5); break;}
+
+	//cell Temperature values
+	case 36: {TxData.asFloat=Temperatures[0]; CANTransmit(0, 36, TxData.asUint,5); break;}
+	case 37: {TxData.asFloat=Temperatures[1]; CANTransmit(0, 37, TxData.asUint,5); break;}
+	case 38: {TxData.asFloat=Temperatures[2]; CANTransmit(0, 38, TxData.asUint,5); break;}
+	case 39: {TxData.asFloat=Temperatures[3]; CANTransmit(0, 39, TxData.asUint,5); break;}
+	case 40: {TxData.asFloat=Temperatures[4]; CANTransmit(0, 40, TxData.asUint,5); break;}
+	case 41: {TxData.asFloat=Temperatures[5]; CANTransmit(0, 41, TxData.asUint,5); break;}
+	case 42: {TxData.asFloat=Temperatures[6]; CANTransmit(0, 42, TxData.asUint,5); break;}
+	case 43: {TxData.asFloat=Temperatures[7]; CANTransmit(0, 43, TxData.asUint,5); break;}
+	case 44: {TxData.asFloat=Temperatures[8]; CANTransmit(0, 44, TxData.asUint,5); break;}
+	case 45: {TxData.asFloat=Temperatures[9]; CANTransmit(0, 45, TxData.asUint,5); break;}
+	case 46: {TxData.asFloat=Temperatures[10]; CANTransmit(0, 46, TxData.asUint,5); break;}
+	case 47: {TxData.asFloat=Temperatures[11]; CANTransmit(0, 47, TxData.asUint,5); break;}
+	case 48: {TxData.asFloat=Temperatures[12]; CANTransmit(0, 48, TxData.asUint,5); break;}
+	case 49: {TxData.asFloat=Temperatures[13]; CANTransmit(0, 49, TxData.asUint,5); break;}
+	case 50: {TxData.asFloat=Temperatures[14]; CANTransmit(0, 50, TxData.asUint,5); break;}
+	case 51: {TxData.asFloat=Temperatures[15]; CANTransmit(0, 51, TxData.asUint,5); break;}
 	}
 }
 

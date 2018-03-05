@@ -155,11 +155,16 @@ void  Read_Cell_Voltages(void)
 	float Voltages_backup10 = Voltages[10];
 
 	float temp_V = 0;
+	float temp_Voltage_total = 0;
 	float temp_Voltage_high;
 	temp_Voltage_high = 0;
+	float temp_Voltage_high_nr = 0;
+
 	float temp_Voltage_low;
 	temp_Voltage_low = 10;
+	float temp_Voltage_low_nr = 0;
 
+	float temp_Voltage_avg = 0;
 
 	for(i = 0; i<15; i++)
 	{
@@ -179,17 +184,28 @@ void  Read_Cell_Voltages(void)
 		if(i != 5 && i != 10)
 			Voltages[i] = temp_V;
 
-		Voltage_total = Voltage_total +  Voltages[i];
+		temp_Voltage_total = temp_Voltage_total +  Voltages[i];
 
 		if(temp_Voltage_high<Voltages[i])
+		{
 			temp_Voltage_high = Voltages[i];
+			temp_Voltage_high_nr = i + 1;
+		}
 
 		if(temp_Voltage_low>Voltages[i])
+		{
 			temp_Voltage_low = Voltages[i];
-	}
+			temp_Voltage_low_nr = i + 1;
+		}
 
+		temp_Voltage_avg =  temp_Voltage_avg + Voltages[i];
+	}
+	Voltage_total = temp_Voltage_total;
+	Voltage_avg = temp_Voltage_avg*0.0667;
 	Voltage_high = temp_Voltage_high;
+	Voltage_low_cell = temp_Voltage_low_nr;
 	Voltage_low = temp_Voltage_low;
+	Voltage_high_cell = temp_Voltage_high_nr;
 
 	ServiceDog();
 }
@@ -314,6 +330,7 @@ void Read_Temperatures(void)
 	float temp_Temperature_high = 0;
 	float temp_Temperature_low = 71;
 	float temp_high_cell = 0;
+	float temp_low_cell = 0;
 
 	float temp_T = 0;
 
@@ -369,19 +386,32 @@ void Read_Temperatures(void)
 		}
 
 		if(temp_Temperature_low>Temperatures[i])							//calculate lowest temperature
+		{
 			temp_Temperature_low = Temperatures[i];
+			temp_low_cell = i;
+		}
+
 	}
 	Temperature_avg = temperature_avg*0.0667;
 
 	if(Temperatures_resistance[4]<100)										//old bms version       (tipies 20)
 	{
-		Temperature_avg = Temperatures[4];
-		Temperature_high = Temperatures[9];
+		Temperature_avg = (Temperatures[4]+Temperatures[9])/2;
 
 		if(Temperatures[4]>Temperatures[9])
+		{
+			Temperature_high = Temperatures[4];
+			Temperature_low = Temperatures[9];
 			Temperature_high_cell = 5;
+			Temperature_low_cell = 10;
+		}
 		else
+		{
+			Temperature_high = Temperatures[9];
+			Temperature_low = Temperatures[4];
 			Temperature_high_cell = 10;
+			Temperature_high_cell = 5;
+		}
 
 		if((Temperatures[4]> Tmax || Temperatures[4]<Tmin) || (Temperatures[9]> Tmax || Temperatures[9]<Tmin))
 			flag = 1;
@@ -391,6 +421,8 @@ void Read_Temperatures(void)
 		Temperature_avg = temperature_avg;
 		Temperature_high = temp_Temperature_high;
 		Temperature_high_cell = temp_high_cell;
+		Temperature_low =temp_Temperature_low;
+		Temperature_low_cell = temp_low_cell;
 
 		if(Temperature_high> Tmax || Temperature_low<Tmin)
 		{

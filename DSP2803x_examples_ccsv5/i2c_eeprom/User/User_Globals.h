@@ -51,15 +51,18 @@ extern volatile float Current;
 extern volatile int current_int;
 
 extern volatile float Voltages[15];
-
+extern volatile float Voltage_avg;
 extern volatile float Voltage_high;
+extern volatile float Voltage_high_cell;
 extern volatile float Voltage_low;
+extern volatile float Voltage_low_cell;
 extern volatile float Temperatures[16];
 extern volatile float Temperature_avg;
 extern volatile float Temperatures_resistance[14];
 extern volatile float Temperature_high;
 extern volatile float Temperature_low;
 extern volatile float Temperature_high_cell;
+extern volatile float Temperature_low_cell;
 
 extern volatile float ADCgain;
 extern volatile float ADCoffset;
