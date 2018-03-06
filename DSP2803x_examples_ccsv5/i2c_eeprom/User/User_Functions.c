@@ -383,6 +383,7 @@ void Read_Temperatures(void)
 		{
 			temp_Temperature_high = Temperatures[i];
 			temp_high_cell = i ;
+
 		}
 
 		if(temp_Temperature_low>Temperatures[i])							//calculate lowest temperature
@@ -410,7 +411,7 @@ void Read_Temperatures(void)
 			Temperature_high = Temperatures[9];
 			Temperature_low = Temperatures[4];
 			Temperature_high_cell = 10;
-			Temperature_high_cell = 5;
+			Temperature_low_cell = 5;
 		}
 
 		if((Temperatures[4]> Tmax || Temperatures[4]<Tmin) || (Temperatures[9]> Tmax || Temperatures[9]<Tmin))
@@ -771,10 +772,10 @@ void Calibrate_Current_charger()
 	ChargerCurrent_di = ChargerCurrent - old_ChargerCurrent;
 	Current_di = Current - old_Current;
 
-	if(ChargerCurrent > 0.2 && Aux_Control == 0 && ChargerCurrent_di<3 && Current_di<3)					//charger busy charging and aux charger turned off
+	if(ChargerCurrent > 15 && Aux_Control == 0 && ChargerCurrent_di<1 && Current_di<1)					//charger busy charging and aux charger turned off
 	{
-		error = (Current + ChargerCurrent-0.08)/Current;												//as percentage
-		Current_CAL = Current_CAL -0.05* error * Current_CAL;											//maybe add slow filter to dampen the fault?
+		error = (Current + ChargerCurrent+0.08)/Current;												//as percentage
+		Current_CAL = Current_CAL -0.02* error * Current_CAL;											//maybe add slow filter to dampen the fault?
 
 		if(Current_CAL>2200)																			//set maximum limit
 			Current_CAL = 2200;
