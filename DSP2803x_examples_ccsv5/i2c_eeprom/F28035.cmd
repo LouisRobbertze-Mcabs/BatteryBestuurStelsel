@@ -74,6 +74,7 @@ PAGE 0:    /* Program Memory */
            /* Memory (RAM/FLASH/OTP) blocks can be moved to PAGE1 for data allocation */
    RAML0       : origin = 0x008000, length = 0x000800     /* on-chip RAM block L0 */
    RAML1       : origin = 0x008800, length = 0x000400     /* on-chip RAM block L1 */
+   RAML3       : origin = 0x009000, length = 0x001000     /* on-chip RAM block L3 */
    OTP         : origin = 0x3D7800, length = 0x000400     /* on-chip OTP */
    FLASHH      : origin = 0x3E8000, length = 0x002000     /* on-chip FLASH */
    FLASHG      : origin = 0x3EA000, length = 0x002000     /* on-chip FLASH */
@@ -105,9 +106,10 @@ PAGE 1 :   /* Data Memory */
    RAMM0       : origin = 0x000050, length = 0x0003B0     /* on-chip RAM block M0 */
    RAMM1       : origin = 0x000400, length = 0x000400     /* on-chip RAM block M1 */
    RAML2       : origin = 0x008C00, length = 0x000400     /* on-chip RAM block L2 */
-   RAML3       : origin = 0x009000, length = 0x001000     /* on-chip RAM block L3 */
-   //FLASHB      : origin = 0x3F4000, length = 0x002000     /* on-chip FLASH */
 
+   //FLASHB      : origin = 0x3F4000, length = 0x002000     /* on-chip FLASH */
+   CLA1_MSGRAMLOW       : origin = 0x001480, length = 0x000080
+   CLA1_MSGRAMHIGH      : origin = 0x001500, length = 0x000080
 }
 
 /* Allocate sections to memory blocks.
@@ -134,6 +136,16 @@ SECTIONS
 
    csmpasswds          : > CSM_PWL_P0  PAGE = 0
    csm_rsvd            : > CSM_RSVD    PAGE = 0
+
+   Cla1Prog            : LOAD = FLASHD,
+                         RUN = RAML3,
+                         LOAD_START(_Cla1funcsLoadStart),
+                         LOAD_SIZE(_Cla1funcsLoadSize),
+                         RUN_START(_Cla1funcsRunStart),
+                         PAGE = 0
+
+   Cla1ToCpuMsgRAM     : > CLA1_MSGRAMLOW,   PAGE = 1
+   CpuToCla1MsgRAM     : > CLA1_MSGRAMHIGH,  PAGE = 1
 
    /* Allocate uninitalized data sections: */
    .stack              : > RAMM0       PAGE = 1
