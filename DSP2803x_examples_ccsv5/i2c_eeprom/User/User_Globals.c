@@ -102,7 +102,7 @@ volatile float Imin = 500;
 volatile float Imax = 3800;
 volatile float Ifilter = 0.27;
 
-volatile float Tmax = 55;
+volatile float Tmax = 50;
 volatile float Tmin = 0;
 
 volatile float SOC;

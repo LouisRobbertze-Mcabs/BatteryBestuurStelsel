@@ -393,7 +393,7 @@ void Read_Temperatures(void)
 		}
 
 	}
-	Temperature_avg = temperature_avg*0.0667;
+	temperature_avg = temperature_avg*0.0667;
 
 	if(Temperatures_resistance[4]<100)										//old bms version       (tipies 20)
 	{
@@ -430,7 +430,11 @@ void Read_Temperatures(void)
 			flag = 1;
 		}
 
-		if((Temperature_avg - Temperatures[15])> 3)
+		if((Temperature_avg - Temperatures[15])> 4 && Temperatures[15]<50 && Temperature_avg>25 && Voltage_low > Vmin)				//sit net aan bo 25 grade celsius
+		{
+			Fan_Control = 1;
+		}
+		else if(GpioDataRegs.GPADAT.bit.GPIO19 == 1 && (Temperature_avg - Temperatures[15])> 1 && Temperature_avg>25 && Voltage_low > Vmin)
 		{
 			Fan_Control = 1;
 		}
@@ -774,7 +778,7 @@ void Calibrate_Current_charger()
 
 	if(ChargerCurrent > 15 && Aux_Control == 0 && ChargerCurrent_di<1 && Current_di<1)					//charger busy charging and aux charger turned off
 	{
-		error = (Current + ChargerCurrent+0.08)/Current;												//as percentage
+		error = (Current + ChargerCurrent-0.1)/Current;												//as percentage
 		Current_CAL = Current_CAL -0.02* error * Current_CAL;											//maybe add slow filter to dampen the fault?
 
 		if(Current_CAL>2200)																			//set maximum limit

@@ -57,44 +57,44 @@ __interrupt void cpu_timer0_isr(void)
 	Temperatures_resistance_temp[13] = Temperatures_resistance[13];
 
 	//Cells:
-	//SOC14 - Cell0
-	Temperatures_resistance[0] = Temperatures_resistance_temp[0] + (0.466*(((AdcResult.ADCRESULT14))-Temperatures_resistance_temp[0]));
+	//SOC0 - Cell0
+	Temperatures_resistance[0] = Temperatures_resistance_temp[0] + (0.466*(((AdcResult.ADCRESULT0))-Temperatures_resistance_temp[0]));
 	Temperatures_resistance_temp[0] = Temperatures_resistance[0];
-	//SOC13 - Cell1
-	Temperatures_resistance[1] = Temperatures_resistance_temp[1] + (0.466*(((AdcResult.ADCRESULT13))-Temperatures_resistance_temp[1]));
+	//SOC3 - Cell1
+	Temperatures_resistance[1] = Temperatures_resistance_temp[1] + (0.466*(((AdcResult.ADCRESULT3))-Temperatures_resistance_temp[1]));
 	Temperatures_resistance_temp[1] = Temperatures_resistance[1];
-	//SOC12 - Cell2
-	Temperatures_resistance[2] = Temperatures_resistance_temp[2] + (0.466*(((AdcResult.ADCRESULT12))-Temperatures_resistance_temp[2]));
+	//SOC4 - Cell2
+	Temperatures_resistance[2] = Temperatures_resistance_temp[2] + (0.466*(((AdcResult.ADCRESULT4))-Temperatures_resistance_temp[2]));
 	Temperatures_resistance_temp[2] = Temperatures_resistance[2];
-	//SOC11 - Cell3
-	Temperatures_resistance[3] = Temperatures_resistance_temp[3] + (0.466*(((AdcResult.ADCRESULT11))-Temperatures_resistance_temp[3]));
+	//SOC5 - Cell3
+	Temperatures_resistance[3] = Temperatures_resistance_temp[3] + (0.466*(((AdcResult.ADCRESULT5))-Temperatures_resistance_temp[3]));
 	Temperatures_resistance_temp[3] = Temperatures_resistance[3];
-	//SOC10 - Cell5
-	Temperatures_resistance[4] = Temperatures_resistance_temp[4] + (0.466*(((AdcResult.ADCRESULT10))-Temperatures_resistance_temp[4]));		//possibly use for model detection
+	//SOC6 - Cell5
+	Temperatures_resistance[4] = Temperatures_resistance_temp[4] + (0.466*(((AdcResult.ADCRESULT6))-Temperatures_resistance_temp[4]));		//possibly use for model detection
 	Temperatures_resistance_temp[4] = Temperatures_resistance[4];
-	//SOC9 - Cell6
-	Temperatures_resistance[5] = Temperatures_resistance_temp[5] + (0.466*(((AdcResult.ADCRESULT9))-Temperatures_resistance_temp[5]));
+	//SOC7 - Cell6
+	Temperatures_resistance[5] = Temperatures_resistance_temp[5] + (0.466*(((AdcResult.ADCRESULT7))-Temperatures_resistance_temp[5]));
 	Temperatures_resistance_temp[5] = Temperatures_resistance[5];
 	//SOC8 - Cell7
 	Temperatures_resistance[6] = Temperatures_resistance_temp[6] + (0.466*(((AdcResult.ADCRESULT8))-Temperatures_resistance_temp[6]));
 	Temperatures_resistance_temp[6] = Temperatures_resistance[6];
-	//SOC7 - Cell8
-	Temperatures_resistance[7] = Temperatures_resistance_temp[7] + (0.466*(((AdcResult.ADCRESULT7))-Temperatures_resistance_temp[7]));
+	//SOC9 - Cell8
+	Temperatures_resistance[7] = Temperatures_resistance_temp[7] + (0.466*(((AdcResult.ADCRESULT9))-Temperatures_resistance_temp[7]));
 	Temperatures_resistance_temp[7] = Temperatures_resistance[7];
-	//SOC6 - Cell10
-	Temperatures_resistance[8] = Temperatures_resistance_temp[8] + (0.466*(((AdcResult.ADCRESULT6))-Temperatures_resistance_temp[8]));
+	//SOC10 - Cell10
+	Temperatures_resistance[8] = Temperatures_resistance_temp[8] + (0.466*(((AdcResult.ADCRESULT10))-Temperatures_resistance_temp[8]));
 	Temperatures_resistance_temp[8] = Temperatures_resistance[8];
-	//SOC5 - Cell11
-	Temperatures_resistance[9] = Temperatures_resistance_temp[9] + (0.466*(((AdcResult.ADCRESULT5))-Temperatures_resistance_temp[9]));
+	//SOC11 - Cell11
+	Temperatures_resistance[9] = Temperatures_resistance_temp[9] + (0.466*(((AdcResult.ADCRESULT11))-Temperatures_resistance_temp[9]));
 	Temperatures_resistance_temp[9] = Temperatures_resistance[9];
-	//SOC5 - Cell12
-	Temperatures_resistance[10] = Temperatures_resistance_temp[10] + (0.466*(((AdcResult.ADCRESULT4))-Temperatures_resistance_temp[10]));
+	//SOC12 - Cell12
+	Temperatures_resistance[10] = Temperatures_resistance_temp[10] + (0.466*(((AdcResult.ADCRESULT12))-Temperatures_resistance_temp[10]));
 	Temperatures_resistance_temp[10] = Temperatures_resistance[10];
-	//SOC5 - Cell13
-	Temperatures_resistance[11] = Temperatures_resistance_temp[11] + (0.466*(((AdcResult.ADCRESULT3))-Temperatures_resistance_temp[11]));
+	//SOC13 - Cell13
+	Temperatures_resistance[11] = Temperatures_resistance_temp[11] + (0.466*(((AdcResult.ADCRESULT13))-Temperatures_resistance_temp[11]));
 	Temperatures_resistance_temp[11] = Temperatures_resistance[11];
-	//SOC5 - Cell14
-	Temperatures_resistance[12] = Temperatures_resistance_temp[12] + (0.466*(((AdcResult.ADCRESULT0))-Temperatures_resistance_temp[12]));
+	//SOC14 - Cell14
+	Temperatures_resistance[12] = Temperatures_resistance_temp[12] + (0.466*(((AdcResult.ADCRESULT14))-Temperatures_resistance_temp[12]));
 	Temperatures_resistance_temp[12] = Temperatures_resistance[12];
 
 	CpuTimer0.InterruptCount++;
