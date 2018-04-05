@@ -430,11 +430,11 @@ void Read_Temperatures(void)
 			flag = 1;
 		}
 
-		if((Temperature_avg - Temperatures[15])> 4 && Temperatures[15]<50 && Temperature_avg>25 && Voltage_low > Vmin)				//sit net aan bo 25 grade celsius
+		if((Temperature_avg - Temperatures[15])> 4.5 && Temperatures[15]<50 && Temperature_avg>25 && Voltage_low > Vmin && balance == 0)				//sit net aan bo 25 grade celsius
 		{
 			Fan_Control = 1;
 		}
-		else if(GpioDataRegs.GPADAT.bit.GPIO19 == 1 && (Temperature_avg - Temperatures[15])> 1 && Temperature_avg>25 && Voltage_low > Vmin)
+		else if(GpioDataRegs.GPADAT.bit.GPIO19 == 1 && (Temperature_avg - Temperatures[15])> 3.5 && Temperature_avg>23 && Voltage_low > Vmin && balance == 0)
 		{
 			Fan_Control = 1;
 		}
@@ -737,8 +737,8 @@ void Calculate_SOC()
 
 	if(SOC>1)
 		SOC = 1;
-	else if(SOC<0)
-		SOC = 0;
+	else if(SOC<0.001)
+		SOC = 0.001;
 }
 
 void Calibrate_Current()

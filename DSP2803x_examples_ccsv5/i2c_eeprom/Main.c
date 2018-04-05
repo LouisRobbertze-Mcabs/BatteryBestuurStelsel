@@ -17,7 +17,6 @@ void main(void)
 		}
 		if(counter_2Hz == 2)
 		{
-
 			Toggle_LED();
 
 			Read_Cell_Voltages();
