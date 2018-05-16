@@ -20,7 +20,7 @@
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROJECT.Texas Instruments XDS100v1 USB Emulator_0/C28xx" value="Example_2803xI2C_eeprom"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROJECT.Texas Instruments XDS100v2 USB Emulator_0/C28xx" value="Example_2803xI2C_eeprom"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_TARGET_CONFIG" value="${target_config_active_default:Example_2803xI2C_eeprom}"/>
-<stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.Texas Instruments XDS100v2 USB Emulator_0/C28xx" value="C:/Users\Bartho\Documents\GitHub\BatteryBestuurStelsel\BatteryBestuurStelsel\DSP2803x_examples_ccsv5\i2c_eeprom\Debug\Example_2803xI2C_eeprom.out"/>
+<stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.Texas Instruments XDS100v2 USB Emulator_0/C28xx" value="C:/Users\Bartho Horn\Documents\Github\BatteryBestuurStelsel\DSP2803x_examples_ccsv5\i2c_eeprom\Debug\Example_2803xI2C_eeprom.out"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/Example_2803xI2C_eeprom"/>
 </listAttribute>

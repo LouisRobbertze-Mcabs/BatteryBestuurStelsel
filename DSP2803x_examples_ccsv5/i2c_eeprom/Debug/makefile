@@ -4,35 +4,38 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/c2000_6.2.5
+CG_TOOL_ROOT := C:/ti/ccsv6/tools/compiler/c2000_15.12.3.LTS
+
+GEN_OPTS__FLAG := 
+GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
-$(GEN_CMDS__FLAG) \
-"./Source/DSP2803x_SysCtrl.obj" \
-"./Source/DSP2803x_Spi.obj" \
-"./Source/DSP2803x_PieVect.obj" \
-"./Source/DSP2803x_PieCtrl.obj" \
-"./Source/DSP2803x_I2C.obj" \
-"./Source/DSP2803x_GlobalVariableDefs.obj" \
-"./Source/DSP2803x_ECan.obj" \
-"./Source/DSP2803x_DefaultIsr.obj" \
-"./Source/DSP2803x_CpuTimers.obj" \
-"./Source/DSP2803x_Adc.obj" \
-"./User/User_Interrupts.obj" \
-"./User/User_I2C.obj" \
-"./User/User_Globals.obj" \
-"./User/User_Functions.obj" \
-"./User/User_CAN.obj" \
-"./User/User_BQ.obj" \
-"./User/User_ADC.obj" \
-"./Main.obj" \
-"./DSP2803x_usDelay.obj" \
 "./DSP2803x_CodeStartBranch.obj" \
-"C:/Users/Bartho/Documents/GitHub/BatteryBestuurStelsel/BatteryBestuurStelsel/DSP2803x_headers/cmd/DSP2803x_Headers_nonBIOS.cmd" \
+"./DSP2803x_usDelay.obj" \
+"./Main.obj" \
+"./Source/DSP2803x_Adc.obj" \
+"./Source/DSP2803x_CpuTimers.obj" \
+"./Source/DSP2803x_DefaultIsr.obj" \
+"./Source/DSP2803x_ECan.obj" \
+"./Source/DSP2803x_GlobalVariableDefs.obj" \
+"./Source/DSP2803x_I2C.obj" \
+"./Source/DSP2803x_PieCtrl.obj" \
+"./Source/DSP2803x_PieVect.obj" \
+"./Source/DSP2803x_Spi.obj" \
+"./Source/DSP2803x_SysCtrl.obj" \
+"./User/User_ADC.obj" \
+"./User/User_BQ.obj" \
+"./User/User_CAN.obj" \
+"./User/User_Functions.obj" \
+"./User/User_Globals.obj" \
+"./User/User_I2C.obj" \
+"./User/User_Interrupts.obj" \
+"C:/Users/Bartho Horn/Documents/Github/BatteryBestuurStelsel/DSP2803x_headers/cmd/DSP2803x_Headers_nonBIOS.cmd" \
 "../F28035.cmd" \
 "../IQmath.lib" \
--l"rts2800_ml.lib" \
--l"IQmath.lib" \
+$(GEN_CMDS__FLAG) \
+-lrts2800_ml.lib \
+-lIQmath.lib \
 
 -include ../makefile.init
 
@@ -42,11 +45,11 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
--include User/subdir_vars.mk
 -include Source/subdir_vars.mk
+-include User/subdir_vars.mk
 -include subdir_rules.mk
--include User/subdir_rules.mk
 -include Source/subdir_rules.mk
+-include User/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -68,17 +71,20 @@ endif
 ifneq ($(strip $(CC_DEPS)),)
 -include $(CC_DEPS)
 endif
+ifneq ($(strip $(SV7A_DEPS)),)
+-include $(SV7A_DEPS)
+endif
 ifneq ($(strip $(S55_DEPS)),)
 -include $(S55_DEPS)
 endif
 ifneq ($(strip $(C67_DEPS)),)
 -include $(C67_DEPS)
 endif
-ifneq ($(strip $(C??_DEPS)),)
--include $(C??_DEPS)
-endif
 ifneq ($(strip $(CLA_DEPS)),)
 -include $(CLA_DEPS)
+endif
+ifneq ($(strip $(C??_DEPS)),)
+-include $(C??_DEPS)
 endif
 ifneq ($(strip $(CPP_DEPS)),)
 -include $(CPP_DEPS)
@@ -107,6 +113,9 @@ endif
 ifneq ($(strip $(C43_DEPS)),)
 -include $(C43_DEPS)
 endif
+ifneq ($(strip $(INO_DEPS)),)
+-include $(INO_DEPS)
+endif
 ifneq ($(strip $(S67_DEPS)),)
 -include $(S67_DEPS)
 endif
@@ -118,6 +127,9 @@ ifneq ($(strip $(S43_DEPS)),)
 endif
 ifneq ($(strip $(OPT_DEPS)),)
 -include $(OPT_DEPS)
+endif
+ifneq ($(strip $(PDE_DEPS)),)
+-include $(PDE_DEPS)
 endif
 ifneq ($(strip $(S64_DEPS)),)
 -include $(S64_DEPS)
@@ -147,16 +159,16 @@ all: Example_2803xI2C_eeprom.out
 Example_2803xI2C_eeprom.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: C2000 Linker'
-	"c:/ti/ccsv6/tools/compiler/c2000_6.2.5/bin/cl2000" -v28 -ml -mt --cla_support=cla0 -g --define="_DEBUG" --define="LARGE_MODEL" --quiet --verbose_diagnostics --diag_warning=225 --issue_remarks --output_all_syms --cdebug_asm_data -z -m"Example_2803xI2C_eeprom.map" --stack_size=0x380 --warn_sections -i"c:/ti/ccsv6/tools/compiler/c2000_6.2.5/lib" -i"c:/ti/ccsv6/tools/compiler/c2000_6.2.5/include" -i"C:/Users/Bartho/Documents/GitHub/BatteryBestuurStelsel/BatteryBestuurStelsel/DSP2803x_examples_ccsv5/i2c_eeprom" -i"C:/Users/Bartho/Documents/GitHub/BatteryBestuurStelsel/BatteryBestuurStelsel/DSP2803x_common/lib" -i"C:/Users/Bartho/Documents/libs/math/IQmath/v160/lib" --reread_libs --verbose_diagnostics --issue_remarks --xml_link_info="Example_2803xI2C_eeprom_linkInfo.xml" --entry_point=code_start --rom_model -o "Example_2803xI2C_eeprom.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv6/tools/compiler/c2000_15.12.3.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 -g --define="_DEBUG" --define="LARGE_MODEL" --quiet --verbose_diagnostics --diag_warning=225 --issue_remarks --output_all_syms --cdebug_asm_data -z -m"Example_2803xI2C_eeprom.map" --stack_size=0x380 --warn_sections -i"C:/ti/ccsv6/tools/compiler/c2000_15.12.3.LTS/lib" -i"C:/ti/ccsv6/tools/compiler/c2000_15.12.3.LTS/include" -i"C:/Users/Bartho Horn/Documents/Github/BatteryBestuurStelsel/DSP2803x_examples_ccsv5/i2c_eeprom" -i"C:/Users/Bartho Horn/Documents/Github/BatteryBestuurStelsel/DSP2803x_common/lib" -i"C:/Users/Bartho Horn/libs/math/IQmath/v160/lib" --reread_libs --verbose_diagnostics --issue_remarks --xml_link_info="Example_2803xI2C_eeprom_linkInfo.xml" --entry_point=code_start --rom_model -o "Example_2803xI2C_eeprom.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Main.pp" "User\User_ADC.pp" "User\User_BQ.pp" "User\User_CAN.pp" "User\User_Functions.pp" "User\User_Globals.pp" "User\User_I2C.pp" "User\User_Interrupts.pp" "Source\DSP2803x_Adc.pp" "Source\DSP2803x_CpuTimers.pp" "Source\DSP2803x_DefaultIsr.pp" "Source\DSP2803x_ECan.pp" "Source\DSP2803x_GlobalVariableDefs.pp" "Source\DSP2803x_I2C.pp" "Source\DSP2803x_PieCtrl.pp" "Source\DSP2803x_PieVect.pp" "Source\DSP2803x_Spi.pp" "Source\DSP2803x_SysCtrl.pp" 
-	-$(RM) "DSP2803x_CodeStartBranch.obj" "DSP2803x_usDelay.obj" "Main.obj" "User\User_ADC.obj" "User\User_BQ.obj" "User\User_CAN.obj" "User\User_Functions.obj" "User\User_Globals.obj" "User\User_I2C.obj" "User\User_Interrupts.obj" "Source\DSP2803x_Adc.obj" "Source\DSP2803x_CpuTimers.obj" "Source\DSP2803x_DefaultIsr.obj" "Source\DSP2803x_ECan.obj" "Source\DSP2803x_GlobalVariableDefs.obj" "Source\DSP2803x_I2C.obj" "Source\DSP2803x_PieCtrl.obj" "Source\DSP2803x_PieVect.obj" "Source\DSP2803x_Spi.obj" "Source\DSP2803x_SysCtrl.obj" 
-	-$(RM) "DSP2803x_CodeStartBranch.pp" "DSP2803x_usDelay.pp" 
+	-$(RM) "Main.d" "Source\DSP2803x_Adc.d" "Source\DSP2803x_CpuTimers.d" "Source\DSP2803x_DefaultIsr.d" "Source\DSP2803x_ECan.d" "Source\DSP2803x_GlobalVariableDefs.d" "Source\DSP2803x_I2C.d" "Source\DSP2803x_PieCtrl.d" "Source\DSP2803x_PieVect.d" "Source\DSP2803x_Spi.d" "Source\DSP2803x_SysCtrl.d" "User\User_ADC.d" "User\User_BQ.d" "User\User_CAN.d" "User\User_Functions.d" "User\User_Globals.d" "User\User_I2C.d" "User\User_Interrupts.d" 
+	-$(RM) "DSP2803x_CodeStartBranch.obj" "DSP2803x_usDelay.obj" "Main.obj" "Source\DSP2803x_Adc.obj" "Source\DSP2803x_CpuTimers.obj" "Source\DSP2803x_DefaultIsr.obj" "Source\DSP2803x_ECan.obj" "Source\DSP2803x_GlobalVariableDefs.obj" "Source\DSP2803x_I2C.obj" "Source\DSP2803x_PieCtrl.obj" "Source\DSP2803x_PieVect.obj" "Source\DSP2803x_Spi.obj" "Source\DSP2803x_SysCtrl.obj" "User\User_ADC.obj" "User\User_BQ.obj" "User\User_CAN.obj" "User\User_Functions.obj" "User\User_Globals.obj" "User\User_I2C.obj" "User\User_Interrupts.obj" 
+	-$(RM) "DSP2803x_CodeStartBranch.d" "DSP2803x_usDelay.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
