@@ -39,7 +39,7 @@ __interrupt void  adc_isr(void)
 	Current_Sum = Current_Sum + AdcResult.ADCRESULT1;
 	Current_Counter++;
 
-	led2 = 0x01^led2;                   //toggle led
+//	led2 = 0x01^led2;                   //toggle led
 
 	AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
 	PieCtrlRegs.PIEACK.bit.ACK10 = 1;   // Acknowledge interrupt to PIE
@@ -127,6 +127,18 @@ __interrupt void cpu_timer1_isr(void)
 		else
 		{
 			ContactorOut = 0;           //turn off contactor
+			//led3 = 1;
+			if(flagCurrent == 1)
+				led3 = 1;
+
+			if(flagDischarged == 1)
+				led2 = 1;
+
+			if(flagTemp == 1)
+			{
+				led3 = 1;
+				led2 = 1;
+			}
 		}
 
 	}

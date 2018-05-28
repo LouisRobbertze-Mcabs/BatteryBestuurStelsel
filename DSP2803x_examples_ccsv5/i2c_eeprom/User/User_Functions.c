@@ -69,7 +69,7 @@ void Initialise_BMS(void)
 	Bq76940_Init();
 	// Shut_D_BQ();
 
-//	Calibrate_Current();
+	//	Calibrate_Current();
 
 	// Enable the watchdog
 	EALLOW;
@@ -94,7 +94,7 @@ void Init_Gpio(void)
 
 	GpioCtrlRegs.GPAMUX1.bit.GPIO6 = 0;     //BT reset
 	GpioCtrlRegs.GPADIR.bit.GPIO6 = 1;      //BT reset
-	BTReset = 0;                            //keep BT in reset
+	Aux_Control2 = 0;                            //keep BT in reset
 
 	GpioCtrlRegs.GPAMUX1.bit.GPIO15 = 0;    //12 Aux drive
 	GpioCtrlRegs.GPADIR.bit.GPIO15 = 1;     // 12 Aux drive (verander miskien)
@@ -217,17 +217,21 @@ void Process_Voltages(void)
 	{
 		balance = 1;            //start balancing
 		flagCharged = 1;        //charged flag to to stop charging
-		ContactorOut = 0;
+		//ContactorOut = 0;																						//kan hierdie wees wat die contactor oopmaak
 	}
 
-	if(Voltage_low > Vmin && Auxilliary_Voltage < Vauxmin && Auxilliary_Voltage > 8)
+	if(Voltage_low > Vmin && Auxilliary_Voltage < Vauxmin && Auxilliary_Voltage > 7 && Aux_Control == 0)
 	{
-		Auxilliary_counter = 0;			//turn on aux supply
+		Auxilliary_counter = 0;															//turn on aux supply
 		Aux_Control = 1;
 	}
-	else if(Auxilliary_counter > AuxChargeTime || Auxilliary_Voltage < 8)
+//	else if(Voltage_low > Vmin && Auxilliary_Voltage < Vauxmin && Aux_Control == 1)	//testing new aux supply controller.... Thinking of using Aux_control to make sense of whats the status
+//	{
+//		Aux_Control = 1;																//keep on aux supply
+//	}
+	else if(Auxilliary_counter > AuxChargeTime || Auxilliary_Voltage < 7)
 	{
-		Aux_Control = 0;										//turn off aux supply
+		Aux_Control = 0;																//turn off aux supply
 	}
 
 	Auxilliary_counter++;
@@ -237,17 +241,18 @@ void Process_Voltages(void)
 	{
 		Aux_Control = 0;
 		flagDischarged = 1;
-		led3 = 1;               //turn on red led
-		ContactorOut = 0;       //turn off contactor
+//		led3 = 1;               //turn on red led
+		//ContactorOut = 0;       //turn off contactor
 		PreCharge = 1;
 	}
 	else if(Voltage_low < Vcritical && Charger_status == 0)
 	{
 		Aux_Control = 0;
 		flagDischarged = 2;
-		led3 = 1;               //turn on red led
+//		led3 = 1;               //turn on red led
 		PreCharge = 0;
-		ContactorOut = 0;       //turn off contactor
+		//ContactorOut = 0;       //turn off contactor
+		//Aux_Control2 = 0;
 	}
 
 	if(Voltage_high<Vchargedflagreset )
@@ -256,8 +261,9 @@ void Process_Voltages(void)
 	if(Voltage_low>Vdischargedflagreset )
 	{
 		flagDischarged = 0;
-		led3 = 0;               //turn off red led
+//		led3 = 0;               //turn off red led
 		PreCharge = 1;
+		//Aux_Control2 = 1;
 	}
 
 }
@@ -395,7 +401,7 @@ void Read_Temperatures(void)
 	}
 	temperature_avg = temperature_avg*0.0667;
 
-	if(Temperatures_resistance[4]<100 || Temperatures_resistance[8]<100)										//old bms version       (tipies 20)				toets hierdie verder
+	if(/*Temperatures_resistance[4]<100 ||*/ Temperatures_resistance[8]<50)										//old bms version       (tipies 20)				toets hierdie verder
 	{
 		Temperature_avg = (Temperatures[4]+Temperatures[9])/2;
 
@@ -419,6 +425,8 @@ void Read_Temperatures(void)
 	}
 	else																	//new bms version
 	{
+		//led3 = 1;
+
 		Temperature_avg = temperature_avg;
 		Temperature_high = temp_Temperature_high;
 		Temperature_high_cell = temp_high_cell;

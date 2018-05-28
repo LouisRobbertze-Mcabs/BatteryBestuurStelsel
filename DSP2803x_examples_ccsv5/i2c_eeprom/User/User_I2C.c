@@ -2,7 +2,7 @@
  * User_I2C.c
  *
  *  Created on: 04 May 2017
- *      Author: Sonja
+ *      Author: Bartho Horn
  */
 
 #include "User_I2C.h"
@@ -19,7 +19,6 @@ void I2CA_Init(void)
 	I2caRegs.I2CFFTX.all = 0x6000;  // Enable FIFO mode and TXFIFO
 	I2caRegs.I2CFFRX.all = 0x2040;  // Enable RXFIFO, clear RXFFINT,
 }
-
 
 Uint16 I2CA_WriteData(unsigned char Register, unsigned char Data)
 {

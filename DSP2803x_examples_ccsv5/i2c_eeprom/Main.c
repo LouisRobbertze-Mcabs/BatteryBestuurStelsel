@@ -8,6 +8,7 @@
 void main(void)
 {
 	Initialise_BMS();
+	led2 = 0;
 
 	for(;;)
 	{
