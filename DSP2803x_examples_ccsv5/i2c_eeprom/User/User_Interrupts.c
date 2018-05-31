@@ -9,7 +9,7 @@
 
 __interrupt void  adc_isr(void)
 {
-	//Sit dit dalk deur 'n laag deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^WcTs
+	//Sit dit dalk deur 'n laag deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^(-WcTs)
 
 	static float Filter_100HZ;
 	static float Filter_100HZ_past = 0;

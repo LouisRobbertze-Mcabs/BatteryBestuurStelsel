@@ -88,6 +88,7 @@ void Init_Gpio(void)
 
 	GpioCtrlRegs.GPAMUX1.bit.GPIO4 = 0;     //led2
 	GpioCtrlRegs.GPADIR.bit.GPIO4 = 1;      //led2
+	led2 = 0;
 
 	GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 0;     //led1
 	GpioCtrlRegs.GPADIR.bit.GPIO5 = 1;      //led1
@@ -153,6 +154,8 @@ void  Read_Cell_Voltages(void)
 	//Voltage_low = 10;
 	float Voltages_backup5 = Voltages[5];
 	float Voltages_backup10 = Voltages[10];
+	static float Voltage_low_filter_temp = 0;
+	static float Another_temp = 0;
 
 	float temp_V = 0;
 	float temp_Voltage_total = 0;
@@ -204,8 +207,14 @@ void  Read_Cell_Voltages(void)
 	Voltage_avg = temp_Voltage_avg*0.0667;
 	Voltage_high = temp_Voltage_high;
 	Voltage_low_cell = temp_Voltage_low_nr;
-	Voltage_low = temp_Voltage_low;
+
 	Voltage_high_cell = temp_Voltage_high_nr;
+	//Voltage_low = temp_Voltage_low;
+
+	// add voltage low filter. 3 second cut off period
+	Another_temp = Voltage_low_filter_temp + (0.878*((temp_Voltage_low)-Voltage_low_filter_temp));
+	Voltage_low = Another_temp;
+	Voltage_low_filter_temp = Voltage_low;
 
 	ServiceDog();
 }
@@ -217,7 +226,7 @@ void Process_Voltages(void)
 	{
 		balance = 1;            //start balancing
 		flagCharged = 1;        //charged flag to to stop charging
-		//ContactorOut = 0;																						//kan hierdie wees wat die contactor oopmaak
+		ContactorOut = 0;																						//kan hierdie wees wat die contactor oopmaak
 	}
 
 	if(Voltage_low > Vmin && Auxilliary_Voltage < Vauxmin && Auxilliary_Voltage > 7 && Aux_Control == 0)
@@ -265,7 +274,6 @@ void Process_Voltages(void)
 		PreCharge = 1;
 		//Aux_Control2 = 1;
 	}
-
 }
 
 void Calculate_SOH(void)
@@ -401,7 +409,7 @@ void Read_Temperatures(void)
 	}
 	temperature_avg = temperature_avg*0.0667;
 
-	if(/*Temperatures_resistance[4]<100 ||*/ Temperatures_resistance[8]<50)										//old bms version       (tipies 20)				toets hierdie verder
+	if(Temperatures_resistance[8]<50)										//old bms version       (tipies 20)				toets hierdie verder
 	{
 		Temperature_avg = (Temperatures[4]+Temperatures[9])/2;
 
