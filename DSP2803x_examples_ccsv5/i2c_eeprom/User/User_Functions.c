@@ -234,10 +234,6 @@ void Process_Voltages(void)
 		Auxilliary_counter = 0;															//turn on aux supply
 		Aux_Control = 1;
 	}
-//	else if(Voltage_low > Vmin && Auxilliary_Voltage < Vauxmin && Aux_Control == 1)	//testing new aux supply controller.... Thinking of using Aux_control to make sense of whats the status
-//	{
-//		Aux_Control = 1;																//keep on aux supply
-//	}
 	else if(Auxilliary_counter > AuxChargeTime || Auxilliary_Voltage < 7)
 	{
 		Aux_Control = 0;																//turn off aux supply

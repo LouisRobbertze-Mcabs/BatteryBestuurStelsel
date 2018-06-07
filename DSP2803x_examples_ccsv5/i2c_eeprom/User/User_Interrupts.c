@@ -108,9 +108,10 @@ __interrupt void cpu_timer1_isr(void)
 
 	//Deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^WcTs
 	//adc/4096 *3.3* 10.51/10.51      12.2/2.2
+	//a = 0.015 ~ 0.1Hz, a = 0.12 ~ 1Hz, a = 0.47 ~ 5Hz
 
 
-	Auxilliary_Voltage = Aux_Voltage_temp + (0.0125*(((AdcResult.ADCRESULT2)* 0.00442)-Aux_Voltage_temp));					//50hz sny af op 0.1hz
+	Auxilliary_Voltage = Aux_Voltage_temp + (0.47*(((AdcResult.ADCRESULT2)* 0.00442)-Aux_Voltage_temp));					//50hz sny af op 0.1hz
 	Aux_Voltage_temp = Auxilliary_Voltage;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////// testing
