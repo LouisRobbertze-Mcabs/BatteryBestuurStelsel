@@ -444,11 +444,11 @@ void Read_Temperatures(void)
 			flag = 1;
 		}
 
-		if((Temperature_avg - Temperatures[15])> 3 && Temperatures[15]<50 && Temperature_avg>18 && Voltage_low > Vmin && balance == 0)				//4.5 en 25sit net aan bo 25 grade celsius
+		if((Temperature_avg - Temperatures[15])> 4.5 && Temperatures[15]<50 && Temperature_avg>25 && Voltage_low > Vmin && balance == 0)				//4.5 en 25sit net aan bo 25 grade celsius
 		{
 			Fan_Control = 0;
 		}
-		else if(GpioDataRegs.GPADAT.bit.GPIO19 == 1 && (Temperature_avg - Temperatures[15])> 2.5 && Temperature_avg>16 && Voltage_low > Vmin && balance == 0)//bly aan solank 3.5 en 23
+		else if(GpioDataRegs.GPADAT.bit.GPIO19 == 1 && (Temperature_avg - Temperatures[15])> 3.5 && Temperature_avg>23 && Voltage_low > Vmin && balance == 0)//bly aan solank 3.5 en 23
 		{
 			Fan_Control = 0;
 		}
