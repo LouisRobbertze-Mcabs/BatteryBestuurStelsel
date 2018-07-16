@@ -142,6 +142,8 @@ void Init_Gpio(void)
 void Toggle_LED(void)
 {
 	GpioDataRegs.GPATOGGLE.bit.GPIO5 = 1;
+
+	//GpioDataRegs.GPATOGGLE.bit.GPIO6 = 1;
 	//GpioDataRegs.GPATOGGLE.bit.GPIO19 = 1;
 }
 
@@ -257,7 +259,7 @@ void Process_Voltages(void)
 //		led3 = 1;               //turn on red led
 		PreCharge = 0;
 		//ContactorOut = 0;       //turn off contactor
-		//Aux_Control2 = 0;
+		Aux_Control2 = 0;
 	}
 
 	if(Voltage_high<Vchargedflagreset )
@@ -268,7 +270,7 @@ void Process_Voltages(void)
 		flagDischarged = 0;
 //		led3 = 0;               //turn off red led
 		PreCharge = 1;
-		//Aux_Control2 = 1;
+		Aux_Control2 = 1;
 	}
 }
 
@@ -442,16 +444,16 @@ void Read_Temperatures(void)
 			flag = 1;
 		}
 
-		if((Temperature_avg - Temperatures[15])> 4.5 && Temperatures[15]<50 && Temperature_avg>25 && Voltage_low > Vmin && balance == 0)				//sit net aan bo 25 grade celsius
+		if((Temperature_avg - Temperatures[15])> 3 && Temperatures[15]<50 && Temperature_avg>18 && Voltage_low > Vmin && balance == 0)				//4.5 en 25sit net aan bo 25 grade celsius
 		{
-			Fan_Control = 1;
+			Fan_Control = 0;
 		}
-		else if(GpioDataRegs.GPADAT.bit.GPIO19 == 1 && (Temperature_avg - Temperatures[15])> 3.5 && Temperature_avg>23 && Voltage_low > Vmin && balance == 0)
+		else if(GpioDataRegs.GPADAT.bit.GPIO19 == 1 && (Temperature_avg - Temperatures[15])> 2.5 && Temperature_avg>16 && Voltage_low > Vmin && balance == 0)//bly aan solank 3.5 en 23
 		{
-			Fan_Control = 1;
+			Fan_Control = 0;
 		}
 		else
-			Fan_Control = 0;
+			Fan_Control = 0;			//0
 	}
 
 	if(flag == 1)

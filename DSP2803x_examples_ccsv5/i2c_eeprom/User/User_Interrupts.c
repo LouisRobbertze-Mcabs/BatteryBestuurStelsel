@@ -51,6 +51,7 @@ __interrupt void cpu_timer0_isr(void)
 
 	counter_2Hz++;
 
+
 	//temp meetings
 	//SOC15 - Outside
 	Temperatures_resistance[13] = Temperatures_resistance_temp[13] + (0.466*(((AdcResult.ADCRESULT15))-Temperatures_resistance_temp[13]));

@@ -47,6 +47,7 @@ extern volatile int system_status;
 
 extern volatile float ChargerVoltage;
 extern volatile float ChargerCurrent;
+ extern volatile  Uint16 ChargerDebug;
 extern volatile float Current;
 extern volatile int current_int;
 

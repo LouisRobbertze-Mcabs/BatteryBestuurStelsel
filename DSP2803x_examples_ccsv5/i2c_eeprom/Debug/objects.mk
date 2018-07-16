@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -l"rts2800_ml.lib" -l"IQmath.lib"
+LIBS := -lrts2800_ml.lib -lIQmath.lib
 

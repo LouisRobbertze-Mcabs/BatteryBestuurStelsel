@@ -48,6 +48,7 @@ volatile int system_status= 0;
 
 volatile float ChargerVoltage=0;
 volatile float ChargerCurrent=0;
+volatile Uint16 ChargerDebug=0;
 volatile float Current;
 volatile int current_int;
 
@@ -93,10 +94,10 @@ volatile Uint16 Auxilliary_counter = 0;
 
 //defines:
 volatile float Vmax = 3.65;
-volatile float Vmin = 2.8;
-volatile float Vcritical = 2.7;
+volatile float Vmin = 2.8;				//2.8
+volatile float Vcritical = 2.7;		//2.7
 volatile float Vcharge = 3.5;
-volatile float Vbalance = 3.48;
+volatile float Vbalance = 3.485; //4.8
 
 volatile float Imin = 500;
 volatile float Imax = 3800;
@@ -108,16 +109,17 @@ volatile float Tmin = 0;
 volatile float SOC;
 
 
+
 volatile float Vauxmin = 12.3;
 volatile float AuxChargeTime = 1800;
 
 volatile float Vchargedflagreset = 3.35;
-volatile float Vdischargedflagreset = 3;
+volatile float Vdischargedflagreset = 3.1;
 
 volatile float kp_constant = 3.5;								//charger
 volatile float kp_multiplier = 30;								//charger
 volatile float balancing_upper_level = 3.49;
-volatile float balancing_bottom_level = 3.475;
+volatile float balancing_bottom_level = 3.48; //4.475
 
 /* Declare variable using above structure and the function datapoints */
 /* These coordinates correspond to the points illustrated in the above graph */

@@ -206,9 +206,9 @@ void CANChargerReception(void)
 
 	//Read Charger Status
 	ChgStatus = RxDataH & 0xFF;
+	ChargerDebug = ChgStatus;
 
-
-	if(ChgStatus == 0)                                                                  //Charger ready to charge. No flags set
+	if(ChgStatus == 0 || ChgStatus == 0x08)                                             //Charger ready to charge || battery voltage low flag
 	{
 		Charger_status = 1;//charger connected
 		if(flagCurrent == 0 && flagTemp == 0 && flagCharged == 0 && KeySwitch == 0)     //check flags to ensure charging is allowed
@@ -255,7 +255,7 @@ void CANChargerReception(void)
 			}
 			else if(delay == 0)
 			{
-				ContactorOut = 0;                                                       //turn off contactor
+				//ContactorOut = 0;                                                       //turn off contactor
 				CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                            //disconnect charger
 				//Charger_status = 0;												//haal miskien uit
 
@@ -272,7 +272,7 @@ void CANChargerReception(void)
 		else if(delay == 0)
 		{
 			ContactorOut = 0;                                                           //turn off contactor
-			CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                                //disconnect charger
+			CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                              //disconnect charger
 			Charger_status = 0;
 			Current_max = 25;
 		}
