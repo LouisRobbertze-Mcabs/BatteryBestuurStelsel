@@ -407,7 +407,7 @@ void Read_Temperatures(void)
 	}
 	temperature_avg = temperature_avg*0.0667;
 
-	if(Temperatures_resistance[8]<50)										//old bms version       (tipies 20)				toets hierdie verder
+	if(Temperatures_resistance[8]<50)										//old bms version       (tipies 20)
 	{
 		Temperature_avg = (Temperatures[4]+Temperatures[9])/2;
 
