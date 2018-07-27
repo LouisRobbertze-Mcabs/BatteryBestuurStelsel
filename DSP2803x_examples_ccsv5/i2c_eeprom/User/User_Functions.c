@@ -790,7 +790,7 @@ void Calibrate_Current_charger()
 	ChargerCurrent_di = ChargerCurrent - old_ChargerCurrent;
 	Current_di = Current - old_Current;
 
-	if(ChargerCurrent > 15 && Aux_Control == 0 && ChargerCurrent_di<1 && Current_di<1)					//charger busy charging and aux charger turned off
+	if(ChargerCurrent > 24 && Aux_Control == 0 && ChargerCurrent_di<1 && Current_di<1)					//15 charger busy charging and aux charger turned off
 	{
 		error = (Current + ChargerCurrent-0.1)/Current;												//as percentage
 		Current_CAL = Current_CAL -0.02* error * Current_CAL;											//maybe add slow filter to dampen the fault?
