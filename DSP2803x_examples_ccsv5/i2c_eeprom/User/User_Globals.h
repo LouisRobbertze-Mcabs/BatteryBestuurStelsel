@@ -14,6 +14,7 @@
 #include <float.h>
 #include <string.h>
 #include "User_Defines.h"
+#include "User_Queue.h"
 
 extern struct I2CMSG I2cMsgOut1;
 extern struct I2CMSG I2cMsgIn1;
@@ -154,6 +155,8 @@ extern volatile float Current_old;
 extern volatile	float resistance;
 extern volatile	float resistance_temp;
 extern volatile float dI;
+
+extern struct queue_obj CAN_queue;
 
 
 #endif /* USER_GLOBALS_H_ */

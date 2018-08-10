@@ -75,6 +75,7 @@ void Initialise_BMS(void)
 	EALLOW;
 	SysCtrlRegs.WDCR = 0x002F;
 	EDIS;
+
 	//watchdog timer>>>>>>>>
 	//DisableDog();
 }

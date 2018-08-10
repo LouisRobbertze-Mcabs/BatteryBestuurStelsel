@@ -5,6 +5,8 @@
  *      Author: Sonja
  */
 #include "User_Globals.h"
+#include "User_Queue.h"
+
 
 // Two bytes will be used for the outgoing address,
 // thus only setup 2 bytes maximum
@@ -108,8 +110,6 @@ volatile float Tmin = 0;
 
 volatile float SOC;
 
-
-
 volatile float Vauxmin = 12.3;
 volatile float AuxChargeTime = 1800;
 
@@ -157,3 +157,6 @@ float ChgCurrent = 0;
  volatile float resistance;
  volatile float resistance_temp;
  volatile float dI;
+
+struct queue_obj CAN_queue;
+
