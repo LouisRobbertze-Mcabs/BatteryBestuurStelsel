@@ -245,10 +245,19 @@ __interrupt void can_tx_isr(void)
     {
         ECanaRegs.CANTA.all = 0xFFFFFFFF;           // Reset tranmission flags
     }*/
-
 	ServiceDog();
 
 	ECanaRegs.CANTA.all = 0xFFFFFFFF;           // Reset tranmission flags
+
+
+///////////////////////////////////////
+	if (!is_queue_empty(CAN_queue))
+	{
+		queue_remove_data(&CAN_queue/*, &Value_Reply, &Data_Reply*/);
+		CANTransmit(0x0, 0x0, 0x0, 0x0)  ;   					//START of new transmit (call CAN_transmit again)
+	}
+//////////////////////////////////////
+
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9
 }
 

@@ -18,7 +18,7 @@ void main(void)
 		if(counter_2Hz == 2)
 		{
 			Toggle_LED();
-			CAN_queue.front = 10;
+			//CAN_queue.front = 10;
 
 			Read_Cell_Voltages();
 			Calculate_Current();

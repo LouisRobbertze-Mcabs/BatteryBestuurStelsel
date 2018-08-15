@@ -146,7 +146,7 @@ volatile float balancing_bottom_level = 3.48; //4.475
  float SOCv = 0.5;
  float SOCc = 0;
 
-float ChgCurrent = 0;
+ float ChgCurrent = 0;
 
  volatile float SOH_avg;
  volatile float SOH_max;
@@ -158,5 +158,7 @@ float ChgCurrent = 0;
  volatile float resistance_temp;
  volatile float dI;
 
-struct queue_obj CAN_queue;
+struct queue_obj CAN_queue;					//initialise structure somewhere??
+
+int queue_length = 0;
 

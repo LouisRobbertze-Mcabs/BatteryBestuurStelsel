@@ -157,6 +157,6 @@ extern volatile	float resistance_temp;
 extern volatile float dI;
 
 extern struct queue_obj CAN_queue;
-
+extern int queue_length;
 
 #endif /* USER_GLOBALS_H_ */
