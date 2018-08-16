@@ -23,17 +23,8 @@ void main(void)
 			Calculate_Current();
 			Process_Voltages();
 
-
 			//testing CAN transmit
-			TxData.asFloat=Voltage_low;
-			CANTransmit(0, 4, TxData.asUint,5);
-			//TxData.asFloat=Voltage_low;
-			CANTransmit(0, 5, TxData.asUint,5);
-			//TxData.asFloat=Voltage_low;
-			CANTransmit(0, 6, TxData.asUint,5);
-
-
-
+			//CAN_Output_All();
 
 			ServiceDog();
 
