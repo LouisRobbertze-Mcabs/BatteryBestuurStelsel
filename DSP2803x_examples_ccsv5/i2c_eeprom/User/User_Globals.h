@@ -159,4 +159,8 @@ extern volatile float dI;
 extern struct queue_obj CAN_queue;
 extern int queue_length;
 
+extern union bits32 TxData;
+
+extern int toets;
+
 #endif /* USER_GLOBALS_H_ */

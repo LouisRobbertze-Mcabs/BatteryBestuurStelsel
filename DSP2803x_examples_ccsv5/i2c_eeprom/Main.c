@@ -18,11 +18,22 @@ void main(void)
 		if(counter_2Hz == 2)
 		{
 			Toggle_LED();
-			//CAN_queue.front = 10;
 
 			Read_Cell_Voltages();
 			Calculate_Current();
 			Process_Voltages();
+
+
+			//testing CAN transmit
+			TxData.asFloat=Voltage_low;
+			CANTransmit(0, 4, TxData.asUint,5);
+			//TxData.asFloat=Voltage_low;
+			CANTransmit(0, 5, TxData.asUint,5);
+			//TxData.asFloat=Voltage_low;
+			CANTransmit(0, 6, TxData.asUint,5);
+
+
+
 
 			ServiceDog();
 

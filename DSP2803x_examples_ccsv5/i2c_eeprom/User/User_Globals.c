@@ -162,3 +162,6 @@ struct queue_obj CAN_queue;					//initialise structure somewhere??
 
 int queue_length = 0;
 
+union bits32 TxData;
+
+ int toets;

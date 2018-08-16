@@ -394,19 +394,18 @@ void CANSlaveConfig(void)
 
 void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Bytes)      //destination, txdataH, txdataL,  bytes
 {
+	toets = queue_size(CAN_queue);
+
 	//do queing here????
 	if(Destination != 0 || TxDataH != 0 || TxDataL != 0 || Bytes != 0)	//if emplty, dont add to queue, send next in queue
 	{
-		if (is_queue_empty(CAN_queue))			//queue empty....
+		//toets = queue_size(CAN_queue);
+
+		if (queue_size(CAN_queue)==0)			//queue empty....
 		{
-			queue_length = queue_size(CAN_queue);
-			/*if (queue_length > max_queue_length)
-			{
-				max_queue_length = queue_length;
-			}*/
 			queue_insert(Destination, TxDataH, TxDataL, Bytes, &CAN_queue);
-
-
+			toets = queue_size(CAN_queue);
+			//Start transmit
 			ECanaRegs.CANME.all = 0x0000000E;                   // Disable Tx Mailbox
 
 			ECanaMboxes.MBOX0.MSGCTRL.all = Bytes;              // Transmit x bytes of data
@@ -422,22 +421,31 @@ void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Byte
 			ECanaRegs.CANTRS.all = 0x00000001;                  // Set transmit request
 
 		}
-		else
+		else if(queue_size(CAN_queue)>0)
 		{
 			queue_insert(Destination, TxDataH, TxDataL, Bytes, &CAN_queue); //insert into queue
 		}
 	}
 	else						//add to queue, don't send next in queue
 	{
-		if (!is_queue_full(CAN_queue))
+		toets = queue_size(CAN_queue);
+
+		if (queue_size(CAN_queue)>0)
 		{
-			queue_length = queue_size(CAN_queue);
-			/*if (queue_length > max_queue_length)
-			{
-				max_queue_length = queue_length;
-			}*/
-			//queue_insert(Destination, TxDataH, TxDataL, Bytes, &queue_obj);
+			ECanaRegs.CANME.all = 0x0000000E;                   // Disable Tx Mailbox
+
+			//Bytes
+			ECanaMboxes.MBOX0.MSGCTRL.all = CAN_queue.queue[CAN_queue.front][3];              // Transmit x bytes of data
+
+			ECanaMboxes.MBOX0.MSGID.all = 0;                    // Standard ID length, acceptance masks used, no remote frames
+			ECanaMboxes.MBOX0.MSGID.bit.STDMSGID = CAN_queue.queue[CAN_queue.front][0]; // Load destination address   Destination
+
+			ECanaMboxes.MBOX0.MDL.all = CAN_queue.queue[CAN_queue.front][2];
+			ECanaMboxes.MBOX0.MDH.all = CAN_queue.queue[CAN_queue.front][1];
+
+			ECanaRegs.CANME.all = 0x0000000F;                   // Enable Tx Mailbox
+
+			ECanaRegs.CANTRS.all = 0x00000001;                  // Set transmit request
 		}
-		//do a check empty and send for a start condition situation.........
 	}
 }

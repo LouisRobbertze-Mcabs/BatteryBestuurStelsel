@@ -9,6 +9,11 @@
 
 void Initialise_BMS(void)
 {
+	//Initialise queue objects
+	CAN_queue.front = 0;
+	CAN_queue.rear = -1;
+	CAN_queue.itemCount = 0;
+
 	flagCurrent = 0;
 
 	InitSysCtrl();
