@@ -165,3 +165,4 @@ int queue_length = 0;
 union bits32 TxData;
 
  int toets;
+ int toets2;

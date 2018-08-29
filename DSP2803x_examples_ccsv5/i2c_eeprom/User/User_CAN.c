@@ -206,7 +206,7 @@ void CANChargerReception(void)
 
 	//Read Charger Status
 	ChgStatus = RxDataH & 0xFF;
-	ChargerDebug = ChgStatus;
+	//	ChargerDebug = ChgStatus;
 
 	if(ChgStatus == 0 || ChgStatus == 0x08)                                             //Charger ready to charge || battery voltage low flag
 	{
@@ -357,9 +357,10 @@ void CANSlaveReception(void)
 
 void CAN_Output_All(void)
 {
+	Uint16 Acewell_Data = 0;
 	//Uint32 RxData = 0;
 	union bits32 TxData;
-
+	/*
 	//Battery data
 	TxData.asFloat=Voltage_total; CANTransmit(0, 4, TxData.asUint,5);
 	TxData.asFloat=Current; CANTransmit(0, 5, TxData.asUint,5);
@@ -421,7 +422,24 @@ void CAN_Output_All(void)
 	TxData.asFloat=Temperatures[13]; CANTransmit(0, 49, TxData.asUint,5);
 	TxData.asFloat=Temperatures[14]; CANTransmit(0, 50, TxData.asUint,5);
 	TxData.asFloat=Temperatures[15]; CANTransmit(0, 51, TxData.asUint,5);
+	 */
+	toets2 = ((int)(SOC*100)) & 0xFF;
 
+	CANTransmit(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5); //Voltage
+	CANTransmit(0x718, 0x11, ((int)(SOC*100)) & 0xFF, 5); //SOC
+
+	//sit system error, system charging, charge required
+	//check flags for error messages
+
+	Acewell_Data = ((Charger_status & 0x1)<<1);
+
+	if (SOC<0.12)
+		Acewell_Data = Acewell_Data++;
+
+	if((flagDischarged == 1) || (flagCurrent == 1)  || (flagTemp == 1))
+		Acewell_Data = Acewell_Data + 4;
+
+	CANTransmit(0x718, 0x88, Acewell_Data & 0xF, 5); //LEDS
 }
 
 void CANSlaveConfig(void)

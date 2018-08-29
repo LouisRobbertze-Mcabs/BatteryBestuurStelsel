@@ -162,5 +162,6 @@ extern int queue_length;
 extern union bits32 TxData;
 
 extern int toets;
+extern int toets2;
 
 #endif /* USER_GLOBALS_H_ */
