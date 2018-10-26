@@ -36,7 +36,7 @@ volatile Uint16 flagTemp=0;
 volatile Uint16 flagCurrent=0;
 volatile Uint16 flagVoltage=0;
 
-volatile Uint16 flagCharged=0;
+volatile Uint16 flagCharged=1;
 volatile Uint16 flagDischarged=0;
 volatile Uint16 balance = 0;
 /////////////////////////////////////////////
@@ -114,8 +114,7 @@ volatile float Vauxmin = 12.3;
 volatile float AuxChargeTime = 1800;
 
 volatile float Vchargedflagreset = 3.35;
-volatile float Vdischargedflagreset = 3.1;
-
+volatile float Vdischargedflagreset = 2.9;
 volatile float kp_constant = 3.5;								//charger
 volatile float kp_multiplier = 30;								//charger
 volatile float balancing_upper_level = 3.49;
@@ -166,3 +165,5 @@ union bits32 TxData;
 
  int toets;
  int toets2;
+
+ int temptimer = 0;

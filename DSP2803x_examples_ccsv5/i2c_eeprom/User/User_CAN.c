@@ -211,7 +211,7 @@ void CANChargerReception(void)
 	if(ChgStatus == 0 || ChgStatus == 0x08)                                             //Charger ready to charge || battery voltage low flag
 	{
 		Charger_status = 1;//charger connected
-		if(flagCurrent == 0 && flagTemp == 0 && flagCharged == 0 && KeySwitch == 0)     //check flags to ensure charging is allowed
+		if(flagCurrent == 0 && flagTemp == 0 && flagCharged == 0 && KeySwitch == 0 /*&& flagDischarged != 2*/)     //check flags to ensure charging is allowed
 		{
 			if(delay == 0)                                                              //sit miskien check in om met die charger Vbat te meet
 			{
@@ -222,7 +222,7 @@ void CANChargerReception(void)
 			{
 				Current_max =  Current_max + kp_multiplier*(kp_constant - Voltage_high);								//kp controller constant & kp multiplier
 
-				if(Current_max <0)									//add max as well
+				if(Current_max <0)								//add max as well
 					Current_max = 0;
 				else if(Current_max > 25)
 					Current_max = 25;
@@ -254,9 +254,11 @@ void CANChargerReception(void)
 				delay--;
 			}
 			else if(delay == 0)
-			{
-				//ContactorOut = 0;                                                       //turn off contactor
+			{                                                   //turn off contactor
 				CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                            //disconnect charger
+				if(flagCharged == 1)
+					ContactorOut = 0;
+
 				//Charger_status = 0;												//haal miskien uit
 
 			}
@@ -271,8 +273,10 @@ void CANChargerReception(void)
 		}
 		else if(delay == 0)
 		{
-			ContactorOut = 0;                                                           //turn off contactor
+
 			CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                              //disconnect charger
+			ContactorOut = 0;                                                           //turn off contactor
+
 			Charger_status = 0;
 			Current_max = 25;
 		}
@@ -286,9 +290,11 @@ void CANChargerReception(void)
 void CANSlaveReception(void)
 {
 	Uint32 RxData = 0;
+	Uint32 RxData2 = 0;
 	union bits32 TxData;
 
 	RxData = ECanaMboxes.MBOX1.MDH.all;             // Data taken out of direct mailbox
+	RxData2 = ECanaMboxes.MBOX1.MDL.all;
 
 	switch (RxData)
 	{
@@ -352,6 +358,7 @@ void CANSlaveReception(void)
 	case 49: {TxData.asFloat=Temperatures[13]; CANTransmit(0, 49, TxData.asUint,5); break;}
 	case 50: {TxData.asFloat=Temperatures[14]; CANTransmit(0, 50, TxData.asUint,5); break;}
 	case 51: {TxData.asFloat=Temperatures[15]; CANTransmit(0, 51, TxData.asUint,5); break;}
+	case 52: {if(RxData2==0x8){Fan_Control = 1;}else if(RxData2==0x4){Fan_Control = 0;}; break;}
 	}
 }
 
@@ -423,7 +430,7 @@ void CAN_Output_All(void)
 	TxData.asFloat=Temperatures[14]; CANTransmit(0, 50, TxData.asUint,5);
 	TxData.asFloat=Temperatures[15]; CANTransmit(0, 51, TxData.asUint,5);
 	 */
-	toets2 = ((int)(SOC*100)) & 0xFF;
+	//toets2 = ((int)(SOC*100)) & 0xFF;
 
 	CANTransmit(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5); //Voltage
 	CANTransmit(0x718, 0x11, ((int)(SOC*100)) & 0xFF, 5); //SOC

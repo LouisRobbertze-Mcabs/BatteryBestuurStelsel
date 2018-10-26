@@ -107,7 +107,7 @@ __interrupt void cpu_timer1_isr(void)
 	//check status of all flags as well as the key switch
 	static float Aux_Voltage_temp = 0;
 
-	//Deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^WcTs
+	//Deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^-WcTs
 	//adc/4096 *3.3* 10.51/10.51      12.2/2.2
 	//a = 0.015 ~ 0.1Hz, a = 0.12 ~ 1Hz, a = 0.47 ~ 5Hz
 
@@ -152,6 +152,10 @@ __interrupt void cpu_timer1_isr(void)
 
 		//  led3 = 0;       //turn off red led
 	}
+/*	else if((flagCharged == 1) && (Charger_status == 1))
+	{
+		ContactorOut = 0;
+	}*/
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	CpuTimer1.InterruptCount++;
 	EDIS;

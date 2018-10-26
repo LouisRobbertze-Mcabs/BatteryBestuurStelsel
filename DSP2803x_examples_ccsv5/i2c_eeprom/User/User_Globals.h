@@ -164,4 +164,6 @@ extern union bits32 TxData;
 extern int toets;
 extern int toets2;
 
+extern int temptimer;
+
 #endif /* USER_GLOBALS_H_ */
