@@ -367,7 +367,7 @@ void CAN_Output_All(void)
 	Uint16 Acewell_Data = 0;
 	//Uint32 RxData = 0;
 	union bits32 TxData;
-	/*
+
 	//Battery data
 	TxData.asFloat=Voltage_total; CANTransmit(0, 4, TxData.asUint,5);
 	TxData.asFloat=Current; CANTransmit(0, 5, TxData.asUint,5);
@@ -429,7 +429,7 @@ void CAN_Output_All(void)
 	TxData.asFloat=Temperatures[13]; CANTransmit(0, 49, TxData.asUint,5);
 	TxData.asFloat=Temperatures[14]; CANTransmit(0, 50, TxData.asUint,5);
 	TxData.asFloat=Temperatures[15]; CANTransmit(0, 51, TxData.asUint,5);
-	 */
+
 	//toets2 = ((int)(SOC*100)) & 0xFF;
 
 	CANTransmit(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5); //Voltage

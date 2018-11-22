@@ -25,7 +25,7 @@ void main(void)
 			Process_Voltages();
 
 			//testing CAN transmit
-			//CAN_Output_All();
+			CAN_Output_All();
 
 			ServiceDog();
 
