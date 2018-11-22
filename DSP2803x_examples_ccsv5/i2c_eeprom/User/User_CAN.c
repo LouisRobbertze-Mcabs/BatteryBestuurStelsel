@@ -358,7 +358,7 @@ void CANSlaveReception(void)
 	case 49: {TxData.asFloat=Temperatures[13]; CANTransmit(0, 49, TxData.asUint,5); break;}
 	case 50: {TxData.asFloat=Temperatures[14]; CANTransmit(0, 50, TxData.asUint,5); break;}
 	case 51: {TxData.asFloat=Temperatures[15]; CANTransmit(0, 51, TxData.asUint,5); break;}
-	case 52: {if(RxData2==0x8){Fan_Control = 1;}else if(RxData2==0x4){Fan_Control = 0;}; break;}
+	//case 52: {if(RxData2==0x8){Fan_Control = 1;}else if(RxData2==0x4){Fan_Control = 0;}; break;}
 	}
 }
 
