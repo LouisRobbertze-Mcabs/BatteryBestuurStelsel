@@ -24,15 +24,16 @@ void main(void)
 			Calculate_Current();
 			Process_Voltages();
 
-			//testing CAN transmit
+			Read_Temperatures();
+
+			ServiceDog();
+
+			Balance(5,Vbalance);
+			Calculate_Current();
 			CAN_Output_All();
 
 			ServiceDog();
 
-			Read_Temperatures();
-			Balance(5,Vbalance);
-
-			Calculate_Current();
 			Calibrate_Current_charger();
 
 			Read_System_Status();

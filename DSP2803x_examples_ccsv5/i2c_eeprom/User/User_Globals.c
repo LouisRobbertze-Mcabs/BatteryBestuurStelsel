@@ -36,7 +36,7 @@ volatile Uint16 flagTemp=0;
 volatile Uint16 flagCurrent=0;
 volatile Uint16 flagVoltage=0;
 
-volatile Uint16 flagCharged=1;
+volatile Uint16 flagCharged=0;
 volatile Uint16 flagDischarged=0;
 volatile Uint16 balance = 0;
 /////////////////////////////////////////////
@@ -122,40 +122,34 @@ volatile float balancing_bottom_level = 3.48; //4.475
 
 /* Declare variable using above structure and the function datapoints */
 /* These coordinates correspond to the points illustrated in the above graph */
- float sine_x[5] = {0, 0.1, 0.3, 0.6, 1};
- float sine_y[5] = {2.88, 3.202, 3.27, 3.293, 3.349};
+float sine_x[5] = {0, 0.1, 0.3, 0.6, 1};
+float sine_y[5] = {2.88, 3.202, 3.27, 3.293, 3.349};
 
- struct table_1d sine_table = {
+struct table_1d sine_table = {
     5,      /* Number of data points */
     sine_x, /* Array of x-coordinates */
     sine_y  /* Array of y-coordinates */
 };
 
- volatile float Current_CAL = 2080;			//=2095
- volatile Uint16 Current_Sum;
- volatile Uint16 Current_Counter;
+volatile float Current_CAL = 2080;			//=2095
 
+float SOC_t;
 
- volatile Uint16 Toets_current_sum[10];
+float Wsoc = 1;
+float SOCv = 0.5;
+float SOCc = 0;
 
+float ChgCurrent = 0;
 
- float SOC_t;
+volatile float SOH_avg;
+volatile float SOH_max;
+volatile float SOH_max_cell;
 
- float Wsoc = 1;
- float SOCv = 0.5;
- float SOCc = 0;
-
- float ChgCurrent = 0;
-
- volatile float SOH_avg;
- volatile float SOH_max;
- volatile float SOH_max_cell;
-
- volatile float Voltages_old[15];
- volatile float Current_old;
- volatile float resistance;
- volatile float resistance_temp;
- volatile float dI;
+volatile float Voltages_old[15];
+volatile float Current_old;
+volatile float resistance;
+volatile float resistance_temp;
+volatile float dI;
 
 struct queue_obj CAN_queue;					//initialise structure somewhere??
 

@@ -14,17 +14,14 @@ __interrupt void  adc_isr(void)
 	static float Filter_100HZ;
 	static float Filter_100HZ_past = 0;
 	static float current_p;
-	//  int toets_stroom = 0;
-
 
 	test_current = current_p + (0.00314*(AdcResult.ADCRESULT1-current_p));     //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
 	current_p=test_current;
 
-
 	Filter_100HZ = Filter_100HZ_past + (Ifilter*(AdcResult.ADCRESULT1-Filter_100HZ_past));     //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
 	Filter_100HZ_past=Filter_100HZ;
 
-	//   Filter_100HZ = (test_current-2109)* 0.122;
+	//Filter_100HZ = (test_current-2109)* 0.122;
 
 	if(Filter_100HZ > Imax || Filter_100HZ < Imin)                       ////////////////////////////////////////////////
 	{
@@ -33,70 +30,13 @@ __interrupt void  adc_isr(void)
 		flagCurrent = 1;
 	} 																	////////////////////////////////////////////////
 
-	if(Current_Counter<10)
-		Toets_current_sum[Current_Counter] = AdcResult.ADCRESULT1;
-
-	Current_Sum = Current_Sum + AdcResult.ADCRESULT1;
-	Current_Counter++;
-
-//	led2 = 0x01^led2;                   //toggle led
-
 	AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
 	PieCtrlRegs.PIEACK.bit.ACK10 = 1;   // Acknowledge interrupt to PIE
 }
 
 __interrupt void cpu_timer0_isr(void)
 {
-	static float Temperatures_resistance_temp[14];
-
 	counter_2Hz++;
-
-
-	//temp meetings
-	//SOC15 - Outside
-	Temperatures_resistance[13] = Temperatures_resistance_temp[13] + (0.466*(((AdcResult.ADCRESULT15))-Temperatures_resistance_temp[13]));
-	Temperatures_resistance_temp[13] = Temperatures_resistance[13];
-
-	//Cells:
-	//SOC0 - Cell0
-	Temperatures_resistance[0] = Temperatures_resistance_temp[0] + (0.466*(((AdcResult.ADCRESULT0))-Temperatures_resistance_temp[0]));
-	Temperatures_resistance_temp[0] = Temperatures_resistance[0];
-	//SOC3 - Cell1
-	Temperatures_resistance[1] = Temperatures_resistance_temp[1] + (0.466*(((AdcResult.ADCRESULT3))-Temperatures_resistance_temp[1]));
-	Temperatures_resistance_temp[1] = Temperatures_resistance[1];
-	//SOC4 - Cell2
-	Temperatures_resistance[2] = Temperatures_resistance_temp[2] + (0.466*(((AdcResult.ADCRESULT4))-Temperatures_resistance_temp[2]));
-	Temperatures_resistance_temp[2] = Temperatures_resistance[2];
-	//SOC5 - Cell3
-	Temperatures_resistance[3] = Temperatures_resistance_temp[3] + (0.466*(((AdcResult.ADCRESULT5))-Temperatures_resistance_temp[3]));
-	Temperatures_resistance_temp[3] = Temperatures_resistance[3];
-	//SOC6 - Cell5
-	Temperatures_resistance[4] = Temperatures_resistance_temp[4] + (0.466*(((AdcResult.ADCRESULT6))-Temperatures_resistance_temp[4]));		//possibly use for model detection
-	Temperatures_resistance_temp[4] = Temperatures_resistance[4];
-	//SOC7 - Cell6
-	Temperatures_resistance[5] = Temperatures_resistance_temp[5] + (0.466*(((AdcResult.ADCRESULT7))-Temperatures_resistance_temp[5]));
-	Temperatures_resistance_temp[5] = Temperatures_resistance[5];
-	//SOC8 - Cell7
-	Temperatures_resistance[6] = Temperatures_resistance_temp[6] + (0.466*(((AdcResult.ADCRESULT8))-Temperatures_resistance_temp[6]));
-	Temperatures_resistance_temp[6] = Temperatures_resistance[6];
-	//SOC9 - Cell8
-	Temperatures_resistance[7] = Temperatures_resistance_temp[7] + (0.466*(((AdcResult.ADCRESULT9))-Temperatures_resistance_temp[7]));
-	Temperatures_resistance_temp[7] = Temperatures_resistance[7];
-	//SOC10 - Cell10
-	Temperatures_resistance[8] = Temperatures_resistance_temp[8] + (0.466*(((AdcResult.ADCRESULT10))-Temperatures_resistance_temp[8]));
-	Temperatures_resistance_temp[8] = Temperatures_resistance[8];
-	//SOC11 - Cell11
-	Temperatures_resistance[9] = Temperatures_resistance_temp[9] + (0.466*(((AdcResult.ADCRESULT11))-Temperatures_resistance_temp[9]));
-	Temperatures_resistance_temp[9] = Temperatures_resistance[9];
-	//SOC12 - Cell12
-	Temperatures_resistance[10] = Temperatures_resistance_temp[10] + (0.466*(((AdcResult.ADCRESULT12))-Temperatures_resistance_temp[10]));
-	Temperatures_resistance_temp[10] = Temperatures_resistance[10];
-	//SOC13 - Cell13
-	Temperatures_resistance[11] = Temperatures_resistance_temp[11] + (0.466*(((AdcResult.ADCRESULT13))-Temperatures_resistance_temp[11]));
-	Temperatures_resistance_temp[11] = Temperatures_resistance[11];
-	//SOC14 - Cell14
-	Temperatures_resistance[12] = Temperatures_resistance_temp[12] + (0.466*(((AdcResult.ADCRESULT14))-Temperatures_resistance_temp[12]));
-	Temperatures_resistance_temp[12] = Temperatures_resistance[12];
 
 	CpuTimer0.InterruptCount++;
 	PieCtrlRegs.PIEACK.bit.ACK1 = 1/* PIEACK_GROUP1*/;
@@ -110,7 +50,6 @@ __interrupt void cpu_timer1_isr(void)
 	//Deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^-WcTs
 	//adc/4096 *3.3* 10.51/10.51      12.2/2.2
 	//a = 0.015 ~ 0.1Hz, a = 0.12 ~ 1Hz, a = 0.47 ~ 5Hz
-
 
 	Auxilliary_Voltage = Aux_Voltage_temp + (0.47*(((AdcResult.ADCRESULT2)* 0.00442)-Aux_Voltage_temp));					//50hz sny af op 0.1hz
 	Aux_Voltage_temp = Auxilliary_Voltage;
@@ -150,7 +89,7 @@ __interrupt void cpu_timer1_isr(void)
 
 		ContactorOut = 0;       //turn off contactor
 
-		//  led3 = 0;       //turn off red led
+		//led3 = 0;       //turn off red led
 	}
 /*	else if((flagCharged == 1) && (Charger_status == 1))
 	{
@@ -226,40 +165,28 @@ __interrupt void can_rx_isr(void)
 {
 	if (ECanaRegs.CANRMP.bit.RMP1 == 1)
 	{
-		CANSlaveReception();                        // Handle the received message
+		CANSlaveReception();                    // Handle the received message
 	}
 	else if (ECanaRegs.CANRMP.bit.RMP2 == 1)
 	{
-		CANChargerReception();
+		CANChargerReception();					//improve these functions for speed
 	}
 	else if(ECanaRegs.CANRMP.bit.RMP3 == 1)
 	{
 		CANSlaveConfig();
 	}
 
-	ServiceDog();
-
 	ECanaRegs.CANRMP.all = 0xFFFFFFFF;          // Reset receive mailbox flags
-	PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9
+	PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;     // Acknowledge this interrupt to receive more interrupts from group 9
 }
 
 __interrupt void can_tx_isr(void)
 {
-	/*if (ECanaRegs.CANTA.all == 0x00000001)
-    {
-        ECanaRegs.CANTA.all = 0xFFFFFFFF;           // Reset tranmission flags
-    }*/
-	ServiceDog();
-
-
-	ECanaRegs.CANTA.all = 0xFFFFFFFF;           // Reset tranmission flags
-	PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9
+	queue_remove_data(&CAN_queue);
 
 	if (queue_size(CAN_queue)>0)
-	{
-		queue_remove_data(&CAN_queue/*, &Value_Reply, &Data_Reply*/);
-		toets = queue_size(CAN_queue);
-		CANTransmit(0x0, 0x0, 0x0, 0x0)  ;   					//START of new transmit (call CAN_transmit again)
-	}
-}
+		CANTransmit(0x0, 0x0, 0x0, 0x0);   		//START of new transmit
 
+	ECanaRegs.CANTA.all = 0xFFFFFFFF;           // Reset tranmission flags
+	PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;     // Acknowledge this interrupt to receive more interrupts from group 9
+}

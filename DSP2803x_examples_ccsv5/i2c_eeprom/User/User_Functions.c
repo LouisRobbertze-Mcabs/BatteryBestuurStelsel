@@ -340,6 +340,54 @@ void Process_System_Status(void)
 
 void Read_Temperatures(void)
 {
+	static float Temperatures_resistance_temp[14];
+
+	//temp meetings
+	//SOC15 - Outside
+	Temperatures_resistance[13] = Temperatures_resistance_temp[13] + (0.06*(((AdcResult.ADCRESULT15))-Temperatures_resistance_temp[13]));
+	Temperatures_resistance_temp[13] = Temperatures_resistance[13];
+
+	//Cells:
+	//SOC0 - Cell0
+	Temperatures_resistance[0] = Temperatures_resistance_temp[0] + (0.06*(((AdcResult.ADCRESULT0))-Temperatures_resistance_temp[0]));
+	Temperatures_resistance_temp[0] = Temperatures_resistance[0];
+	//SOC3 - Cell1
+	Temperatures_resistance[1] = Temperatures_resistance_temp[1] + (0.06*(((AdcResult.ADCRESULT3))-Temperatures_resistance_temp[1]));
+	Temperatures_resistance_temp[1] = Temperatures_resistance[1];
+	//SOC4 - Cell2
+	Temperatures_resistance[2] = Temperatures_resistance_temp[2] + (0.06*(((AdcResult.ADCRESULT4))-Temperatures_resistance_temp[2]));
+	Temperatures_resistance_temp[2] = Temperatures_resistance[2];
+	//SOC5 - Cell3
+	Temperatures_resistance[3] = Temperatures_resistance_temp[3] + (0.06*(((AdcResult.ADCRESULT5))-Temperatures_resistance_temp[3]));
+	Temperatures_resistance_temp[3] = Temperatures_resistance[3];
+	//SOC6 - Cell5
+	Temperatures_resistance[4] = Temperatures_resistance_temp[4] + (0.06*(((AdcResult.ADCRESULT6))-Temperatures_resistance_temp[4]));		//possibly use for model detection
+	Temperatures_resistance_temp[4] = Temperatures_resistance[4];
+	//SOC7 - Cell6
+	Temperatures_resistance[5] = Temperatures_resistance_temp[5] + (0.06*(((AdcResult.ADCRESULT7))-Temperatures_resistance_temp[5]));
+	Temperatures_resistance_temp[5] = Temperatures_resistance[5];
+	//SOC8 - Cell7
+	Temperatures_resistance[6] = Temperatures_resistance_temp[6] + (0.06*(((AdcResult.ADCRESULT8))-Temperatures_resistance_temp[6]));
+	Temperatures_resistance_temp[6] = Temperatures_resistance[6];
+	//SOC9 - Cell8
+	Temperatures_resistance[7] = Temperatures_resistance_temp[7] + (0.06*(((AdcResult.ADCRESULT9))-Temperatures_resistance_temp[7]));
+	Temperatures_resistance_temp[7] = Temperatures_resistance[7];
+	//SOC10 - Cell10
+	Temperatures_resistance[8] = Temperatures_resistance_temp[8] + (0.06*(((AdcResult.ADCRESULT10))-Temperatures_resistance_temp[8]));
+	Temperatures_resistance_temp[8] = Temperatures_resistance[8];
+	//SOC11 - Cell11
+	Temperatures_resistance[9] = Temperatures_resistance_temp[9] + (0.06*(((AdcResult.ADCRESULT11))-Temperatures_resistance_temp[9]));
+	Temperatures_resistance_temp[9] = Temperatures_resistance[9];
+	//SOC12 - Cell12
+	Temperatures_resistance[10] = Temperatures_resistance_temp[10] + (0.06*(((AdcResult.ADCRESULT12))-Temperatures_resistance_temp[10]));
+	Temperatures_resistance_temp[10] = Temperatures_resistance[10];
+	//SOC13 - Cell13
+	Temperatures_resistance[11] = Temperatures_resistance_temp[11] + (0.06*(((AdcResult.ADCRESULT13))-Temperatures_resistance_temp[11]));
+	Temperatures_resistance_temp[11] = Temperatures_resistance[11];
+	//SOC14 - Cell14
+	Temperatures_resistance[12] = Temperatures_resistance_temp[12] + (0.06*(((AdcResult.ADCRESULT14))-Temperatures_resistance_temp[12]));
+	Temperatures_resistance_temp[12] = Temperatures_resistance[12];
+
 	int i;
 	int flag = 0;
 	float Vts;
@@ -778,26 +826,6 @@ void Calculate_SOC()
 		SOC = 1;
 	else if(SOC<0.001)
 		SOC = 0.001;
-}
-
-void Calibrate_Current()
-{
-	// Reset the watchdog counter
-	ServiceDog();
-
-	Current_Sum = 0;
-	Current_Counter = 0;
-
-	while(Current_Counter <= 500);
-	ServiceDog();
-	Current_Sum = 0;
-	Current_Counter = 0;
-	while(Current_Counter < 20);
-
-	Current_CAL = Current_Sum/20;
-	PreCharge = 1;                          //turn on precharge resistor
-	// Reset the watchdog counter
-	ServiceDog();
 }
 
 void Calibrate_Current_charger()

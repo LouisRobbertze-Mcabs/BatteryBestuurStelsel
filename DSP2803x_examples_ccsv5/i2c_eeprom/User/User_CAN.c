@@ -190,14 +190,6 @@ void CANChargerReception(void)
 	ChgVoltage = (float)temp2*0.1;
 
 	//Read Charger Current
-	/*	temp = (RxDataL& 0xFFFF0000)>>16;
-	temp2    = (temp & 0xFF) << 8;
-	temp2 = ((temp &0xFF00)>>8) | temp2;
-	temp2 = (((temp &0xFF00)>>8) | temp2)*0.1;
-	ChgCurrent = (float)temp2 * 0.1;
-	 */
-
-	//Read Charger Current
 	temp = (RxDataL& 0xFFFF0000)>>16;
 	temp2    = (temp & 0xFF) << 8;
 	temp2 = ((temp &0xFF00)>>8) | temp2;
@@ -488,17 +480,12 @@ void CANSlaveConfig(void)
 
 void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Bytes)      //destination, txdataH, txdataL,  bytes
 {
-	toets = queue_size(CAN_queue);
-
-	//do queing here????
-	if(Destination != 0 || TxDataH != 0 || TxDataL != 0 || Bytes != 0)	//if emplty, dont add to queue, send next in queue
+	if(Destination != 0 || TxDataH != 0 || TxDataL != 0 || Bytes != 0)	//if transmit request not empty
 	{
-		//toets = queue_size(CAN_queue);
-
 		if (queue_size(CAN_queue)==0)			//queue empty....
 		{
 			queue_insert(Destination, TxDataH, TxDataL, Bytes, &CAN_queue);
-			toets = queue_size(CAN_queue);
+			//toets = queue_size(CAN_queue);
 			//Start transmit
 			ECanaRegs.CANME.all = 0x0000000E;                   // Disable Tx Mailbox
 
@@ -513,18 +500,14 @@ void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Byte
 			ECanaRegs.CANME.all = 0x0000000F;                   // Enable Tx Mailbox
 
 			ECanaRegs.CANTRS.all = 0x00000001;                  // Set transmit request
-
 		}
-		else if(queue_size(CAN_queue)>0)
+		else //if(queue_size(CAN_queue)>0)
 		{
-			toets = queue_size(CAN_queue);
 			queue_insert(Destination, TxDataH, TxDataL, Bytes, &CAN_queue); //insert into queue
 		}
 	}
-	else						//add to queue, don't send next in queue
+	else	//Send next in queue
 	{
-		toets = queue_size(CAN_queue);
-
 		if (queue_size(CAN_queue)>0)
 		{
 			ECanaRegs.CANME.all = 0x0000000E;                   // Disable Tx Mailbox
