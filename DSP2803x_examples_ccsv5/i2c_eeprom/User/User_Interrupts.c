@@ -31,7 +31,7 @@ __interrupt void  adc_isr(void)
 	} 																	////////////////////////////////////////////////
 
 	AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
-	PieCtrlRegs.PIEACK.bit.ACK10 = 1;   // Acknowledge interrupt to PIE
+	PieCtrlRegs.PIEACK.bit.ACK10 = 1;   		// Acknowledge interrupt to PIE
 }
 
 __interrupt void cpu_timer0_isr(void)
@@ -57,12 +57,9 @@ __interrupt void cpu_timer1_isr(void)
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////// testing
 	if(KeySwitch == 1)  //keyswitch == 1
 	{
-		//  led3 = 1;       //turn on red led
-
 		//binne die keydrive if
 		if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp == 0) && (Charger_status == 0))
 		{
-
 			ContactorOut = 1;           //turn on contactor
 		}
 		else
@@ -81,21 +78,15 @@ __interrupt void cpu_timer1_isr(void)
 				led2 = 1;
 			}
 		}
-
 	}
 	else if((KeySwitch == 0) && (Charger_status == 0)) //keyswitch == 0
 	{
 		flagCurrent = 0;
-
 		ContactorOut = 0;       //turn off contactor
 
 		//led3 = 0;       //turn off red led
 	}
-/*	else if((flagCharged == 1) && (Charger_status == 1))
-	{
-		ContactorOut = 0;
-	}*/
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	CpuTimer1.InterruptCount++;
 	EDIS;
 }
@@ -185,7 +176,7 @@ __interrupt void can_tx_isr(void)
 	queue_remove_data(&CAN_queue);
 
 	if (queue_size(CAN_queue)>0)
-		CANTransmit(0x0, 0x0, 0x0, 0x0);   		//START of new transmit
+		CANTransmit(0x0, 0x0, 0x0, 0x0);   		//START transmit of next in queue
 
 	ECanaRegs.CANTA.all = 0xFFFFFFFF;           // Reset tranmission flags
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;     // Acknowledge this interrupt to receive more interrupts from group 9

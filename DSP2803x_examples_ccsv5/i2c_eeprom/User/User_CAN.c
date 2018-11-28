@@ -195,7 +195,6 @@ void CANChargerReception(void)
 	temp2 = ((temp &0xFF00)>>8) | temp2;
 	ChgCurrent = (float)temp2*0.1;
 
-
 	//Read Charger Status
 	ChgStatus = RxDataH & 0xFF;
 	//	ChargerDebug = ChgStatus;
@@ -282,11 +281,11 @@ void CANChargerReception(void)
 void CANSlaveReception(void)
 {
 	Uint32 RxData = 0;
-	Uint32 RxData2 = 0;
+//	Uint32 RxData2 = 0;
 	union bits32 TxData;
 
 	RxData = ECanaMboxes.MBOX1.MDH.all;             // Data taken out of direct mailbox
-	RxData2 = ECanaMboxes.MBOX1.MDL.all;
+//	RxData2 = ECanaMboxes.MBOX1.MDL.all;
 
 	switch (RxData)
 	{
