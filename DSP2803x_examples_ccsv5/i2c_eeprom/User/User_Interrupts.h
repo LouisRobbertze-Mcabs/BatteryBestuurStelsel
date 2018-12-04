@@ -22,7 +22,7 @@ __interrupt void cpu_timer1_isr(void);
 __interrupt void cpu_timer2_isr(void);
 __interrupt void i2c_int1a_isr(void);
 __interrupt void adc_isr(void);
-__interrupt void spiRxFifoIsr(void);
+//__interrupt void spiRxFifoIsr(void);
 __interrupt void can_rx_isr(void);
 __interrupt void can_tx_isr(void);
 

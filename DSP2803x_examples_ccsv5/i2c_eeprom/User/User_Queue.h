@@ -11,7 +11,7 @@
 #include "User_Defines.h"
 #include <string.h>
 
-#define MAX_QUEUE_SIZE 80
+#define MAX_QUEUE_SIZE 110
 
 // Queue functions
 

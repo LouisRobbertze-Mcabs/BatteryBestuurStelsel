@@ -84,7 +84,7 @@ __interrupt void NMI_ISR(void)       // Non-maskable interrupt
   for(;;);
 }
 
-__interrupt void ILLEGAL_ISR(void)   // Illegal operation TRAP
+__interrupt void ILLEGAL_ISR(void)   // Illegal operation TRAP					//kom hier in!!!!!!
 {
   // Insert ISR Code here
 
@@ -92,7 +92,7 @@ __interrupt void ILLEGAL_ISR(void)   // Illegal operation TRAP
   // Remove after inserting ISR Code
   __asm("          ESTOP0");
   for(;;);
-
+//	return;
 }
 
 __interrupt void USER1_ISR(void)     // User Defined trap 1

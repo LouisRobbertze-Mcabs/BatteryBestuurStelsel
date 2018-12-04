@@ -36,7 +36,7 @@ volatile Uint16 flagTemp=0;
 volatile Uint16 flagCurrent=0;
 volatile Uint16 flagVoltage=0;
 
-volatile Uint16 flagCharged=0;
+volatile Uint16 flagCharged=0;											//*****
 volatile Uint16 flagDischarged=0;
 volatile Uint16 balance = 0;
 /////////////////////////////////////////////
@@ -161,3 +161,5 @@ union bits32 TxData;
  int toets2;
 
  int temptimer = 0;
+
+  int toetsQueue =0;

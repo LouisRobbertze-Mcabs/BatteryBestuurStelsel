@@ -166,4 +166,6 @@ extern int toets2;
 
 extern int temptimer;
 
+extern int toetsQueue;
+
 #endif /* USER_GLOBALS_H_ */
