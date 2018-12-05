@@ -74,7 +74,7 @@ PAGE 0:    /* Program Memory */
            /* Memory (RAM/FLASH/OTP) blocks can be moved to PAGE1 for data allocation */
    RAML0       : origin = 0x008000, length = 0x000800     /* on-chip RAM block L0 */
    RAML1       : origin = 0x008800, length = 0x000400     /* on-chip RAM block L1 */
-   RAML3       : origin = 0x009000, length = 0x001000     /* on-chip RAM block L3 */
+   RAML3       : origin = 0x009400, length = 0x00800     /* on-chip RAM block L3 */
    OTP         : origin = 0x3D7800, length = 0x000400     /* on-chip OTP */
    FLASHH      : origin = 0x3E8000, length = 0x002000     /* on-chip FLASH */
    FLASHG      : origin = 0x3EA000, length = 0x002000     /* on-chip FLASH */
@@ -103,11 +103,11 @@ PAGE 1 :   /* Data Memory */
            /* Memory (RAM/FLASH/OTP) blocks can be moved to PAGE0 for program allocation */
            /* Registers remain on PAGE1                                                  */
    BOOT_RSVD   : origin = 0x000000, length = 0x000050     /* Part of M0, BOOT rom will use this for stack */
-   RAMM0       : origin = 0x000050, length = 0x0003B0     /* on-chip RAM block M0 */		//0x0003B0      bartho
-   RAMM1       : origin = 0x000400, length = 0x000400     /* on-chip RAM block M1 */		//0x000400		bartho
+   RAMM0       : origin = 0x000050, length = 0x0007B0     /* on-chip RAM block M0 */		//0x0003B0      bartho
+//   RAMM1       : origin = 0x000400, length = 0x000400     /* on-chip RAM block M1 */		//0x000400		bartho
 
    //bartho was hier ook! //0x400
-   RAML2       : origin = 0x008C00, length = 0x000600     /* on-chip RAM block L2 */	//0x400
+   RAML2       : origin = 0x008C00, length = 0x000800     /* on-chip RAM block L2 */	//0x400
 
    //FLASHB      : origin = 0x3F4000, length = 0x002000     /* on-chip FLASH */
    CLA1_MSGRAMLOW       : origin = 0x001480, length = 0x000080
