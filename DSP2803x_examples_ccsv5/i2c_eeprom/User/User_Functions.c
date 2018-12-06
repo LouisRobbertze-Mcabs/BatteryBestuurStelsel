@@ -140,7 +140,7 @@ void Init_Gpio(void)
 	CSControl = 0;  //turn CScontrol on for current measurement
 
 	//turn off contactor
-	ContactorOut = 0;
+//	ContactorOut = 0;
 	//turn off PreCharge
 	//PreCharge = 0;
 }

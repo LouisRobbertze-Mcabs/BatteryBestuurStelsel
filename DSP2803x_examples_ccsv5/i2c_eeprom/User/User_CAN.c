@@ -164,10 +164,10 @@ void CANInterruptConfig(void)
 	EINT;                                           // Global interrupt enable
 }
 
-void CANChargerReception(void)
+void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 {
-	Uint32 RxDataL = 0;
-	Uint32 RxDataH = 0;
+	//	Uint32 RxDataL = 0;
+	//	Uint32 RxDataH = 0;
 	float ChgVoltage = 0;
 
 	Uint16 ChgStatus = 0;
@@ -181,102 +181,111 @@ void CANChargerReception(void)
 	static volatile int delay = 0;  // miskien >> count 1 cycle from contactor closes till charger starts
 	//   >> count 1 cycle from charger stops till contactor opens
 
-	RxDataL = ECanaMboxes.MBOX2.MDL.all;                // Data taken out of direct mailbox
-	RxDataH = ECanaMboxes.MBOX2.MDH.all;                // Data taken out of direct mailbox
+	//	RxDataL = ECanaMboxes.MBOX2.MDL.all;                // Data taken out of direct mailbox
+	//	RxDataH = ECanaMboxes.MBOX2.MDH.all;                // Data taken out of direct mailbox
 
-	//Read Charger Voltage
-	temp = RxDataL;
-	temp2 = (temp & 0xFF) << 8;
-	temp2 = ((temp &0xFF00)>>8) | temp2;
-	ChgVoltage = (float)temp2*0.1;
 
-	//Read Charger Current
-	temp = (RxDataL& 0xFFFF0000)>>16;
-	temp2    = (temp & 0xFF) << 8;
-	temp2 = ((temp &0xFF00)>>8) | temp2;
-	ChgCurrent = (float)temp2*0.1;
-
-	//Read Charger Status
-	ChgStatus = RxDataH & 0xFF;
-	//	ChargerDebug = ChgStatus;
-
-	if(ChgStatus == 0 || ChgStatus == 0x08)                                             //Charger ready to charge || battery voltage low flag
+	if(RxDataL == 0 && RxDataH == 0)
 	{
-		Charger_status = 1;//charger connected
-		if(flagCurrent == 0 && flagTemp == 0 && flagCharged == 0 && KeySwitch == 0 /*&& flagDischarged != 2*/)     //check flags to ensure charging is allowed
+
+
+		//Read Charger Voltage
+		temp = RxDataL;
+		temp2 = (temp & 0xFF) << 8;
+		temp2 = ((temp &0xFF00)>>8) | temp2;
+		ChgVoltage = (float)temp2*0.1;
+
+		//Read Charger Current
+		temp = (RxDataL& 0xFFFF0000)>>16;
+		temp2    = (temp & 0xFF) << 8;
+		temp2 = ((temp &0xFF00)>>8) | temp2;
+		ChgCurrent = (float)temp2*0.1;
+
+		//Read Charger Status
+		ChgStatus = RxDataH & 0xFF;
+		//	ChargerDebug = ChgStatus;
+
+		if(ChgStatus == 0 || ChgStatus == 0x08)                                             //Charger ready to charge || battery voltage low flag
 		{
-			if(delay == 0)                                                              //sit miskien check in om met die charger Vbat te meet
+			Charger_status = 1;//charger connected
+			if(flagCurrent == 0 && flagTemp == 0 && flagCharged == 0 && KeySwitch == 0 /*&& flagDischarged != 2*/)     //check flags to ensure charging is allowed
 			{
-				ContactorOut = 1;                                                       //turn on contactor
-				delay++;
+				if(delay == 0)                                                              //sit miskien check in om met die charger Vbat te meet
+				{
+					ContactorOut = 1;                                                       //turn on contactor
+					delay++;
+				}
+				else if(delay == 1)
+				{
+					Current_max =  Current_max + kp_multiplier*(kp_constant - Voltage_high);								//kp controller constant & kp multiplier
+
+					if(Current_max <0)								//add max as well
+						Current_max = 0;
+					else if(Current_max > 25)
+						Current_max = 25;
+
+					//determine if balancing should start
+					//if cell high > 3.48 balance
+					//if cell low > 3.48: stop balancing , stop charging
+
+
+					if(Voltage_high> balancing_upper_level && Voltage_low < balancing_bottom_level)										//balancing upper level & balancing lower level
+					{
+						balance = 1;
+					}
+					else if(Voltage_high> balancing_upper_level && Voltage_low > balancing_bottom_level && Current > -2)
+					{
+						//balance = 0;
+						flagCharged = 1;
+					}
+
+					CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8);             //charging started
+					PreCharge = 1;                          								//turn on precharge resistor
+				}
 			}
-			else if(delay == 1)
+			else																			//BMS flag high. Stop charging and disconnect blah blah
 			{
-				Current_max =  Current_max + kp_multiplier*(kp_constant - Voltage_high);								//kp controller constant & kp multiplier
-
-				if(Current_max <0)								//add max as well
-					Current_max = 0;
-				else if(Current_max > 25)
-					Current_max = 25;
-
-				//determine if balancing should start
-				//if cell high > 3.48 balance
-				//if cell low > 3.48: stop balancing , stop charging
-
-
-				if(Voltage_high> balancing_upper_level && Voltage_low < balancing_bottom_level)										//balancing upper level & balancing lower level
+				if(delay == 1)                                                              //sit miskien check in om met die charger Vbat te meet
 				{
-					balance = 1;
+					CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                            //disconnect charger
+					delay--;
 				}
-				else if(Voltage_high> balancing_upper_level && Voltage_low > balancing_bottom_level && Current > -2)
-				{
-					//balance = 0;
-					flagCharged = 1;
-				}
+				else if(delay == 0)
+				{                                                   //turn off contactor
+					CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                            //disconnect charger
+					if(flagCharged == 1)
+						ContactorOut = 0;
 
-				CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8);             //charging started
-				PreCharge = 1;                          								//turn on precharge resistor
+					//Charger_status = 0;												//haal miskien uit
+
+				}
 			}
 		}
-		else																			//BMS flag high. Stop charging and disconnect blah blah
+		else                                                                                //Charger flag set. typically power disconnected
 		{
-			if(delay == 1)                                                              //sit miskien check in om met die charger Vbat te meet
+			if(delay == 1)
 			{
-				CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                            //disconnect charger
+				CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                                //disconnect charger
 				delay--;
 			}
 			else if(delay == 0)
-			{                                                   //turn off contactor
-				CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                            //disconnect charger
-				if(flagCharged == 1)
-					ContactorOut = 0;
+			{
 
-				//Charger_status = 0;												//haal miskien uit
+				CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                              //disconnect charger
+				ContactorOut = 0;                                                           //turn off contactor
 
+				Charger_status = 0;
+				Current_max = 25;
 			}
 		}
+
+		//    Charger_status = ChgStatus;
+		ChargerVoltage = ChgVoltage;
+		ChargerCurrent = ChgCurrent;
+
+		CAN_Charger_dataL = 0;
+		CAN_Charger_dataH = 0;
 	}
-	else                                                                                //Charger flag set. typically power disconnected
-	{
-		if(delay == 1)
-		{
-			CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                                //disconnect charger
-			delay--;
-		}
-		else if(delay == 0)
-		{
-
-			CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                              //disconnect charger
-			ContactorOut = 0;                                                           //turn off contactor
-
-			Charger_status = 0;
-			Current_max = 25;
-		}
-	}
-
-	//    Charger_status = ChgStatus;
-	ChargerVoltage = ChgVoltage;
-	ChargerCurrent = ChgCurrent;
 }
 
 void CANSlaveReception(void)
@@ -532,7 +541,7 @@ void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Byte
 		ECanaRegs.CANMC.all = ECanaShadow.CANMC.all;
 		EDIS;
 	}
-/*	else if (ECanaRegs.CANES.bit.SE == 1 || ECanaRegs.CANES.bit.CRCE == 1 || ECanaRegs.CANES.bit.BE == 1  || ECanaRegs.CANES.bit.FE == 1 ||ECanaRegs.CANES.bit.ACKE == 1)	//reset fault on CAN bus
+	/*	else if (ECanaRegs.CANES.bit.SE == 1 || ECanaRegs.CANES.bit.CRCE == 1 || ECanaRegs.CANES.bit.BE == 1  || ECanaRegs.CANES.bit.FE == 1 ||ECanaRegs.CANES.bit.ACKE == 1)	//reset fault on CAN bus
 	{
 		ECanaRegs.CANES.all = 0x1B00000;
 	}*/

@@ -14,7 +14,7 @@ void CAN_Init(void);
 void CANSetup(void);
 void CANMailboxConfig(void);
 void CANInterruptConfig(void);
-void CANChargerReception(void);
+void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH);
 void CANSlaveReception(void);
 void CAN_Output_All(void);
 void CANSlaveConfig(void);

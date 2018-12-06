@@ -163,3 +163,6 @@ union bits32 TxData;
  int temptimer = 0;
 
   int toetsQueue =0;
+
+  volatile Uint32 CAN_Charger_dataL = 0;
+  volatile Uint32 CAN_Charger_dataH = 0;

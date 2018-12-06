@@ -168,4 +168,7 @@ extern int temptimer;
 
 extern int toetsQueue;
 
+extern volatile Uint32 CAN_Charger_dataL;
+extern volatile Uint32 CAN_Charger_dataH;
+
 #endif /* USER_GLOBALS_H_ */

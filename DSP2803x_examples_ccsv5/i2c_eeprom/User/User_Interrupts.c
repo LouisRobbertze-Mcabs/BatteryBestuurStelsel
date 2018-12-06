@@ -155,7 +155,7 @@ __interrupt void i2c_int1a_isr(void)     // I2C-A
 __interrupt void can_rx_isr(void)
 {
 	//was receive successful? maybe use CANES.All < 3
-	if(ECanaRegs.CANES.bit.SE == 0 && ECanaRegs.CANES.bit.CRCE == 0 && ECanaRegs.CANES.bit.BE == 0  && ECanaRegs.CANES.bit.FE == 0)
+	/*	if(ECanaRegs.CANES.bit.SE == 0 && ECanaRegs.CANES.bit.CRCE == 0 && ECanaRegs.CANES.bit.BE == 0  && ECanaRegs.CANES.bit.FE == 0)
 	{
 		if (ECanaRegs.CANRMP.bit.RMP1 == 1)
 		{
@@ -177,6 +177,20 @@ __interrupt void can_rx_isr(void)
 	{
 		CANTransmit(0x0, 0x0, 0x0, 0x0);
 	}
+	 */
+
+
+	if (ECanaRegs.CANRMP.bit.RMP1 == 1)
+	{
+		//CANSlaveReception();                    // Handle the received message
+	}
+	else if (ECanaRegs.CANRMP.bit.RMP2 == 1)
+	{
+		//CANChargerReception();					//improve these functions for speed
+		CAN_Charger_dataL = ECanaMboxes.MBOX2.MDL.all;                // Data taken out of direct mailbox
+		CAN_Charger_dataH = ECanaMboxes.MBOX2.MDH.all;                // Data taken out of direct mailbox
+	}
+
 
 	ECanaRegs.CANRMP.all = 0xFFFFFFFF;          // Reset receive mailbox flags
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;     // Acknowledge this interrupt to receive more interrupts from group 9

@@ -28,9 +28,11 @@ void main(void)
 
 			ServiceDog();
 
+			CANChargerReception(CAN_Charger_dataL, CAN_Charger_dataH);
+
 			Balance(5,Vbalance);
 			Calculate_Current();
-			CAN_Output_All();
+			//CAN_Output_All();
 
 			ServiceDog();
 
