@@ -175,7 +175,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 	Uint16 temp2 = 0;
 	//	float error = 0;
 
-	static volatile float Current_max = 25;
+	static volatile float Current_max = 5;
 	//  float Vreference = 52;
 
 	static volatile int delay = 0;  // miskien >> count 1 cycle from contactor closes till charger starts
@@ -185,7 +185,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 	//	RxDataH = ECanaMboxes.MBOX2.MDH.all;                // Data taken out of direct mailbox
 
 
-	if(RxDataL == 0 && RxDataH == 0)
+	if(RxDataL != 0 || RxDataH != 0)
 	{
 
 
@@ -275,7 +275,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 				ContactorOut = 0;                                                           //turn off contactor
 
 				Charger_status = 0;
-				Current_max = 25;
+				Current_max = 5;															//speel rond om charge stabiel te kry
 			}
 		}
 
@@ -370,78 +370,124 @@ void CAN_Output_All(void)
 	union bits32 TxData;
 
 	//Battery data
-	TxData.asFloat=Voltage_total; CANTransmit(0x700, 4, TxData.asUint,5);
-	//queue_insert(0, 4, TxData.asUint, 5, &CAN_queue); //insert into queue
+	TxData.asFloat=Voltage_total;// CANTransmit(0x700, 4, TxData.asUint,5);
+	queue_insert(0x700, 4, TxData.asUint, 5, &CAN_queue); //insert into queue
 
-	TxData.asFloat=Current; CANTransmit(0x700, 5, TxData.asUint,5);
-	//queue_insert(0, 5, TxData.asUint, 5, &CAN_queue); //insert into queue
+	TxData.asFloat=Current; //CANTransmit(0x700, 5, TxData.asUint,5);
+	queue_insert(0x700, 5, TxData.asUint, 5, &CAN_queue); //insert into queue
 
-	TxData.asFloat=Voltage_low; CANTransmit(0x700, 6, TxData.asUint,5);
-	//queue_insert(0, 6, TxData.asUint, 5, &CAN_queue);
-	TxData.asFloat=Voltage_low_cell; CANTransmit(0x700, 7, TxData.asUint,5);
-	//queue_insert(0, 7, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltage_low; //CANTransmit(0x700, 6, TxData.asUint,5);
+	queue_insert(0x700, 6, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltage_low_cell; //CANTransmit(0x700, 7, TxData.asUint,5);
+	queue_insert(0x700, 7, TxData.asUint, 5, &CAN_queue);
 
-	TxData.asFloat=Voltage_high; CANTransmit(0x700, 8, TxData.asUint,5);
-	//queue_insert(0, 8, TxData.asUint, 5, &CAN_queue);
-	TxData.asFloat=Voltage_high_cell; CANTransmit(0x700, 9, TxData.asUint,5);
-	//queue_insert(0, 9, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltage_high; //CANTransmit(0x700, 8, TxData.asUint,5);
+	queue_insert(0x700, 8, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltage_high_cell; //CANTransmit(0x700, 9, TxData.asUint,5);
+	queue_insert(0x700, 9, TxData.asUint, 5, &CAN_queue);
 
-	TxData.asFloat=Voltage_avg; CANTransmit(0x700, 10, TxData.asUint,5);
 
-	TxData.asFloat=Temperature_high; CANTransmit(0x700, 11, TxData.asUint,5);
-	TxData.asFloat=Temperature_high_cell; CANTransmit(0x700, 12, TxData.asUint, 5);
+	TxData.asFloat=Voltage_avg; //CANTransmit(0x700, 10, TxData.asUint,5);
+	queue_insert(0x700, 10, TxData.asUint, 5, &CAN_queue);
 
-	TxData.asFloat=Temperature_low; CANTransmit(0x700, 13, TxData.asUint,5);
-	TxData.asFloat=Temperature_low_cell; CANTransmit(0x700, 14, TxData.asUint, 5);
+	TxData.asFloat=Temperature_high; //CANTransmit(0x700, 11, TxData.asUint,5);
+	queue_insert(0x700, 11, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperature_high_cell; //CANTransmit(0x700, 12, TxData.asUint, 5);
+	queue_insert(0x700, 12, TxData.asUint, 5, &CAN_queue);
 
-	TxData.asFloat=Temperature_avg; CANTransmit(0x700, 15, TxData.asUint,5);
+	TxData.asFloat=Temperature_low; //CANTransmit(0x700, 13, TxData.asUint,5);
+	queue_insert(0x700, 13, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperature_low_cell; //CANTransmit(0x700, 14, TxData.asUint, 5);
+	queue_insert(0x700, 14, TxData.asUint, 5, &CAN_queue);
 
-	TxData.asFloat=Auxilliary_Voltage; CANTransmit(0x700, 16, TxData.asUint, 5);
-	TxData.asFloat=SOC*100; CANTransmit(0x700, 17, TxData.asUint, 5);
+	TxData.asFloat=Temperature_avg; //CANTransmit(0x700, 15, TxData.asUint,5);
+	queue_insert(0x700, 15, TxData.asUint, 5, &CAN_queue);
 
-	TxData.asFloat= SOH_avg ; CANTransmit(0x700, 18, TxData.asUint,5);				//r_avg
-	TxData.asFloat=SOH_max; CANTransmit(0x700, 19, TxData.asUint,5);						//rmaks
-	TxData.asFloat=SOH_max_cell; CANTransmit(0x700, 20, TxData.asUint, 5);			//rcell
+	TxData.asFloat=Auxilliary_Voltage; //CANTransmit(0x700, 16, TxData.asUint, 5);
+	queue_insert(0x700, 16, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=SOC*100; //CANTransmit(0x700, 17, TxData.asUint, 5);
+	queue_insert(0x700, 17, TxData.asUint, 5, &CAN_queue);
+
+	TxData.asFloat= SOH_avg ; //CANTransmit(0x700, 18, TxData.asUint,5);				//r_avg
+	queue_insert(0x700, 18, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=SOH_max; //CANTransmit(0x700, 19, TxData.asUint,5);						//rmaks
+	queue_insert(0x700, 19, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=SOH_max_cell; //CANTransmit(0x700, 20, TxData.asUint, 5);			//rcell
+	queue_insert(0x700, 20, TxData.asUint, 5, &CAN_queue);
 
 	//cell voltage values
-	TxData.asFloat=Voltages[0]; CANTransmit(0x700, 21, TxData.asUint,5);
-	TxData.asFloat=Voltages[1]; CANTransmit(0x700, 22, TxData.asUint,5);
-	TxData.asFloat=Voltages[2]; CANTransmit(0x700, 23, TxData.asUint,5);
-	TxData.asFloat=Voltages[3]; CANTransmit(0x700, 24, TxData.asUint,5);
-	TxData.asFloat=Voltages[4]; CANTransmit(0x700, 25, TxData.asUint,5);
-	TxData.asFloat=Voltages[5]; CANTransmit(0x700, 26, TxData.asUint,5);
-	TxData.asFloat=Voltages[6]; CANTransmit(0x700, 27, TxData.asUint,5);
-	TxData.asFloat=Voltages[7]; CANTransmit(0x700, 28, TxData.asUint,5);
-	TxData.asFloat=Voltages[8]; CANTransmit(0x700, 29, TxData.asUint,5);
-	TxData.asFloat=Voltages[9]; CANTransmit(0x700, 30, TxData.asUint,5);
-	TxData.asFloat=Voltages[10]; CANTransmit(0x700, 31, TxData.asUint,5);
-	TxData.asFloat=Voltages[11]; CANTransmit(0x700, 32, TxData.asUint,5);
-	TxData.asFloat=Voltages[12]; CANTransmit(0x700, 33, TxData.asUint,5);
-	TxData.asFloat=Voltages[13]; CANTransmit(0x700, 34, TxData.asUint,5);
-	TxData.asFloat=Voltages[14]; CANTransmit(0x700, 35, TxData.asUint,5);
+	TxData.asFloat=Voltages[0];// CANTransmit(0x700, 21, TxData.asUint,5);
+	queue_insert(0x700, 21, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[1]; //CANTransmit(0x700, 22, TxData.asUint,5);
+	queue_insert(0x700, 22, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[2]; //CANTransmit(0x700, 23, TxData.asUint,5);
+	queue_insert(0x700, 23, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[3]; //CANTransmit(0x700, 24, TxData.asUint,5);
+	queue_insert(0x700, 24, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[4]; //CANTransmit(0x700, 25, TxData.asUint,5);
+	queue_insert(0x700, 25, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[5]; //CANTransmit(0x700, 26, TxData.asUint,5);
+	queue_insert(0x700, 26, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[6]; //CANTransmit(0x700, 27, TxData.asUint,5);
+	queue_insert(0x700, 27, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[7]; //CANTransmit(0x700, 28, TxData.asUint,5);
+	queue_insert(0x700, 28, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[8]; //CANTransmit(0x700, 29, TxData.asUint,5);
+	queue_insert(0x700, 29, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[9];// CANTransmit(0x700, 30, TxData.asUint,5);
+	queue_insert(0x700, 30, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[10]; //CANTransmit(0x700, 31, TxData.asUint,5);
+	queue_insert(0x700, 31, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[11];// CANTransmit(0x700, 32, TxData.asUint,5);
+	queue_insert(0x700, 32, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[12]; //CANTransmit(0x700, 33, TxData.asUint,5);
+	queue_insert(0x700, 33, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[13]; //CANTransmit(0x700, 34, TxData.asUint,5);
+	queue_insert(0x700, 34, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Voltages[14]; //CANTransmit(0x700, 35, TxData.asUint,5);
+	queue_insert(0x700, 35, TxData.asUint, 5, &CAN_queue);
 
 	//cell Temperature values
-	TxData.asFloat=Temperatures[0]; CANTransmit(0x700, 36, TxData.asUint,5);
-	TxData.asFloat=Temperatures[1]; CANTransmit(0x700, 37, TxData.asUint,5);
-	TxData.asFloat=Temperatures[2]; CANTransmit(0x700, 38, TxData.asUint,5);
-	TxData.asFloat=Temperatures[3]; CANTransmit(0x700, 39, TxData.asUint,5);
-	TxData.asFloat=Temperatures[4]; CANTransmit(0x700, 40, TxData.asUint,5);
-	TxData.asFloat=Temperatures[5]; CANTransmit(0x700, 41, TxData.asUint,5);
-	TxData.asFloat=Temperatures[6]; CANTransmit(0x700, 42, TxData.asUint,5);
-	TxData.asFloat=Temperatures[7]; CANTransmit(0x700, 43, TxData.asUint,5);
-	TxData.asFloat=Temperatures[8]; CANTransmit(0x700, 44, TxData.asUint,5);
-	TxData.asFloat=Temperatures[9]; CANTransmit(0x700, 45, TxData.asUint,5);
-	TxData.asFloat=Temperatures[10]; CANTransmit(0x700, 46, TxData.asUint,5);
-	TxData.asFloat=Temperatures[11]; CANTransmit(0x700, 47, TxData.asUint,5);
-	TxData.asFloat=Temperatures[12]; CANTransmit(0x700, 48, TxData.asUint,5);
-	TxData.asFloat=Temperatures[13]; CANTransmit(0x700, 49, TxData.asUint,5);
-	TxData.asFloat=Temperatures[14]; CANTransmit(0x700, 50, TxData.asUint,5);
-	TxData.asFloat=Temperatures[15]; CANTransmit(0x700, 51, TxData.asUint,5);
+	TxData.asFloat=Temperatures[0];// CANTransmit(0x700, 36, TxData.asUint,5);
+	queue_insert(0x700, 36, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[1]; //CANTransmit(0x700, 37, TxData.asUint,5);
+	queue_insert(0x700, 37, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[2];// CANTransmit(0x700, 38, TxData.asUint,5);
+	queue_insert(0x700, 38, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[3];// CANTransmit(0x700, 39, TxData.asUint,5);
+	queue_insert(0x700, 39, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[4]; //CANTransmit(0x700, 40, TxData.asUint,5);
+	queue_insert(0x700, 40, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[5]; //CANTransmit(0x700, 41, TxData.asUint,5);
+	queue_insert(0x700, 41, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[6]; //CANTransmit(0x700, 42, TxData.asUint,5);
+	queue_insert(0x700, 42, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[7];// CANTransmit(0x700, 43, TxData.asUint,5);
+	queue_insert(0x700, 43, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[8]; //CANTransmit(0x700, 44, TxData.asUint,5);
+	queue_insert(0x700, 44, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[9]; //CANTransmit(0x700, 45, TxData.asUint,5);
+	queue_insert(0x700, 45, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[10];// CANTransmit(0x700, 46, TxData.asUint,5);
+	queue_insert(0x700, 46, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[11];// CANTransmit(0x700, 47, TxData.asUint,5);
+	queue_insert(0x700, 47, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[12]; //CANTransmit(0x700, 48, TxData.asUint,5);
+	queue_insert(0x700, 48, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[13]; //CANTransmit(0x700, 49, TxData.asUint,5);
+	queue_insert(0x700, 49, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[14]; //CANTransmit(0x700, 50, TxData.asUint,5);
+	queue_insert(0x700, 50, TxData.asUint, 5, &CAN_queue);
+	TxData.asFloat=Temperatures[15]; //CANTransmit(0x700, 51, TxData.asUint,5);
+	queue_insert(0x700, 51, TxData.asUint, 5, &CAN_queue);
 
 	//toets2 = ((int)(SOC*100)) & 0xFF;
 
-	CANTransmit(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5); //Voltage
-	CANTransmit(0x718, 0x11, ((int)(SOC*100)) & 0xFF, 5); //SOC
+	//CANTransmit(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5); //Voltage
+
+	queue_insert(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5, &CAN_queue);
+	//CANTransmit(0x718, 0x11, ((int)(SOC*100)) & 0xFF, 5); //SOC
+	queue_insert(0x718, 0x11, ((int)(SOC*100)) & 0xFF, 5, &CAN_queue);
 
 	//sit system error, system charging, charge required
 	//check flags for error messages
@@ -455,6 +501,7 @@ void CAN_Output_All(void)
 		Acewell_Data = Acewell_Data + 4;
 
 	CANTransmit(0x718, 0x88, Acewell_Data & 0xF, 5); //LEDS*/
+	//queue_insert(0x718, 0x88, Acewell_Data & 0xF, 5, &CAN_queue);
 }
 
 void CANSlaveConfig(void)
@@ -507,7 +554,7 @@ void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Byte
 	//	if(ECanaRegs.CANES.bit.SE == 1)
 	//		ECanaRegs.CANES.bit.SE = 1;
 
-	if (ECanaRegs.CANES.all == 0 )			//CAN bus ready for action
+	/*	if (ECanaRegs.CANES.all == 0 )			//CAN bus ready for action
 	{
 		if(Transmit_payload == 1) 											//data in transmit
 			queue_insert(Destination, TxDataH, TxDataL, Bytes, &CAN_queue); //insert into queue
@@ -540,14 +587,47 @@ void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Byte
 		ECanaShadow.CANMC.bit.WUBA = 1;					//Bartho testing Wake up on bus activity..
 		ECanaRegs.CANMC.all = ECanaShadow.CANMC.all;
 		EDIS;
-	}
+	}*/
 	/*	else if (ECanaRegs.CANES.bit.SE == 1 || ECanaRegs.CANES.bit.CRCE == 1 || ECanaRegs.CANES.bit.BE == 1  || ECanaRegs.CANES.bit.FE == 1 ||ECanaRegs.CANES.bit.ACKE == 1)	//reset fault on CAN bus
 	{
 		ECanaRegs.CANES.all = 0x1B00000;
-	}*/
-	else if (ECanaRegs.CANES.bit.TM == 1 || ECanaRegs.CANES.bit.RM == 1)	//traffic on CAN bus
+	}
+	else */if (ECanaRegs.CANES.bit.TM != 1 && ECanaRegs.CANES.bit.RM != 1)	//traffic on CAN bus
 	{
 		if(Transmit_payload == 1)
+			//queue_insert(Destination, TxDataH, TxDataL, Bytes, &CAN_queue); //insert into queue
+
+		{//data in transmit
 			queue_insert(Destination, TxDataH, TxDataL, Bytes, &CAN_queue); //insert into queue
+			//Start transmit
+			ECanaRegs.CANME.all = 0x0000000E;                   // Disable Tx Mailbox
+
+			//Bytes
+			ECanaMboxes.MBOX0.MSGCTRL.all = CAN_queue.queue[CAN_queue.front][3];              // Transmit x bytes of data
+			ECanaMboxes.MBOX0.MSGID.all = 0;                    // Standard ID length, acceptance masks used, no remote frames
+			ECanaMboxes.MBOX0.MSGID.bit.STDMSGID = CAN_queue.queue[CAN_queue.front][0]; // Load destination address   Destination
+
+			ECanaMboxes.MBOX0.MDL.all = CAN_queue.queue[CAN_queue.front][2];
+			ECanaMboxes.MBOX0.MDH.all = CAN_queue.queue[CAN_queue.front][1];
+
+			ECanaRegs.CANME.all = 0x0000000F;                   // Enable Tx Mailbox
+			ECanaRegs.CANTRS.all = 0x00000001;                  // Set transmit request
+		}
+		else
+		{
+			ECanaRegs.CANME.all = 0x0000000E;                   // Disable Tx Mailbox
+
+			//Bytes
+			ECanaMboxes.MBOX0.MSGCTRL.all = CAN_queue.queue[CAN_queue.front][3];              // Transmit x bytes of data
+			ECanaMboxes.MBOX0.MSGID.all = 0;                    // Standard ID length, acceptance masks used, no remote frames
+			ECanaMboxes.MBOX0.MSGID.bit.STDMSGID = CAN_queue.queue[CAN_queue.front][0]; // Load destination address   Destination
+
+			ECanaMboxes.MBOX0.MDL.all = CAN_queue.queue[CAN_queue.front][2];
+			ECanaMboxes.MBOX0.MDH.all = CAN_queue.queue[CAN_queue.front][1];
+
+			ECanaRegs.CANME.all = 0x0000000F;                   // Enable Tx Mailbox
+			ECanaRegs.CANTRS.all = 0x00000001;                  // Set transmit request
+		}
+
 	}
 }
