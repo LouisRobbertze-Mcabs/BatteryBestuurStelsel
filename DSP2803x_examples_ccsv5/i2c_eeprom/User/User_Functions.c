@@ -41,9 +41,9 @@ void Initialise_BMS(void)
 	I2CA_Init();
 	InitCpuTimers();
 
-	ConfigCpuTimer(&CpuTimer0, 60, 500000); //2 hz
+	ConfigCpuTimer(&CpuTimer0, 60, 500); //2 khz - 500
 	ConfigCpuTimer(&CpuTimer1, 60, 20000);  //50 hz
-	ConfigCpuTimer(&CpuTimer2, 60, 500);    //2 Khz         //500
+	ConfigCpuTimer(&CpuTimer2, 60, 500000);    //2 hz
 
 	CpuTimer0Regs.TCR.all = 0x4000; // Use write-only instruction to set TSS bit = 0
 	CpuTimer1Regs.TCR.all = 0x4000; // Use write-only instruction to set TSS bit = 0

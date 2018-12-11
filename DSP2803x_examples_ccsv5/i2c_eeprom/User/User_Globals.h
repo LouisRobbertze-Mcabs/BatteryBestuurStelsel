@@ -156,7 +156,7 @@ extern volatile	float resistance;
 extern volatile	float resistance_temp;
 extern volatile float dI;
 
-extern struct queue_obj CAN_queue;
+extern volatile struct queue_obj CAN_queue;
 extern int queue_length;
 
 extern union bits32 TxData;
@@ -166,7 +166,7 @@ extern int toets2;
 
 extern int temptimer;
 
-extern int toetsQueue;
+extern volatile int toetsQueue;
 
 extern volatile Uint32 CAN_Charger_dataL;
 extern volatile Uint32 CAN_Charger_dataH;

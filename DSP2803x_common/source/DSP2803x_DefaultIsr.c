@@ -22,6 +22,7 @@
 #include "DSP2803x_Device.h"     // DSP2803x Headerfile Include File
 #include "DSP2803x_Examples.h"   // DSP2803x Examples Include File
 
+
 // Connected to INT13 of CPU (use MINT13 mask):
 // ISR can be used by the user.
 __interrupt void INT13_ISR(void)     // INT13 or CPU-Timer1
@@ -90,9 +91,14 @@ __interrupt void ILLEGAL_ISR(void)   // Illegal operation TRAP					//kom hier in
 
   // Next two lines for debug only to halt the processor here
   // Remove after inserting ISR Code
+	//toetsQueue = 100;
+
   __asm("          ESTOP0");
   for(;;);
-//	return;
+
+ // asm ("  B   $,UNC");
+      // place PC here to continue the execution
+ // asm ("  NOP");
 }
 
 __interrupt void USER1_ISR(void)     // User Defined trap 1

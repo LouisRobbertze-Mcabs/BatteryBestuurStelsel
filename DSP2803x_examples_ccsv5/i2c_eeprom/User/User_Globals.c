@@ -151,7 +151,7 @@ volatile float resistance;
 volatile float resistance_temp;
 volatile float dI;
 
-struct queue_obj CAN_queue;					//initialise structure somewhere??
+volatile struct queue_obj CAN_queue;					//initialise structure somewhere??
 
 int queue_length = 0;
 
@@ -162,7 +162,7 @@ union bits32 TxData;
 
  int temptimer = 0;
 
-  int toetsQueue =0;
+  volatile int toetsQueue;
 
   volatile Uint32 CAN_Charger_dataL = 0;
   volatile Uint32 CAN_Charger_dataH = 0;

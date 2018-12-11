@@ -11,6 +11,31 @@ __interrupt void  adc_isr(void)
 {
 	//Sit dit dalk deur 'n laag deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^(-WcTs)
 
+	/*static float Filter_100HZ;
+	static float Filter_100HZ_past = 0;
+	static float current_p;
+
+	test_current = current_p + (0.00314*(AdcResult.ADCRESULT1-current_p));     //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
+	current_p=test_current;
+
+	Filter_100HZ = Filter_100HZ_past + (Ifilter*(AdcResult.ADCRESULT1-Filter_100HZ_past));     //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
+	Filter_100HZ_past=Filter_100HZ;
+
+	//Filter_100HZ = (test_current-2109)* 0.122;
+
+	if(Filter_100HZ > Imax || Filter_100HZ < Imin)                       ////////////////////////////////////////////////
+	{
+		//sit uittree af
+		ContactorOut = 0;       //turn off contactor
+		flagCurrent = 1;
+	} 		*/															////////////////////////////////////////////////
+
+	AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
+	PieCtrlRegs.PIEACK.bit.ACK10 = 1;   		// Acknowledge interrupt to PIE
+}
+
+__interrupt void cpu_timer0_isr(void)
+{
 	static float Filter_100HZ;
 	static float Filter_100HZ_past = 0;
 	static float current_p;
@@ -30,13 +55,6 @@ __interrupt void  adc_isr(void)
 		flagCurrent = 1;
 	} 																	////////////////////////////////////////////////
 
-	AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
-	PieCtrlRegs.PIEACK.bit.ACK10 = 1;   		// Acknowledge interrupt to PIE
-}
-
-__interrupt void cpu_timer0_isr(void)
-{
-	counter_2Hz++;
 
 	CpuTimer0.InterruptCount++;
 	PieCtrlRegs.PIEACK.bit.ACK1 = 1/* PIEACK_GROUP1*/;
@@ -93,6 +111,8 @@ __interrupt void cpu_timer1_isr(void)
 
 __interrupt void cpu_timer2_isr(void)
 {
+	counter_2Hz++;
+
 	EALLOW;
 
 	CpuTimer2.InterruptCount++;
@@ -198,11 +218,11 @@ __interrupt void can_rx_isr(void)
 
 __interrupt void can_tx_isr(void)
 {
-	if (queue_size(CAN_queue)>0)
+	/*if (queue_size(CAN_queue)>0)
 	{
 		queue_remove_data(&CAN_queue);
 		CANTransmit(0x0, 0x0, 0x0, 0x0);   		//START transmit of next in queue
-	}
+	}*/
 
 	ECanaRegs.CANTA.all = 0xFFFFFFFF;           // Reset tranmission flags
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;     // Acknowledge this interrupt to receive more interrupts from group 9

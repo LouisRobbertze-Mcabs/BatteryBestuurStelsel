@@ -11,7 +11,8 @@ Uint32 peek_queue(struct queue_obj queue){
     return queue.front;
 }
 
-int is_queue_empty(struct queue_obj queue){
+int is_queue_empty(struct queue_obj queue)
+{
     return queue.itemCount == 0;
 }
 
@@ -24,8 +25,10 @@ int queue_size(struct queue_obj queue){
 }
 
 void queue_insert(Uint16 Dest, Uint32 data_H, Uint32 data_L, Uint16 Bytes, struct queue_obj* queue_obj){
-    if(!is_queue_full(*queue_obj)) {
-        if(queue_obj->rear == MAX_QUEUE_SIZE-1) {
+    if(!is_queue_full(*queue_obj))
+    {
+        if(queue_obj->rear == MAX_QUEUE_SIZE-1)
+        {
             queue_obj->rear = -1;
         }
         queue_obj->queue[++queue_obj->rear][0] = Dest;
