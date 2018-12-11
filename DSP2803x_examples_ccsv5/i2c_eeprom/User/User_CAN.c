@@ -166,29 +166,19 @@ void CANInterruptConfig(void)
 
 void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 {
-	//	Uint32 RxDataL = 0;
-	//	Uint32 RxDataH = 0;
 	float ChgVoltage = 0;
 
 	Uint16 ChgStatus = 0;
 	Uint16 temp = 0;
 	Uint16 temp2 = 0;
-	//	float error = 0;
 
 	static volatile float Current_max = 5;
-	//  float Vreference = 52;
 
 	static volatile int delay = 0;  // miskien >> count 1 cycle from contactor closes till charger starts
 	//   >> count 1 cycle from charger stops till contactor opens
 
-	//	RxDataL = ECanaMboxes.MBOX2.MDL.all;                // Data taken out of direct mailbox
-	//	RxDataH = ECanaMboxes.MBOX2.MDH.all;                // Data taken out of direct mailbox
-
-
 	if(RxDataL != 0 || RxDataH != 0)
 	{
-
-
 		//Read Charger Voltage
 		temp = RxDataL;
 		temp2 = (temp & 0xFF) << 8;
@@ -197,13 +187,12 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 
 		//Read Charger Current
 		temp = (RxDataL& 0xFFFF0000)>>16;
-		temp2    = (temp & 0xFF) << 8;
+		temp2 = (temp & 0xFF) << 8;
 		temp2 = ((temp &0xFF00)>>8) | temp2;
 		ChgCurrent = (float)temp2*0.1;
 
 		//Read Charger Status
 		ChgStatus = RxDataH & 0xFF;
-		//	ChargerDebug = ChgStatus;
 
 		if(ChgStatus == 0 || ChgStatus == 0x08)                                             //Charger ready to charge || battery voltage low flag
 		{
@@ -224,18 +213,13 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 					else if(Current_max > 25)
 						Current_max = 25;
 
-					//determine if balancing should start
-					//if cell high > 3.48 balance
-					//if cell low > 3.48: stop balancing , stop charging
 
-
-					if(Voltage_high> balancing_upper_level && Voltage_low < balancing_bottom_level)										//balancing upper level & balancing lower level
+					if(Voltage_high> balancing_upper_level && Voltage_low < balancing_bottom_level)	//determine if balancing should start									//balancing upper level & balancing lower level
 					{
 						balance = 1;
 					}
-					else if(Voltage_high> balancing_upper_level && Voltage_low > balancing_bottom_level && Current > -2)
+					else if(Voltage_high> balancing_upper_level && Voltage_low > balancing_bottom_level && Current > -2) //if cell high > 3.48 balance
 					{
-						//balance = 0;
 						flagCharged = 1;
 					}
 
@@ -255,9 +239,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 					CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                            //disconnect charger
 					if(flagCharged == 1)
 						ContactorOut = 0;
-
 					//Charger_status = 0;												//haal miskien uit
-
 				}
 			}
 		}
@@ -279,7 +261,6 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 			}
 		}
 
-		//    Charger_status = ChgStatus;
 		ChargerVoltage = ChgVoltage;
 		ChargerCurrent = ChgCurrent;
 
@@ -595,60 +576,38 @@ void CANSlaveConfig(void)
 
 void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Bytes)      //destination, txdataH, txdataL,  bytes
 {
-	Uint16 Transmit_payload = 1;												//Data send - 1 or just empty queue - 0
-//	long Reset;
-
 	struct ECAN_REGS ECanaShadow;
 
-	/*	if(Destination == 0 && TxDataH == 0 && TxDataL == 0 && Bytes == 0)
-		Transmit_payload = 0;
-	else
-		queue_insert(Destination, TxDataH, TxDataL, Bytes, &CAN_queue); //insert into queue*/
-
-	if (ECanaRegs.CANES.all == 0 )			//CAN bus ready for action
+	if (ECanaRegs.CANES.all == 0 )								//CAN bus ready for action
 	{
-		//	if (queue_size(CAN_queue)>0)							//is queue empty?
-		//	{
 		//Start transmit
-		ECanaRegs.CANME.all = 0x0000000E;                   // Disable Tx Mailbox
-
-
+		ECanaRegs.CANME.all = 0x0000000E;                   	// Disable Tx Mailbox
 
 		//Bytes
-		ECanaMboxes.MBOX0.MSGCTRL.all = Bytes;              // Transmit x bytes of data
-		ECanaMboxes.MBOX0.MSGID.all = 0;                    // Standard ID length, acceptance masks used, no remote frames
-		ECanaMboxes.MBOX0.MSGID.bit.STDMSGID = Destination; // Load destination address   Destination
+		ECanaMboxes.MBOX0.MSGCTRL.all = Bytes;              	// Transmit x bytes of data
+		ECanaMboxes.MBOX0.MSGID.all = 0;                    	// Standard ID length, acceptance masks used, no remote frames
+		ECanaMboxes.MBOX0.MSGID.bit.STDMSGID = Destination; 	// Load destination address   Destination
 
 		ECanaMboxes.MBOX0.MDL.all = TxDataL;
 		ECanaMboxes.MBOX0.MDH.all = TxDataH;
 
-
-		//Bytes
-		/*	ECanaMboxes.MBOX0.MSGCTRL.all = CAN_queue.queue[CAN_queue.front][3];              // Transmit x bytes of data
-		ECanaMboxes.MBOX0.MSGID.all = 0;                    // Standard ID length, acceptance masks used, no remote frames
-		ECanaMboxes.MBOX0.MSGID.bit.STDMSGID = CAN_queue.queue[CAN_queue.front][0]; // Load destination address   Destination
-
-		ECanaMboxes.MBOX0.MDL.all = CAN_queue.queue[CAN_queue.front][2];
-		ECanaMboxes.MBOX0.MDH.all = CAN_queue.queue[CAN_queue.front][1];*/
-
-		ECanaRegs.CANME.all = 0x0000000F;                   // Enable Tx Mailbox
-		ECanaRegs.CANTRS.all = 0x00000001;                  // Set transmit request
-		//	}
+		ECanaRegs.CANME.all = 0x0000000F;                   	// Enable Tx Mailbox
+		ECanaRegs.CANTRS.all = 0x00000001;                  	// Set transmit request
 	}
 	else if (ECanaRegs.CANES.bit.SE == 1 || ECanaRegs.CANES.bit.CRCE == 1 || ECanaRegs.CANES.bit.BE == 1  || ECanaRegs.CANES.bit.FE == 1 ||ECanaRegs.CANES.bit.ACKE == 1)	//reset fault on CAN bus
 	{
-		ECanaRegs.CANES.all = 0x1B00000;			//reset flags
+		ECanaRegs.CANES.all = 0x1B00000;						//reset flags
 
 	}
 	else if (ECanaRegs.CANES.bit.EP == 1)						//Warning, Error-passive state - Turn bus off
 	{
-		ECanaRegs.CANES.all = 0xFFFFFFFF;					//acknowledge all errors
+		ECanaRegs.CANES.all = 0xFFFFFFFF;						//acknowledge all errors
 
 		EALLOW;
 		// Configure Master Control register
 		ECanaShadow.CANMC.all = ECanaRegs.CANMC.all;
-		ECanaShadow.CANMC.bit.PDR = 1; 					//request powerdown
-		ECanaShadow.CANMC.bit.WUBA = 1;					//Bartho testing Wake up on bus activity..
+		ECanaShadow.CANMC.bit.PDR = 1; 							//request powerdown
+		ECanaShadow.CANMC.bit.WUBA = 1;							//Bartho testing Wake up on bus activity..
 		ECanaRegs.CANMC.all = ECanaShadow.CANMC.all;
 		EDIS;
 	}

@@ -14,16 +14,12 @@
 #include <float.h>
 #include <string.h>
 #include "User_Defines.h"
-#include "User_Queue.h"
+//#include "User_Queue.h"
 
 extern struct I2CMSG I2cMsgOut1;
 extern struct I2CMSG I2cMsgIn1;
 
 extern struct I2CMSG *CurrentMsgPtr;               // Used in interrupts
-
-
-
-
 
 extern volatile Uint16 DataOut;
 extern volatile Uint16 DataOut2;
@@ -156,17 +152,12 @@ extern volatile	float resistance;
 extern volatile	float resistance_temp;
 extern volatile float dI;
 
-extern volatile struct queue_obj CAN_queue;
-extern int queue_length;
-
 extern union bits32 TxData;
 
 extern int toets;
 extern int toets2;
 
 extern int temptimer;
-
-extern volatile int toetsQueue;
 
 extern volatile Uint32 CAN_Charger_dataL;
 extern volatile Uint32 CAN_Charger_dataH;

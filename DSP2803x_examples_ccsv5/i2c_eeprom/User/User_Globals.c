@@ -5,8 +5,7 @@
  *      Author: Sonja
  */
 #include "User_Globals.h"
-#include "User_Queue.h"
-
+//#include "User_Queue.h"
 
 // Two bytes will be used for the outgoing address,
 // thus only setup 2 bytes maximum
@@ -151,18 +150,12 @@ volatile float resistance;
 volatile float resistance_temp;
 volatile float dI;
 
-volatile struct queue_obj CAN_queue;					//initialise structure somewhere??
-
-int queue_length = 0;
-
 union bits32 TxData;
 
- int toets;
- int toets2;
+int toets;
+int toets2;
 
- int temptimer = 0;
+int temptimer = 0;
 
-  volatile int toetsQueue;
-
-  volatile Uint32 CAN_Charger_dataL = 0;
-  volatile Uint32 CAN_Charger_dataH = 0;
+volatile Uint32 CAN_Charger_dataL = 0;
+volatile Uint32 CAN_Charger_dataH = 0;

@@ -9,11 +9,6 @@
 
 void Initialise_BMS(void)
 {
-	//Initialise queue objects
-	CAN_queue.front = 0;
-	CAN_queue.rear = -1;
-	CAN_queue.itemCount = 0;
-
 	flagCurrent = 0;
 
 	InitSysCtrl();
@@ -41,9 +36,9 @@ void Initialise_BMS(void)
 	I2CA_Init();
 	InitCpuTimers();
 
-	ConfigCpuTimer(&CpuTimer0, 60, 500); //2 khz - 500
+	ConfigCpuTimer(&CpuTimer0, 60, 500000); //2 hz - 500
 	ConfigCpuTimer(&CpuTimer1, 60, 20000);  //50 hz
-	ConfigCpuTimer(&CpuTimer2, 60, 500000);    //2 hz
+	ConfigCpuTimer(&CpuTimer2, 60, 500);    //2 khz
 
 	CpuTimer0Regs.TCR.all = 0x4000; // Use write-only instruction to set TSS bit = 0
 	CpuTimer1Regs.TCR.all = 0x4000; // Use write-only instruction to set TSS bit = 0

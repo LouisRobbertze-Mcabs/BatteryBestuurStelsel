@@ -7,7 +7,6 @@
 
 void main(void)
 {
-
 	Initialise_BMS();
 
 	for(;;)
