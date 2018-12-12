@@ -135,7 +135,7 @@ void Init_Gpio(void)
 	CSControl = 0;  //turn CScontrol on for current measurement
 
 	//turn off contactor
-//	ContactorOut = 0;
+	//	ContactorOut = 0;
 	//turn off PreCharge
 	//PreCharge = 0;
 }
@@ -494,7 +494,7 @@ void Read_Temperatures(void)
 		}
 
 
-	/*	if((Temperature_avg - Temperatures[15])> 4 && Temperatures[15]<50 && Temperature_avg>10&& Voltage_low > Vmin && balance == 0 && temptimer ==0)				//4.5 en 25sit net aan bo 25 grade celsius
+		/*	if((Temperature_avg - Temperatures[15])> 4 && Temperatures[15]<50 && Temperature_avg>10&& Voltage_low > Vmin && balance == 0 && temptimer ==0)				//4.5 en 25sit net aan bo 25 grade celsius
 		{
 			Fan_Control = 1;
 			temptimer = 1;
@@ -851,4 +851,25 @@ void Calibrate_Current_charger()
 
 	old_ChargerCurrent = ChargerCurrent;
 	old_Current = Current;
+}
+
+void Battery_Status(void)
+{
+	BMS_Status = 0;
+
+	if(balance == 1)
+		BMS_Status++;
+	if(flagCharged == 1)
+		BMS_Status = BMS_Status + 2;
+	if(flagCurrent == 1)
+		BMS_Status = BMS_Status + 4;
+	if(flagVoltage == 1)
+		BMS_Status = BMS_Status + 8;
+	if(flagTemp == 1)
+		BMS_Status = BMS_Status + 16;
+	if(flagDischarged == 1)
+		BMS_Status = BMS_Status + 32;
+	if(Charger_status == 1)
+		BMS_Status = BMS_Status + 64;
+	//Extra flags are a possibility
 }

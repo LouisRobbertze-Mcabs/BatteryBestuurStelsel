@@ -510,7 +510,8 @@ void CAN_Output_All(void)
 	TxData.asFloat=Temperatures[15]; CANTransmit(0x700, 51, TxData.asUint,5);
 //	queue_insert(0x700, 51, TxData.asUint, 5, &CAN_queue);
 	for(i=0;i<1500;i++){};
-
+	CANTransmit(0x700, 52, BMS_Status,5);
+	for(i=0;i<1500;i++){};
 	//toets2 = ((int)(SOC*100)) & 0xFF;
 
 	CANTransmit(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5); //Voltage

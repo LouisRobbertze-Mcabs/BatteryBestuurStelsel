@@ -31,6 +31,7 @@ void main(void)
 
 			Balance(5,Vbalance);
 			Calculate_Current();
+			Battery_Status();
 			CAN_Output_All();
 
 			ServiceDog();

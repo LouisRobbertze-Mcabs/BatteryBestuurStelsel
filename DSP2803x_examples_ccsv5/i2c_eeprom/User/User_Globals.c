@@ -159,3 +159,5 @@ int temptimer = 0;
 
 volatile Uint32 CAN_Charger_dataL = 0;
 volatile Uint32 CAN_Charger_dataH = 0;
+
+volatile Uint32 BMS_Status = 0;

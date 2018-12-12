@@ -153,30 +153,6 @@ __interrupt void i2c_int1a_isr(void)     // I2C-A
 __interrupt void can_rx_isr(void)
 {
 	//was receive successful? maybe use CANES.All < 3
-	/*	if(ECanaRegs.CANES.bit.SE == 0 && ECanaRegs.CANES.bit.CRCE == 0 && ECanaRegs.CANES.bit.BE == 0  && ECanaRegs.CANES.bit.FE == 0)
-	{
-		if (ECanaRegs.CANRMP.bit.RMP1 == 1)
-		{
-			CANSlaveReception();                    // Handle the received message
-		}
-		else if (ECanaRegs.CANRMP.bit.RMP2 == 1)
-		{
-			CANChargerReception();					//improve these functions for speed
-		}
-		else if(ECanaRegs.CANRMP.bit.RMP3 == 1)
-		{
-			CANSlaveConfig();
-		}
-	}
-	else
-		ECanaRegs.CANES.all = 0x1B00000;
-
-	if (ECanaRegs.CANES.all == 0 && queue_size(CAN_queue)>0)
-	{
-		CANTransmit(0x0, 0x0, 0x0, 0x0);
-	}
-	 */
-
 
 	if (ECanaRegs.CANRMP.bit.RMP1 == 1)
 	{
@@ -196,11 +172,6 @@ __interrupt void can_rx_isr(void)
 
 __interrupt void can_tx_isr(void)
 {
-	/*if (queue_size(CAN_queue)>0)
-	{
-		queue_remove_data(&CAN_queue);
-		CANTransmit(0x0, 0x0, 0x0, 0x0);   		//START transmit of next in queue
-	}*/
 
 	ECanaRegs.CANTA.all = 0xFFFFFFFF;           // Reset tranmission flags
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;     // Acknowledge this interrupt to receive more interrupts from group 9

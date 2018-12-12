@@ -51,6 +51,8 @@ void Balance(int period, float reference);
 
 unsigned char CRC8(unsigned char *ptr, unsigned char len,unsigned char key);
 
+void Battery_Status(void);
+
 //#pragma CODE_SECTION(DELAY_US, "ramfuncs");
 
 

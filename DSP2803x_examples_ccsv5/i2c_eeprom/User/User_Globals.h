@@ -162,4 +162,6 @@ extern int temptimer;
 extern volatile Uint32 CAN_Charger_dataL;
 extern volatile Uint32 CAN_Charger_dataH;
 
+extern volatile Uint32 BMS_Status;
+
 #endif /* USER_GLOBALS_H_ */
