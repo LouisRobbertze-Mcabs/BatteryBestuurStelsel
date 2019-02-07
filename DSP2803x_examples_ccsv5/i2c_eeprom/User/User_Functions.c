@@ -803,7 +803,8 @@ void Calculate_SOC()
 	if(SOC_t > 5400)					//delay of 90 min maybe do 60 min?
 	{
 		//ln(2)/afsnytydperk(s)
-		Wsoc = 2 - (exp((SOC_t-5400)*0.000556));		//sny af na halfuur....
+		//Wsoc = 2 - (exp((SOC_t-5400)*0.000556));		//sny af na halfuur....
+		Wsoc = 0;
 	}
 	else
 	{
