@@ -858,7 +858,7 @@ void Battery_Status(void)
 	BMS_Status = 0;
 
 	if(balance == 1)
-		BMS_Status++;
+		BMS_Status = BMS_Status + 1;
 	if(flagCharged == 1)
 		BMS_Status = BMS_Status + 2;
 	if(flagCurrent == 1)
