@@ -11,19 +11,30 @@ __interrupt void  adc_isr(void)
 {
 	//Sit dit dalk deur 'n laag deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^(-WcTs)
 
-	static float Filter_100HZ;
-	static float Filter_100HZ_past = 0;
+	static float Filter_SC;
+	static float Filter_SC_past = 0;
 	static float current_p;
 
 	test_current = current_p + (0.00314*(AdcResult.ADCRESULT1-current_p));     //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
 	current_p=test_current;
+	////////////
+	//4095 = maksimum current -> 250??
+	//3686 -> 4.5V = 200 A
+	//2048 -> 2.5V= 0 A
+	//
+	//410 -> 0.5V = -200A
+	//0 -> 0V = -250A
 
-	Filter_100HZ = Filter_100HZ_past + (Ifilter*(AdcResult.ADCRESULT1-Filter_100HZ_past));     //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
-	Filter_100HZ_past=Filter_100HZ;
+	//SOCv = interpolate_table_1d(&trip_table, test_current);
 
-	//Filter_100HZ = (test_current-2109)* 0.122;
 
-	if(Filter_100HZ > Imax || Filter_100HZ < Imin)                       ////////////////////////////////////////////////
+	///////////
+	Filter_SC = Filter_SC_past + (Ifilter*(AdcResult.ADCRESULT1-Filter_SC_past));     //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
+	Filter_SC_past=Filter_SC;
+
+	//Short circuit fault - 100 Hz cut-off
+
+	if(Filter_SC > Imax || Filter_SC < Imin)                       ////////////////////////////////////////////////
 	{
 		//sit uittree af
 		ContactorOut = 0;       //turn off contactor

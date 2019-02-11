@@ -101,7 +101,7 @@ volatile float Vcharge = 3.5;
 volatile float Vbalance = 3.485; //4.8
 
 volatile float Imin = 500;
-volatile float Imax = 3800;
+volatile float Imax = 4050;
 volatile float Ifilter = 0.27;
 
 volatile float Tmax = 50;
@@ -128,6 +128,24 @@ struct table_1d sine_table = {
     5,      /* Number of data points */
     sine_x, /* Array of x-coordinates */
     sine_y  /* Array of y-coordinates */
+};
+
+float time_x[3] = {0.005,0.1, 5, 600, };
+float I_y[3] = {4096, 200, 160, 121};			//250A->4096, 200A->3686, 160A->, 121A
+
+struct table_1d trip_table = {
+    4,      /* Number of data points */
+	time_x, /* Array of x-coordinates */
+	I_y  /* Array of y-coordinates */
+};
+
+float time2_x[3] = {0.005,0.1, 5, 600, };
+float I2_y[3] = {250, 200, 160, 121};
+
+struct table_1d trip2_table = {
+    3,      /* Number of data points */
+	time2_x, /* Array of x-coordinates */
+	I2_y  /* Array of y-coordinates */
 };
 
 volatile float Current_CAL = 2080;			//=2095

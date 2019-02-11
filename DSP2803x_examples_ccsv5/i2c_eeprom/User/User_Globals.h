@@ -125,6 +125,17 @@ extern  float sine_y[5];
 
 extern  struct table_1d sine_table;
 
+extern float time_x[3];
+extern float I_y[3];
+
+extern struct table_1d trip_table;
+
+extern float time2_x[3];
+extern float I2_y[3];
+
+extern struct table_1d trip2_table;
+
+
 extern volatile float Current_CAL;
 //extern volatile Uint16 Current_Sum;
 //extern volatile Uint16 Current_Counter;
