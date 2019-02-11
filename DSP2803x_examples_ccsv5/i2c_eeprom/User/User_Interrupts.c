@@ -18,6 +18,7 @@ __interrupt void  adc_isr(void)
 	test_current = current_p + (0.00314*(AdcResult.ADCRESULT1-current_p));     //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
 	current_p=test_current;
 	////////////
+	//insert limits here
 	//4095 = maksimum current -> 250??
 	//3686 -> 4.5V = 200 A
 	//2048 -> 2.5V= 0 A
@@ -25,7 +26,19 @@ __interrupt void  adc_isr(void)
 	//410 -> 0.5V = -200A
 	//0 -> 0V = -250A
 
-	//SOCv = interpolate_table_1d(&trip_table, test_current);
+
+
+	//if FilterSC> 120
+		//SOCv = interpolate_table_1d(&trip_table, test_current);					//non-linear heating graph
+		//counter
+
+		//if counter > limit
+			//turn off contactor
+			//switch flag on
+
+	//else if FilterSC < 120
+	//SOCv = interpolate_table_1d(&trip_table, test_current);					//linear cooling -- straight line
+	//counter --
 
 
 	///////////
