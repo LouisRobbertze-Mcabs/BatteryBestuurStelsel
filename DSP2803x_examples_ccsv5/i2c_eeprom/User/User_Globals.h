@@ -95,8 +95,8 @@ extern volatile float Vcritical;
 extern volatile float Vcharge;
 extern volatile float Vbalance;
 
-extern volatile float Imin;
-extern volatile float Imax;
+extern volatile int Imin;
+extern volatile int Imax;
 extern volatile float Ifilter;
 
 extern volatile float Tmax;
@@ -125,13 +125,13 @@ extern  float sine_y[5];
 
 extern  struct table_1d sine_table;
 
-extern float time_x[3];
-extern float I_y[3];
+extern float time_x[4];
+extern float I_y[4];
 
 extern struct table_1d trip_table;
 
-extern float time2_x[3];
-extern float I2_y[3];
+extern float time2_x[2];
+extern float I2_y[2];
 
 extern struct table_1d trip2_table;
 
@@ -174,5 +174,7 @@ extern volatile Uint32 CAN_Charger_dataL;
 extern volatile Uint32 CAN_Charger_dataH;
 
 extern volatile Uint32 BMS_Status;
+extern volatile float trip_counter;
+extern volatile Uint32 testcounter;
 
 #endif /* USER_GLOBALS_H_ */

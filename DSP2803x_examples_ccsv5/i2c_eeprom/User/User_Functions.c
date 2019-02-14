@@ -11,6 +11,9 @@ void Initialise_BMS(void)
 {
 	flagCurrent = 0;
 
+	Temperatures[5] = 0;
+	Temperatures_resistance[4] = 0;
+
 	InitSysCtrl();
 	InitI2CGpio();
 	Init_Gpio();
@@ -317,7 +320,7 @@ void Calculate_SOH(void)
 
 void Calculate_Current(void)
 {
-	Current = (test_current-Current_CAL )* 0.122;                   //2095    maal, moenie deel nie!!!!     0.0982--200/2048          /*Current_CAL/*
+	Current = ((test_current)-Current_CAL )* 0.122;                   //2095    maal, moenie deel nie!!!!     0.0982--200/2048          /*Current_CAL/*
 }
 
 void Read_System_Status(void)

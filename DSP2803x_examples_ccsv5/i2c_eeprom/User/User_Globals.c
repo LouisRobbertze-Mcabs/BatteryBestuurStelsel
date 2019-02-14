@@ -100,8 +100,8 @@ volatile float Vcritical = 2.7;		//2.7
 volatile float Vcharge = 3.5;
 volatile float Vbalance = 3.485; //4.8
 
-volatile float Imin = 500;
-volatile float Imax = 4050;
+volatile int Imin = 500;
+volatile int Imax = 4000;//4050
 volatile float Ifilter = 0.27;
 
 volatile float Tmax = 50;
@@ -130,8 +130,8 @@ struct table_1d sine_table = {
     sine_y  /* Array of y-coordinates */
 };
 
-float time_x[3] = {0.005,0.1, 5, 600, };
-float I_y[3] = {4096, 200, 160, 121};			//250A->4096, 200A->3686, 160A->, 121A
+float time_x[4] = {0.01, 1, 5, 600};
+float I_y[4] = {4050, 3686, 3359, 3031};			//  4050 = 245A, 3686=200A, 3359=160A, 3032=120A
 
 struct table_1d trip_table = {
     4,      /* Number of data points */
@@ -139,11 +139,11 @@ struct table_1d trip_table = {
 	I_y  /* Array of y-coordinates */
 };
 
-float time2_x[3] = {0.005,0.1, 5, 600, };
-float I2_y[3] = {250, 200, 160, 121};
+float time2_x[2] = {300, 600};
+float I2_y[2] = {2048, 3031};
 
 struct table_1d trip2_table = {
-    3,      /* Number of data points */
+    2,      /* Number of data points */
 	time2_x, /* Array of x-coordinates */
 	I2_y  /* Array of y-coordinates */
 };
@@ -178,4 +178,7 @@ int temptimer = 0;
 volatile Uint32 CAN_Charger_dataL = 0;
 volatile Uint32 CAN_Charger_dataH = 0;
 
+
 volatile Uint32 BMS_Status = 0;
+volatile float trip_counter = 0;
+volatile Uint32 testcounter = 0;

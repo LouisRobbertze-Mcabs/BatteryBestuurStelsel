@@ -11,48 +11,73 @@ __interrupt void  adc_isr(void)
 {
 	//Sit dit dalk deur 'n laag deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^(-WcTs)
 
-	static float Filter_SC;
-	static float Filter_SC_past = 0;
+	static long int Filter_SC;
+	static long int Filter_SC_past = 0;
 	static float current_p;
 
-	test_current = current_p + (0.00314*(AdcResult.ADCRESULT1-current_p));     //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
+	static float trip_timer;
+//	static float trip_counter;
+
+	test_current = current_p + (0.00314*(AdcResult.ADCRESULT1-current_p));     		//   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
 	current_p=test_current;
+
 	////////////
 	//insert limits here
 	//4095 = maksimum current -> 250??
 	//3686 -> 4.5V = 200 A
+	//3359 -> 4.1V = 160 A
+	//3031 -> 3.7V = 120 A
 	//2048 -> 2.5V= 0 A
-	//
+	//1065 -> 1.3V = -120
 	//410 -> 0.5V = -200A
 	//0 -> 0V = -250A
 
-
-
-	//if FilterSC> 120
-		//SOCv = interpolate_table_1d(&trip_table, test_current);					//non-linear heating graph
-		//counter
-
-		//if counter > limit
-			//turn off contactor
-			//switch flag on
-
-	//else if FilterSC < 120
-	//SOCv = interpolate_table_1d(&trip_table, test_current);					//linear cooling -- straight line
-	//counter --
-
-
-	///////////
-	Filter_SC = Filter_SC_past + (Ifilter*(AdcResult.ADCRESULT1-Filter_SC_past));     //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
+	Filter_SC = (100*Filter_SC_past + (27*(AdcResult.ADCRESULT1-Filter_SC_past)))/100;	   //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
 	Filter_SC_past=Filter_SC;
 
 	//Short circuit fault - 100 Hz cut-off
-
-	if(Filter_SC > Imax || Filter_SC < Imin)                       ////////////////////////////////////////////////
+	if(Filter_SC > Imax || Filter_SC < Imin)
 	{
 		//sit uittree af
 		ContactorOut = 0;       //turn off contactor
 		flagCurrent = 1;
-	} 																////////////////////////////////////////////////
+		trip_counter = Filter_SC;
+	}
+/*
+	if(Filter_SC <= 3031 && Filter_SC > 2048)											//current between 0A and 120 A
+	{
+		trip_timer = interpolate_table_1d(&trip2_table, Filter_SC);						//linear cooling -- straight line
+		trip_counter = trip_counter - (0.0005/trip_timer);
+	}
+	else if(Filter_SC <= 2048 && Filter_SC > 1065)										//current between 0A and -120 A
+	{
+		trip_timer = interpolate_table_1d(&trip2_table, (4096-Filter_SC));				//linear cooling -- straight line
+		trip_counter = trip_counter - (0.0005/trip_timer);
+	}
+	else if(Filter_SC > 3031)															//current larger than 120 A
+	{
+		trip_timer = interpolate_table_1d(&trip_table, Filter_SC);						//Non-linear heating
+		trip_counter = trip_counter + (0.0005/trip_timer);
+	}
+	else																				//current smaller than -120 A
+	{
+		trip_timer = interpolate_table_1d(&trip_table, (4096-Filter_SC));				//Non-linear heating
+		trip_counter = trip_counter + (0.0005/trip_timer);
+	}
+
+
+	if(trip_counter < 0)																//counter out of bounds
+		trip_counter = 0;
+
+
+	if(trip_counter > 1)
+	{
+		ContactorOut = 0;       														//turn off contactor
+		flagCurrent = 1;
+		//reset counter???
+	}
+*/
+	///////////
 
 	AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
 	PieCtrlRegs.PIEACK.bit.ACK10 = 1;   		// Acknowledge interrupt to PIE
@@ -116,7 +141,9 @@ __interrupt void cpu_timer1_isr(void)
 __interrupt void cpu_timer2_isr(void)
 {
 	EALLOW;
-
+	//counter
+	if(KeySwitch == 1 && flagCurrent == 0)
+		testcounter++;
 	CpuTimer2.InterruptCount++;
 	EDIS;
 }
