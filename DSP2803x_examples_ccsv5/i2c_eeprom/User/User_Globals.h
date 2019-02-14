@@ -120,8 +120,8 @@ extern volatile float balancing_bottom_level;
 
 /* Declare variable using above structure and the function datapoints */
 /* These coordinates correspond to the points illustrated in the above graph */
-extern  float sine_x[5];
-extern  float sine_y[5];
+extern  long sine_x[5];
+extern  long sine_y[5];
 
 extern  struct table_1d sine_table;
 
@@ -130,8 +130,8 @@ extern float I_y[4];
 
 extern struct table_1d trip_table;
 
-extern float time2_x[2];
-extern float I2_y[2];
+extern long time2_x[2];
+extern long I2_y[2];
 
 extern struct table_1d trip2_table;
 
@@ -174,7 +174,10 @@ extern volatile Uint32 CAN_Charger_dataL;
 extern volatile Uint32 CAN_Charger_dataH;
 
 extern volatile Uint32 BMS_Status;
-extern volatile float trip_counter;
+extern volatile long trip_counter;
 extern volatile Uint32 testcounter;
+
+extern volatile long testvariable;
+
 
 #endif /* USER_GLOBALS_H_ */

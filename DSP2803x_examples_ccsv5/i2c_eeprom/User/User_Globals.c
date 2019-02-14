@@ -121,8 +121,9 @@ volatile float balancing_bottom_level = 3.48; //4.475
 
 /* Declare variable using above structure and the function datapoints */
 /* These coordinates correspond to the points illustrated in the above graph */
-float sine_x[5] = {0, 0.1, 0.3, 0.6, 1};
-float sine_y[5] = {2.88, 3.202, 3.27, 3.293, 3.349};
+/////////////////////////////////////////////////////////////////////////////////////////////////
+long sine_x[5] = {0, 10, 30, 60, 100};
+long sine_y[5] = {2880, 3202, 3270, 3293, 3349};
 
 struct table_1d sine_table = {
     5,      /* Number of data points */
@@ -130,23 +131,25 @@ struct table_1d sine_table = {
     sine_y  /* Array of y-coordinates */
 };
 
-float time_x[4] = {0.01, 1, 5, 600};
-float I_y[4] = {4050, 3686, 3359, 3031};			//  4050 = 245A, 3686=200A, 3359=160A, 3032=120A
+//float time_x[4] = {0.01, 1, 5, 600};
+//float I_y[4] = {4050, 3686, 3359, 3031};			//  4050 = 245A, 3686=200A, 3359=160A, 3032=120A
 
-struct table_1d trip_table = {
-    4,      /* Number of data points */
-	time_x, /* Array of x-coordinates */
-	I_y  /* Array of y-coordinates */
-};
+//struct table_1d trip_table = {
+//    4,      /* Number of data points */
+//	time_x, /* Array of x-coordinates */
+//	I_y  /* Array of y-coordinates */
+//};
 
-float time2_x[2] = {300, 600};
-float I2_y[2] = {2048, 3031};
+long time2_x[2] = {600000, 1200000}; //samples-> 300s  , 600s
+long I2_y[2] = {2048, 3031};
 
 struct table_1d trip2_table = {
     2,      /* Number of data points */
 	time2_x, /* Array of x-coordinates */
 	I2_y  /* Array of y-coordinates */
 };
+
+
 
 volatile float Current_CAL = 2080;			//=2095
 
@@ -180,5 +183,7 @@ volatile Uint32 CAN_Charger_dataH = 0;
 
 
 volatile Uint32 BMS_Status = 0;
-volatile float trip_counter = 0;
+volatile long trip_counter = 0;
 volatile Uint32 testcounter = 0;
+
+volatile long testvariable = 0;

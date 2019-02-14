@@ -109,8 +109,8 @@ struct I2CMSG {
 /* Structure definition */
 struct table_1d {
 	Uint16 x_length;
-    float *x_values;
-    float *y_values;
+    long int *x_values;
+    long int *y_values;
 };
 
 #endif  // end of DSP2803x_I2C_DEFINES_H definition

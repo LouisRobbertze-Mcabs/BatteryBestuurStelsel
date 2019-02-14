@@ -735,21 +735,26 @@ Uint32 ChgCalculator(float Voltage, float Current)
  * Returns the interpolated y-value.
  * Saturates to y0 or y1 if x outside interval [x0, x1].
  */
-float interpolate_segment(float x0, float y0, float x1, float y1, float x)
+long interpolate_segment(long x0, long y0, long x1, long y1, long x)
 {
-	float t;
+	long t;
+	long speel;
 
 	if (x <= y0) { return x0; }
 	if (x >= y1) { return x1; }
 
 	t =  (x-y0);
-	t /= (y1-y0);
+//	t /= (y1-y0);
 
-	return x0 + t*(x1-x0);
+	t *= (x1-x0);
+
+	return x0 + t/(y1-y0);
+
+//	return x0 + t*(x1-x0);
 }
 /******************************************************************************/
 
-float interpolate_table_1d(struct table_1d *table, float x)
+long interpolate_table_1d(struct table_1d *table, long x)
 /* 1D Table lookup with interpolation */
 {
 	Uint16 segment;
