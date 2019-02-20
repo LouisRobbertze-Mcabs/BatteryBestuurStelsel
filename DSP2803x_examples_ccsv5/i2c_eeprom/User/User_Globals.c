@@ -101,7 +101,7 @@ volatile float Vcharge = 3.5;
 volatile float Vbalance = 3.485; //4.8
 
 volatile int Imin = 500;
-volatile int Imax = 4000;//4050
+volatile int Imax = 4050;//4050
 volatile float Ifilter = 0.27;
 
 volatile float Tmax = 50;
@@ -131,16 +131,16 @@ struct table_1d sine_table = {
     sine_y  /* Array of y-coordinates */
 };
 
-//float time_x[4] = {0.01, 1, 5, 600};
-//float I_y[4] = {4050, 3686, 3359, 3031};			//  4050 = 245A, 3686=200A, 3359=160A, 3032=120A
+long time_x[4] = {1200000, 10000, 1000, 20};		//10ms, 0.5s, 5s, 600s							{20, 2000, 10000, 1200000}
+long I_y[4] = {3031,3359 ,3686 ,4050};			//  4050 = 245A, 3686=200A, 3359=160A, 3032=120A	{4050, 3686, 3359, 3031}
 
-//struct table_1d trip_table = {
-//    4,      /* Number of data points */
-//	time_x, /* Array of x-coordinates */
-//	I_y  /* Array of y-coordinates */
-//};
+struct table_1d trip_table = {
+    4,      /* Number of data points */
+	time_x, /* Array of x-coordinates */
+	I_y  /* Array of y-coordinates */
+};
 
-long time2_x[2] = {600000, 1200000}; //samples-> 300s  , 600s
+long time2_x[2] = {300000, 1200000}; //samples-> 300s  , 600s
 long I2_y[2] = {2048, 3031};
 
 struct table_1d trip2_table = {
@@ -148,7 +148,6 @@ struct table_1d trip2_table = {
 	time2_x, /* Array of x-coordinates */
 	I2_y  /* Array of y-coordinates */
 };
-
 
 
 volatile float Current_CAL = 2080;			//=2095
@@ -187,3 +186,9 @@ volatile long trip_counter = 0;
 volatile Uint32 testcounter = 0;
 
 volatile long testvariable = 0;
+volatile long testvariable2 = 0;
+
+volatile long testtrip = 0;
+
+volatile long timecounter = 0;
+volatile long timecounterseconds = 0;

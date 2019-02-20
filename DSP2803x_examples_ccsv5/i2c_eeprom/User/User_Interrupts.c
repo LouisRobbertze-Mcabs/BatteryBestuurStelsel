@@ -40,40 +40,50 @@ __interrupt void  adc_isr(void)
 		//sit uittree af
 		ContactorOut = 0;       //turn off contactor
 		flagCurrent = 1;
+		//testvariable2 = Filter_SC;
 	}
 	else if(Filter_SC <= 3031 && Filter_SC > 2048)										//current between 0A and 120 A
 	{
 		trip_timer = interpolate_table_1d(&trip2_table, Filter_SC);						//linear cooling -- straight line
-		testvariable = trip_timer;
+		//testvariable = trip_timer;
 		trip_counter = trip_counter - (1200000/trip_timer);
 	}
-/*	else if(Filter_SC <= 2048 && Filter_SC > 1065)										//current between 0A and -120 A
+	else if(Filter_SC <= 2048 && Filter_SC > 1065)										//current between 0A and -120 A
 	{
 		trip_timer = interpolate_table_1d(&trip2_table, (4096-Filter_SC));				//linear cooling -- straight line
-		trip_counter = trip_counter - (0.0005/trip_timer);
+		//testvariable = trip_timer;
+		trip_counter = trip_counter - (1200000/trip_timer);
 	}
 	else if(Filter_SC > 3031)															//current larger than 120 A
 	{
 		trip_timer = interpolate_table_1d(&trip_table, Filter_SC);						//Non-linear heating
-		trip_counter = trip_counter + (0.0005/trip_timer);
+		trip_counter = trip_counter + (1200000/trip_timer);
+		if( Filter_SC> testvariable2)
+			testvariable2 = Filter_SC;
+		testvariable++;
 	}
 	else																				//current smaller than -120 A
 	{
 		trip_timer = interpolate_table_1d(&trip_table, (4096-Filter_SC));				//Non-linear heating
-		trip_counter = trip_counter + (0.0005/trip_timer);
+		trip_counter = trip_counter + (1200000/trip_timer);
 	}
-*/
+
+	//if(trip_counter > testvariable)
+	//testvariable = trip_counter;
+
+
+	if(trip_counter > 1200000)					//1200000
+	{
+		ContactorOut = 0;       														//turn off contactor
+		flagCurrent = 1;
+
+		//reset counter???
+	}
 
 	if(trip_counter < 0)																//counter out of bounds
 		trip_counter = 0;
 
-
-	if(trip_counter > 120000)
-	{
-		ContactorOut = 0;       														//turn off contactor
-		flagCurrent = 1;
-		//reset counter???
-	}
+	//timecounter++;
 
 	///////////
 

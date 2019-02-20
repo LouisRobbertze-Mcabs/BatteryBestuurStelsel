@@ -798,7 +798,7 @@ void Calculate_SOC()
 	//	static Uint16 t=1000;							//time since current activity
 	//	float Wsoc;										//weighting parameter
 
-	SOCv = interpolate_table_1d(&sine_table, Voltage_low);
+	SOCv = interpolate_table_1d(&sine_table, (long)(Voltage_low*1000));
 
 	SOC_t++;
 
@@ -806,7 +806,7 @@ void Calculate_SOC()
 	{
 		SOC_t = 0;
 	}
-	SOCc = SOC - (Current*0.00000185);				//coulomb counter      Ampere sec -> Ampere huur						1/150A*3600s
+	SOCc = SOC - (Current*0.000185);				//coulomb counter      Ampere sec -> Ampere huur						1/150A*3600s
 
 	if(SOC_t > 5400)					//delay of 90 min maybe do 60 min?
 	{

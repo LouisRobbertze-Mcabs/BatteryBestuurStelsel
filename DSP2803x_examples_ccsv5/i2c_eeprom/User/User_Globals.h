@@ -125,8 +125,8 @@ extern  long sine_y[5];
 
 extern  struct table_1d sine_table;
 
-extern float time_x[4];
-extern float I_y[4];
+extern long time_x[4];
+extern long I_y[4];
 
 extern struct table_1d trip_table;
 
@@ -178,6 +178,11 @@ extern volatile long trip_counter;
 extern volatile Uint32 testcounter;
 
 extern volatile long testvariable;
+extern volatile long testvariable2;
 
+extern volatile long testtrip;
+
+extern volatile long timecounter;
+extern volatile long timecounterseconds;
 
 #endif /* USER_GLOBALS_H_ */
