@@ -367,7 +367,7 @@ void CAN_Output_All(void)
 //	queue_insert(0x700, 7, TxData.asUint, 5, &CAN_queue);
 	for(i=0;i<1500;i++){};
 
-	TxData.asFloat=/*Voltage_high*/(float)testvariable; CANTransmit(0x700, 8, TxData.asUint,5);									///////////ljdfvbhsd
+	TxData.asFloat=Voltage_high/*(float)testvariable*/; CANTransmit(0x700, 8, TxData.asUint,5);									///////////ljdfvbhsd
 //	queue_insert(0x700, 8, TxData.asUint, 5, &CAN_queue);
 	for(i=0;i<1500;i++){};
 	TxData.asFloat=Voltage_high_cell; CANTransmit(0x700, 9, TxData.asUint,5);
@@ -375,11 +375,11 @@ void CAN_Output_All(void)
 	for(i=0;i<1500;i++){};
 
 
-	TxData.asFloat=/*Voltage_avg*/(float)testvariable2; CANTransmit(0x700, 10, TxData.asUint,5);							/////////////lksbhodfhx
+	TxData.asFloat=Voltage_avg/*(float)testvariable2*/; CANTransmit(0x700, 10, TxData.asUint,5);							/////////////lksbhodfhx
 //	queue_insert(0x700, 10, TxData.asUint, 5, &CAN_queue);
 	for(i=0;i<1500;i++){};
 
-	TxData.asFloat=/*Temperature_high*/ (float)trip_counter; CANTransmit(0x700, 11, TxData.asUint,5); 						/////////dhjdghj
+	TxData.asFloat=Temperature_high /*(float)trip_counter*/; CANTransmit(0x700, 11, TxData.asUint,5); 						/////////dhjdghj
 //	queue_insert(0x700, 11, TxData.asUint, 5, &CAN_queue);
 	for(i=0;i<1500;i++){};
 	TxData.asFloat=Temperature_high_cell; CANTransmit(0x700, 12, TxData.asUint, 5);

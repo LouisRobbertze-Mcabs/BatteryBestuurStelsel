@@ -25,8 +25,6 @@ void main(void)
 
 			Read_Temperatures();
 
-		//	testtrip = interpolate_table_1d(&trip2_table, 2095);						//Non-linear heating
-
 			ServiceDog();
 
 			CANChargerReception(CAN_Charger_dataL, CAN_Charger_dataH);

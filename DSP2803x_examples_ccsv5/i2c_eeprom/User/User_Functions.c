@@ -798,7 +798,7 @@ void Calculate_SOC()
 	//	static Uint16 t=1000;							//time since current activity
 	//	float Wsoc;										//weighting parameter
 
-	SOCv = interpolate_table_1d(&sine_table, (long)(Voltage_low*1000));
+	SOCv = (float)(interpolate_table_1d(&sine_table, (long)(Voltage_low*1000)));
 
 	SOC_t++;
 
@@ -809,27 +809,21 @@ void Calculate_SOC()
 	SOCc = SOC - (Current*0.000185);				//coulomb counter      Ampere sec -> Ampere huur						1/150A*3600s
 
 	if(SOC_t > 5400)					//delay of 90 min maybe do 60 min?
-	{
-		//ln(2)/afsnytydperk(s)
-		//Wsoc = 2 - (exp((SOC_t-5400)*0.000556));		//sny af na halfuur....
 		Wsoc = 0;
-	}
 	else
-	{
 		Wsoc = 1;
-	}
 
-	if(Wsoc>1)
+	/*if(Wsoc>1)
 		Wsoc = 1;
 	else if(Wsoc<0)
-		Wsoc = 0;
+		Wsoc = 0;*/
 
 	SOC = Wsoc*SOCc + (1-Wsoc)*SOCv;
 
-	if(SOC>1)
+	if(SOC>100)
+		SOC = 100;
+	else if(SOC<1)
 		SOC = 1;
-	else if(SOC<0.001)
-		SOC = 0.001;
 }
 
 void Calibrate_Current_charger()
