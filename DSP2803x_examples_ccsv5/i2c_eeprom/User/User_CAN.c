@@ -518,7 +518,7 @@ void CAN_Output_All(void)
 	for(i=0;i<1500;i++){};
 
 //	queue_insert(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5, &CAN_queue);
-	CANTransmit(0x718, 0x11, ((int)(SOC*100)) & 0xFF, 5); //SOC
+	CANTransmit(0x718, 0x11, ((int)(SOC)) & 0xFF, 5); //SOC
 //	queue_insert(0x718, 0x11, ((int)(SOC*100)) & 0xFF, 5, &CAN_queue);
 	for(i=0;i<1500;i++){};
 
@@ -527,7 +527,7 @@ void CAN_Output_All(void)
 
 	Acewell_Data = ((Charger_status & 0x1)<<1);
 
-	if (SOC<0.12)
+	if (SOC<12)
 		Acewell_Data = Acewell_Data++;
 
 	if((flagDischarged == 1) || (flagCurrent == 1)  || (flagTemp == 1))
