@@ -802,28 +802,23 @@ void Calculate_SOC()
 
 	SOC_t++;
 
-	if(Current>4 || Current<-4)
+	if(Current>3 || Current<-3 || Charger_status == 1)
 	{
 		SOC_t = 0;
 	}
 	SOCc = SOC - (Current*0.000185);				//coulomb counter      Ampere sec -> Ampere huur						1/150A*3600s
 
-	if(SOC_t > 5400)					//delay of 90 min maybe do 60 min?
+	if(SOC_t > 5400)								//delay of 90 min maybe do 60 min?
 		Wsoc = 0;
 	else
 		Wsoc = 1;
-
-	/*if(Wsoc>1)
-		Wsoc = 1;
-	else if(Wsoc<0)
-		Wsoc = 0;*/
 
 	SOC = Wsoc*SOCc + (1-Wsoc)*SOCv;
 
 	if(SOC>100)
 		SOC = 100;
-	else if(SOC<1)
-		SOC = 1;
+	else if(SOC<0.01)
+		SOC = 0.01;
 }
 
 void Calibrate_Current_charger()

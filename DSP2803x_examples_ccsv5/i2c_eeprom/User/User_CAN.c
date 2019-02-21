@@ -360,7 +360,7 @@ void CAN_Output_All(void)
 //	queue_insert(0x700, 5, TxData.asUint, 5, &CAN_queue); //insert into queue
 	for(i=0;i<1500;i++){};
 
-	TxData.asFloat=/*Voltage_low*/ (float)testcounter; CANTransmit(0x700, 6, TxData.asUint,5);								///////////xcbxcb
+	TxData.asFloat=Voltage_low/* (float)testcounter*/; CANTransmit(0x700, 6, TxData.asUint,5);								///////////xcbxcb
 //	queue_insert(0x700, 6, TxData.asUint, 5, &CAN_queue);
 	for(i=0;i<1500;i++){};
 	TxData.asFloat=Voltage_low_cell; CANTransmit(0x700, 7, TxData.asUint,5);
