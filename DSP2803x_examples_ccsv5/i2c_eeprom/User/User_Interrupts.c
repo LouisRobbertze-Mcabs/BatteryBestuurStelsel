@@ -117,7 +117,7 @@ __interrupt void cpu_timer1_isr(void)
 			if(flagCurrent == 1)
 				led3 = 1;
 
-			if(flagDischarged == 1)
+			if(flagDischarged == 1 || flagDischarged == 2)
 				led2 = 1;
 
 			if(flagTemp == 1)

@@ -321,6 +321,7 @@ void Calculate_SOH(void)
 void Calculate_Current(void)
 {
 	Current = ((test_current)-Current_CAL )* 0.122;                   //2095    maal, moenie deel nie!!!!     0.0982--200/2048          /*Current_CAL/*
+
 }
 
 void Read_System_Status(void)
@@ -338,7 +339,7 @@ void Process_System_Status(void)
 
 void Read_Temperatures(void)
 {
-	static float Temperatures_resistance_temp[14];
+	static float Temperatures_resistance_temp[14] = { 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000 };
 
 	//temp meetings
 	//SOC15 - Outside
