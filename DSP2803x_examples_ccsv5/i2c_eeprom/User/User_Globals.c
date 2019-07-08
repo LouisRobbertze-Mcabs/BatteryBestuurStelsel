@@ -95,8 +95,8 @@ volatile Uint16 Auxilliary_counter = 0;
 
 //defines:
 volatile float Vmax = 3.65;
-volatile float Vmin = 2.8;				//2.8
-volatile float Vcritical = 2.7;		//2.7
+volatile float Vmin = 2.7;				//2.8
+volatile float Vcritical = 2.6;		//2.7
 volatile float Vcharge = 3.5;
 volatile float Vbalance = 3.485; //4.8
 
@@ -113,7 +113,7 @@ volatile float Vauxmin = 12.3;
 volatile float AuxChargeTime = 1800;
 
 volatile float Vchargedflagreset = 3.35;
-volatile float Vdischargedflagreset = 2.9;
+volatile float Vdischargedflagreset = 2.8;
 volatile float kp_constant = 3.5;								//charger
 volatile float kp_multiplier = 30;								//charger
 volatile float balancing_upper_level = 3.49;

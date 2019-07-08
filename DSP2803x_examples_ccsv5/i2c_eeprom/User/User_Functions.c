@@ -250,13 +250,13 @@ void Process_Voltages(void)
 
 	if(Voltage_low < Vmin && Voltage_low > Vcritical && Charger_status == 0)
 	{
-		Aux_Control = 0;
+		//Aux_Control = 0;
 		flagDischarged = 1;
 		//		led3 = 1;               //turn on red led
 		//ContactorOut = 0;       //turn off contactor
 		PreCharge = 1;
 	}
-	else if(Voltage_low < Vcritical && Charger_status == 0)
+	else if(Voltage_low < Vcritical && Charger_status == 0)						//Maybe make this a bit smaller --> 2.7 or even 2.6??
 	{
 		Aux_Control = 0;
 		flagDischarged = 2;

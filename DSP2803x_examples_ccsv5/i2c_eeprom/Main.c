@@ -1,6 +1,11 @@
 //###########################################################################
 // $TI Release: F2803x C/C++ Header Files and Peripheral Examples V127 $
 // $Release Date: March 30, 2013 $
+
+//To Do List:
+//Check if CRC is correct, and BQ is responding
+//
+//
 //###########################################################################
 
 #include "User\User_Defines.h"
