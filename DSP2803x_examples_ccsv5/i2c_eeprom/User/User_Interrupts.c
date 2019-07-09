@@ -112,6 +112,7 @@ __interrupt void cpu_timer1_isr(void)
 		}
 		else
 		{
+			//Maybe this should just always show????
 			ContactorOut = 0;           //turn off contactor
 			//led3 = 1;
 			if(flagCurrent == 1)

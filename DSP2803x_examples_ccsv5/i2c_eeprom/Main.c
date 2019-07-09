@@ -3,7 +3,8 @@
 // $Release Date: March 30, 2013 $
 
 //To Do List:
-//Check if CRC is correct, and BQ is responding
+//Check if CRC is correct, and BQ is responding // werk watchdog reg????
+//Check CAN reset procedure to ensure always sending data
 //
 //
 //###########################################################################
