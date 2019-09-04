@@ -661,7 +661,6 @@ void Balance(int period, float reference)
 			else if(balance ==0)                //sit miskien else hier             hierdie is toets fase
 			{
 				balance = 0;
-				SOC = 100;						//Hierdie is toets fase om SOC by 100 te kry!
 			}
 
 			count = 0;

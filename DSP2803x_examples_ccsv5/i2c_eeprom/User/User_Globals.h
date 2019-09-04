@@ -144,10 +144,10 @@ extern volatile float Current_CAL;
 //extern volatile Uint16 Toets_current_sum[10];
 
 
-extern float SOC_t;
-extern float Wsoc;
-extern float SOCv;
-extern float SOCc;
+extern volatile float SOC_t;
+extern volatile float Wsoc;
+extern volatile float SOCv;
+extern volatile float SOCc;
 
 
 extern float ChgCurrent;

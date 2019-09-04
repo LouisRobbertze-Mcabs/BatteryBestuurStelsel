@@ -95,8 +95,8 @@ volatile Uint16 Auxilliary_counter = 0;
 
 //defines:
 volatile float Vmax = 3.65;
-volatile float Vmin = 2.7;				//2.8
-volatile float Vcritical = 2.6;		//2.7
+volatile float Vmin = 2.65;				//2.8
+volatile float Vcritical = 2.55;		//2.7
 volatile float Vcharge = 3.5;
 volatile float Vbalance = 3.485; //4.8
 
@@ -107,7 +107,7 @@ volatile float Ifilter = 0.27;
 volatile float Tmax = 50;
 volatile float Tmin = 0;
 
-volatile float SOC;
+volatile float SOC = 50;
 
 volatile float Vauxmin = 12.3;
 volatile float AuxChargeTime = 1800;
@@ -152,11 +152,11 @@ struct table_1d trip2_table = {
 
 volatile float Current_CAL = 2080;			//=2095
 
-float SOC_t;
+volatile float SOC_t;
 
-float Wsoc = 1;
-float SOCv = 0.5;
-float SOCc = 0;
+float volatile Wsoc = 1;
+float volatile SOCv = 0.5;
+float volatile SOCc = 0;
 
 float ChgCurrent = 0;
 

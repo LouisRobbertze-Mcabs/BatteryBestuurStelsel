@@ -194,9 +194,9 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 		//Read Charger Status
 		ChgStatus = RxDataH & 0xFF;
 
-		if(ChgStatus == 0 || ChgStatus == 0x08)                                             //Charger ready to charge || battery voltage low flag
+		if(ChgStatus == 0 || ChgStatus == 0x08 /*|| ChgStatus == 0x10*/)                        //Charger ready to charge || battery voltage low flag || Comms issue
 		{
-			Charger_status = 1;//charger connected
+			Charger_status = 1;														//0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????											//charger connected
 			if(flagCurrent == 0 && flagTemp == 0 && flagCharged == 0 && KeySwitch == 0 /*&& flagDischarged != 2*/)     //check flags to ensure charging is allowed
 			{
 				if(delay == 0)                                                              //sit miskien check in om met die charger Vbat te meet
@@ -221,8 +221,10 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 					else if(Voltage_high> balancing_upper_level && Voltage_low > balancing_bottom_level && Current > -2) //if cell high > 3.48 balance
 					{
 						flagCharged = 1;
+						SOC = 100;						//Hierdie is toets fase om SOC by 100 te kry!
 					}
 
+					Charger_status = 1;														//0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????
 					CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8);             //charging started
 					PreCharge = 1;                          								//turn on precharge resistor
 				}
@@ -514,11 +516,11 @@ void CAN_Output_All(void)
 	for(i=0;i<1500;i++){};
 	//toets2 = ((int)(SOC*100)) & 0xFF;
 
-	CANTransmit(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5); //Voltage
+	CANTransmit(0x718, 0x4, ((int)(Voltage_total*10)), 5); //Voltage
 	for(i=0;i<1500;i++){};
 
 //	queue_insert(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5, &CAN_queue);
-	CANTransmit(0x718, 0x11, ((int)(SOC)) & 0xFF, 5); //SOC
+	CANTransmit(0x718, 0x11, ((int)(SOC)), 5); //SOC
 //	queue_insert(0x718, 0x11, ((int)(SOC*100)) & 0xFF, 5, &CAN_queue);
 	for(i=0;i<1500;i++){};
 
@@ -528,7 +530,7 @@ void CAN_Output_All(void)
 	Acewell_Data = ((Charger_status & 0x1)<<1);
 
 	if (SOC<12)
-		Acewell_Data = Acewell_Data++;
+		Acewell_Data = Acewell_Data + 1;
 
 	if((flagDischarged == 1) || (flagCurrent == 1)  || (flagTemp == 1))
 		Acewell_Data = Acewell_Data + 4;
@@ -577,9 +579,9 @@ void CANSlaveConfig(void)
 
 void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Bytes)      //destination, txdataH, txdataL,  bytes
 {
-	struct ECAN_REGS ECanaShadow;
+	//struct ECAN_REGS ECanaShadow;
 
-	if (ECanaRegs.CANES.all == 0 || ECanaRegs.CANES.all == 0x30000 /*|| ECanaRegs.CANES.all == 0x10000*/)								//CAN bus ready for action
+	if (ECanaRegs.CANES.all == 0 || ECanaRegs.CANES.all == 0x30000 || ECanaRegs.CANES.all == 0x30001)		//Maybe add more??     	CAN bus ready for action		/*|| ECanaRegs.CANES.all == 0x10000*/
 	{
 		//Start transmit
 		ECanaRegs.CANME.all = 0x0000000E;                   	// Disable Tx Mailbox
@@ -595,9 +597,9 @@ void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Byte
 		ECanaRegs.CANME.all = 0x0000000F;                   	// Enable Tx Mailbox
 		ECanaRegs.CANTRS.all = 0x00000001;                  	// Set transmit request
 	}
-	else if (ECanaRegs.CANES.bit.SE == 1 || ECanaRegs.CANES.bit.CRCE == 1 || ECanaRegs.CANES.bit.BE == 1  || ECanaRegs.CANES.bit.FE == 1 ||ECanaRegs.CANES.bit.ACKE == 1||ECanaRegs.CANES.bit.EW == 1||ECanaRegs.CANES.bit.EP == 1)	//reset fault on CAN bus
+	else /*if (ECanaRegs.CANES.bit.SE == 1 || ECanaRegs.CANES.bit.CRCE == 1 || ECanaRegs.CANES.bit.BE == 1  || ECanaRegs.CANES.bit.FE == 1 ||ECanaRegs.CANES.bit.ACKE == 1||ECanaRegs.CANES.bit.EW == 1||ECanaRegs.CANES.bit.EP == 1)*/	//reset fault on CAN bus
 	{
-		ECanaRegs.CANES.all = 0x1BB0000;						//reset flags
+		ECanaRegs.CANES.all = 0xFFF0000;						//reset flags		0x1BB0000
 		//add reset error warning
 
 	}
