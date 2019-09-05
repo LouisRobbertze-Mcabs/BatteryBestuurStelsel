@@ -224,7 +224,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 						SOC = 100;						//Hierdie is toets fase om SOC by 100 te kry!
 					}
 
-					Charger_status = 1;														//0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????
+					Charging_animation = 1;												//0 - not plugged in, 1 -plugged in
 					CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8);             //charging started
 					PreCharge = 1;                          								//turn on precharge resistor
 				}
@@ -241,7 +241,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 					CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                            //disconnect charger
 					if(flagCharged == 1)
 						ContactorOut = 0;
-					//Charger_status = 0;												//haal miskien uit
+					Charging_animation = 0;
 				}
 			}
 		}
@@ -259,6 +259,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 				ContactorOut = 0;                                                           //turn off contactor
 
 				Charger_status = 0;
+				Charging_animation = 0;
 				Current_max = 5;															//speel rond om charge stabiel te kry
 			}
 		}
@@ -520,7 +521,11 @@ void CAN_Output_All(void)
 	for(i=0;i<1500;i++){};
 
 //	queue_insert(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5, &CAN_queue);
-	CANTransmit(0x718, 0x11, ((int)(SOC)), 5); //SOC
+
+	if(Charging_animation == 1)
+		CANTransmit(0x718, 0x11, ((int)(Charging_Animation(SOC))), 5);
+	else
+		CANTransmit(0x718, 0x11, ((int)(SOC)), 5); //SOC
 //	queue_insert(0x718, 0x11, ((int)(SOC*100)) & 0xFF, 5, &CAN_queue);
 	for(i=0;i<1500;i++){};
 
@@ -532,7 +537,7 @@ void CAN_Output_All(void)
 	if (SOC<12)
 		Acewell_Data = Acewell_Data + 1;
 
-	if((flagDischarged == 1) || (flagCurrent == 1)  || (flagTemp == 1))
+	if((flagDischarged >= 1) || (flagCurrent == 1)  || (flagTemp == 1))
 		Acewell_Data = Acewell_Data + 4;
 
 	CANTransmit(0x718, 0x88, Acewell_Data & 0xF, 5); //LEDS*/

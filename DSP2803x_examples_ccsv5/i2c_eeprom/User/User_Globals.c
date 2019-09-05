@@ -192,3 +192,5 @@ volatile long testtrip = 0;
 
 volatile long timecounter = 0;
 volatile long timecounterseconds = 0;
+
+volatile float Charging_animation = 0;

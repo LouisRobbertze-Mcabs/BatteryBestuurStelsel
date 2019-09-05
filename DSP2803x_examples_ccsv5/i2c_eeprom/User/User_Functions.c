@@ -872,3 +872,21 @@ void Battery_Status(void)
 		BMS_Status = BMS_Status + 64;
 	//Extra flags are a possibility
 }
+
+float Charging_Animation(float real_SOC)
+{	//
+	static float previous_SOC = 0;
+
+	previous_SOC = previous_SOC + 12;
+
+	if(previous_SOC <= real_SOC)				//start-up
+	{
+		previous_SOC = real_SOC;
+	}
+	else if(previous_SOC > 100)
+	{
+		previous_SOC = real_SOC;
+	}
+
+	return previous_SOC;
+}

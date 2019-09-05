@@ -185,4 +185,6 @@ extern volatile long testtrip;
 extern volatile long timecounter;
 extern volatile long timecounterseconds;
 
+extern volatile float Charging_animation;
+
 #endif /* USER_GLOBALS_H_ */
