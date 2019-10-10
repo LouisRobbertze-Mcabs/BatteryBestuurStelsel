@@ -21,6 +21,8 @@ extern struct I2CMSG I2cMsgIn1;
 
 extern struct I2CMSG *CurrentMsgPtr;               // Used in interrupts
 
+extern struct BMS_STATUS_FLAGS;
+
 extern volatile Uint16 DataOut;
 extern volatile Uint16 DataOut2;
 extern volatile Uint16 Received;

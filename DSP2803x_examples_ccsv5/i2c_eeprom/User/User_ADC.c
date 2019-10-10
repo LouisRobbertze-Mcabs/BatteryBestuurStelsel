@@ -2,7 +2,7 @@
  * User_ADC.c
  *
  *  Created on: 04 May 2017
- *      Author: Sonja
+ *      Author: Bartho Horn
  */
 
 #include "User_ADC.h"

@@ -2,7 +2,7 @@
  * User_CAN.c
  *
  *  Created on: 04 May 2017
- *      Author: Sonja
+ *      Author: Bartho Horn
  */
 
 #include "User_CAN.h"
@@ -165,7 +165,7 @@ void CANInterruptConfig(void)
 }
 
 void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
-{
+{ //maybe setup CAN status structure to capture all the info required. -Charger active, battery charging,
 	float ChgVoltage = 0;
 
 	Uint16 ChgStatus = 0;
@@ -208,7 +208,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 				{
 					Current_max =  Current_max + kp_multiplier*(kp_constant - Voltage_high);								//kp controller constant & kp multiplier
 
-					if(Current_max <0)								//add max as well
+					if(Current_max <0)
 						Current_max = 0;
 					else if(Current_max > 25)
 						Current_max = 25;
@@ -258,7 +258,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 				CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                              //disconnect charger
 				ContactorOut = 0;                                                           //turn off contactor
 
-				Charger_status = 0;
+				Charger_status = 0;															//add counter to monitor if charger is unplugged?
 				Charging_animation = 0;
 				Current_max = 5;															//speel rond om charge stabiel te kry
 			}
@@ -602,11 +602,10 @@ void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Byte
 		ECanaRegs.CANME.all = 0x0000000F;                   	// Enable Tx Mailbox
 		ECanaRegs.CANTRS.all = 0x00000001;                  	// Set transmit request
 	}
-	else /*if (ECanaRegs.CANES.bit.SE == 1 || ECanaRegs.CANES.bit.CRCE == 1 || ECanaRegs.CANES.bit.BE == 1  || ECanaRegs.CANES.bit.FE == 1 ||ECanaRegs.CANES.bit.ACKE == 1||ECanaRegs.CANES.bit.EW == 1||ECanaRegs.CANES.bit.EP == 1)*/	//reset fault on CAN bus
+	else 														//reset fault on CAN bus
 	{
 		ECanaRegs.CANES.all = 0xFFF0000;						//reset flags		0x1BB0000
-		//add reset error warning
-
+		//add reset error warning, maybe to BMS flags
 	}
 /*	else if (ECanaRegs.CANES.bit.EP == 1)						//Warning, Error-passive state - Turn bus off
 	{

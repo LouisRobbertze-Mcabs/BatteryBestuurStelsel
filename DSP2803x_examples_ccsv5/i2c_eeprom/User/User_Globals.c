@@ -30,6 +30,8 @@ volatile Uint16 DataOut;
 volatile Uint16 DataOut2;
 volatile Uint16 Received;
 
+struct BMS_STATUS_FLAGS;
+
 /////////////////////////////////////////////
 volatile Uint16 flagTemp=0;
 volatile Uint16 flagCurrent=0;
@@ -95,8 +97,8 @@ volatile Uint16 Auxilliary_counter = 0;
 
 //defines:
 volatile float Vmax = 3.65;
-volatile float Vmin = 2.65;				//2.8
-volatile float Vcritical = 2.55;		//2.7
+volatile float Vmin = 2.75;				//2.8
+volatile float Vcritical = 2.65;		//2.7
 volatile float Vcharge = 3.5;
 volatile float Vbalance = 3.485; //4.8
 

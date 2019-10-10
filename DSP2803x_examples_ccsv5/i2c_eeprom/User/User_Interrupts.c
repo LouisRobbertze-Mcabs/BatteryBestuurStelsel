@@ -2,7 +2,7 @@
  * User_Interrupts.c
  *
  *  Created on: 04 May 2017
- *      Author: Sonja
+ *      Author: Bartho Horn
  */
 
 #include "User_Interrupts.h"
@@ -54,7 +54,7 @@ __interrupt void  adc_isr(void)
 	{
 		trip_timer = interpolate_table_1d(&trip_table, Filter_SC);						//Non-linear heating
 		trip_counter = trip_counter + (1200000/trip_timer);
-/*		if( Filter_SC> testvariable2)
+		/*		if( Filter_SC> testvariable2)
 			testvariable2 = Filter_SC;
 		testvariable++;*/
 	}
@@ -115,17 +115,6 @@ __interrupt void cpu_timer1_isr(void)
 			//Maybe this should just always show????
 			ContactorOut = 0;           //turn off contactor
 			//led3 = 1;
-			if(flagCurrent == 1)
-				led3 = 1;
-
-			if(flagDischarged == 1 || flagDischarged == 2)
-				led2 = 1;
-
-			if(flagTemp == 1)
-			{
-				led3 = 1;
-				led2 = 1;
-			}
 		}
 	}
 	else if((KeySwitch == 0) && (Charger_status == 0)) //keyswitch == 0
@@ -134,6 +123,19 @@ __interrupt void cpu_timer1_isr(void)
 		ContactorOut = 0;       //turn off contactor
 		//led3 = 0;       		//turn off red led
 	}
+
+	if(flagCurrent == 1)
+		led3 = 1;
+
+	if(flagDischarged == 1 || flagDischarged == 2)
+		led2 = 1;
+
+	if(flagTemp == 1)
+	{
+		led3 = 1;
+		led2 = 1;
+	}
+
 	EALLOW;
 	CpuTimer1.InterruptCount++;
 	EDIS;
@@ -212,7 +214,7 @@ __interrupt void can_rx_isr(void)
 	}
 	else if (ECanaRegs.CANRMP.bit.RMP2 == 1)
 	{
-		//CANChargerReception();					//improve these functions for speed
+		//CANChargerReception();
 		CAN_Charger_dataL = ECanaMboxes.MBOX2.MDL.all;                // Data taken out of direct mailbox
 		CAN_Charger_dataH = ECanaMboxes.MBOX2.MDH.all;                // Data taken out of direct mailbox
 	}

@@ -10,6 +10,9 @@
 void I2CA_Init(void)
 {
 	// Initialize I2C
+
+	I2caRegs.I2CMDR.all == 0;		//reset I2C to ensure operation to ensure restart
+
 	I2caRegs.I2CSAR = 0x08;         // Slave address - EEPROM control code              0x08
 	I2caRegs.I2CPSC.all = 6;        // Prescaler - need 7-12 Mhz on module clk          8Mhz
 	I2caRegs.I2CCLKL = 40;          // NOTE: must be non zero                           40
@@ -58,7 +61,7 @@ Uint16 I2CA_WriteData(unsigned char Register, unsigned char Data)
 	{
 		I2CA_WriteData(Register, Data);
 	}
-	ServiceDog();
+
 	return I2C_SUCCESS;
 }// end of write section
 

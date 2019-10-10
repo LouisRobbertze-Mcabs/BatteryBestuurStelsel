@@ -2,7 +2,7 @@
  * User_Functions.c
  *
  *  Created on: 04 May 2017
- *      Author: Sonja
+ *      Author: Bartho Horn
  */
 
 #include "User_Defines.h"
@@ -70,9 +70,9 @@ void Initialise_BMS(void)
 	CAN_Init();
 	configADC();
 	Bq76940_Init();
-	// Shut_D_BQ();
+	//Shut_D_BQ();
 
-	//	Calibrate_Current();
+	//Calibrate_Current();
 
 	// Enable the watchdog
 	EALLOW;
@@ -222,7 +222,7 @@ void  Read_Cell_Voltages(void)
 	Voltage_low = Another_temp;
 	Voltage_low_filter_temp = Voltage_low;
 
-	ServiceDog();
+	//ServiceDog();
 }
 
 void Process_Voltages(void)
@@ -739,7 +739,6 @@ Uint32 ChgCalculator(float Voltage, float Current)
 long interpolate_segment(long x0, long y0, long x1, long y1, long x)
 {
 	long t;
-	long speel;
 
 	if (x <= y0) { return x0; }
 	if (x >= y1) { return x1; }
@@ -870,6 +869,8 @@ void Battery_Status(void)
 		BMS_Status = BMS_Status + 32;
 	if(Charger_status == 1)
 		BMS_Status = BMS_Status + 64;
+	if(KeySwitch == 1)
+		BMS_Status = BMS_Status + 128;
 	//Extra flags are a possibility
 }
 

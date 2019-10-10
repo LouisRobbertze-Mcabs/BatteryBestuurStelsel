@@ -113,6 +113,30 @@ struct table_1d {
     long int *y_values;
 };
 
+
+////////////////////////////////////////////////////////////////////////////////////////
+struct BMS_STATUS_FLAGS {       // bits   description
+   Uint16 Balance:1;           	// 0      reserved
+   Uint16 Charged:1;           	// 1      reserved
+   Uint16 Current:1;            // 2      reserved
+   Uint16 Voltage:1;           	// 3      reserved
+   Uint16 Temperature:1;       	// 4      reserved
+   Uint16 Discharged:1;         // 5      reserved
+   Uint16 ChargerActive:1;      // 6      reserved
+   Uint16 Ignition:1;          	// 7      reserved
+   Uint16 rsvd6:1;           	// 8      reserved
+   Uint16 rsvd7:1;           // 9      reserved
+   Uint16 rsvd8:1;           // 10     reserved
+   Uint16 rsvd9:1;           // 11     reserved
+   Uint16 rsvd10:1;           // 12     reserved
+   Uint16 rsvd11:1;           // 13     reserved
+   Uint16 rsvd12:1;           // 14     reserved
+   Uint16 rsvd113:1;          // 15     reserved
+};
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 #endif  // end of DSP2803x_I2C_DEFINES_H definition
 
 //===========================================================================

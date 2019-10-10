@@ -24,7 +24,7 @@ void  Bq76940_Init(void)
 	Uint16 Reset;
 
 	BQEnable = 1;                                           //turn on BQ chip
-	while(counter_2Hz != 1);                                      //toets delay
+	while(counter_2Hz != 1);                                //toets delay
 
 	Reset = I2CA_ReadData(&I2cMsgIn1,0x00, 1);
 
