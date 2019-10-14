@@ -3,9 +3,8 @@
 // $Release Date: March 30, 2013 $
 
 //To Do List:
-//Check if CRC is correct, and BQ is responding // werk watchdog reg????
+//Check if CRC is correct, and BQ is responding // werk watchdog reg???? Doen ekstra reset flag so that if new data is not returned contactor cant close / toets..
 //Check CAN reset procedure to ensure always sending data
-//
 //
 //###########################################################################
 

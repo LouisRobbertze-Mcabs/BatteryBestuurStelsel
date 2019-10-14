@@ -142,9 +142,9 @@ Uint16 I2CA_ReadData(struct I2CMSG *msg, unsigned char Register, Uint16 amount)
 			Received = Received | DataOut;
 
 		}
-		ServiceDog();
+		//ServiceDog();
 		return Received;
 	}
-	ServiceDog();
+	//ServiceDog();
 	return I2C_SUCCESS;
 }

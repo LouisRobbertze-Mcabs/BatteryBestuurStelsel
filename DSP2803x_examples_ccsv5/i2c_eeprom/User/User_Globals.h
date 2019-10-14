@@ -175,6 +175,8 @@ extern int temptimer;
 extern volatile Uint32 CAN_Charger_dataL;
 extern volatile Uint32 CAN_Charger_dataH;
 
+extern volatile Uint32 System_State;
+
 extern volatile Uint32 BMS_Status;
 extern volatile long trip_counter;
 extern volatile Uint32 testcounter;

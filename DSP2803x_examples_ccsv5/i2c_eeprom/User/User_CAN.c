@@ -173,12 +173,14 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 	Uint16 temp2 = 0;
 
 	static volatile float Current_max = 5;
-
-	static volatile int delay = 0;  // miskien >> count 1 cycle from contactor closes till charger starts
-	//   >> count 1 cycle from charger stops till contactor opens
+	static volatile int timeout = 0;
+	timeout++;
+	static volatile int delay = 0;  									// miskien >> count 1 cycle from contactor closes till charger starts
+																		//   >> count 1 cycle from charger stops till contactor opens
 
 	if(RxDataL != 0 || RxDataH != 0)
 	{
+		timeout = 0;
 		//Read Charger Voltage
 		temp = RxDataL;
 		temp2 = (temp & 0xFF) << 8;
@@ -194,9 +196,9 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 		//Read Charger Status
 		ChgStatus = RxDataH & 0xFF;
 
-		if(ChgStatus == 0 || ChgStatus == 0x08 /*|| ChgStatus == 0x10*/)                        //Charger ready to charge || battery voltage low flag || Comms issue
+		if(ChgStatus == 0 || ChgStatus == 0x08)                        //Charger ready to charge || battery voltage low flag || Comms issue
 		{
-			Charger_status = 1;														//0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????											//charger connected
+			Charger_status = 1;																//0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????											//charger connected
 			if(flagCurrent == 0 && flagTemp == 0 && flagCharged == 0 && KeySwitch == 0 /*&& flagDischarged != 2*/)     //check flags to ensure charging is allowed
 			{
 				if(delay == 0)                                                              //sit miskien check in om met die charger Vbat te meet
@@ -212,7 +214,6 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 						Current_max = 0;
 					else if(Current_max > 25)
 						Current_max = 25;
-
 
 					if(Voltage_high> balancing_upper_level && Voltage_low < balancing_bottom_level)	//determine if balancing should start									//balancing upper level & balancing lower level
 					{
@@ -245,7 +246,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 				}
 			}
 		}
-		else                                                                                //Charger flag set. typically power disconnected
+		else                                                                                 //Charger flag set. typically power disconnected
 		{
 			if(delay == 1)
 			{
@@ -270,6 +271,9 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 		CAN_Charger_dataL = 0;
 		CAN_Charger_dataH = 0;
 	}
+
+	if(timeout > 3)
+		Charger_status = 0;																	//charger disconnected
 }
 
 void CANSlaveReception(void)

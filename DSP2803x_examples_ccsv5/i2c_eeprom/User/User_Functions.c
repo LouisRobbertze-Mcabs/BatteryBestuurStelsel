@@ -10,6 +10,7 @@
 void Initialise_BMS(void)
 {
 	flagCurrent = 0;
+	System_State = 0;
 
 	Temperatures[5] = 0;
 	Temperatures_resistance[4] = 0;
@@ -146,6 +147,8 @@ void Init_Gpio(void)
 void Toggle_LED(void)
 {
 	GpioDataRegs.GPATOGGLE.bit.GPIO5 = 1;
+
+	System_State = 1; 							//State is good, not state in while loop
 
 	//GpioDataRegs.GPATOGGLE.bit.GPIO6 = 1;
 	//GpioDataRegs.GPATOGGLE.bit.GPIO19 = 1;

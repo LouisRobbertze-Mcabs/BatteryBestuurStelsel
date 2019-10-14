@@ -103,7 +103,7 @@ __interrupt void cpu_timer1_isr(void)
 	Aux_Voltage_temp = Auxilliary_Voltage;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////// testing
-	if(KeySwitch == 1)  //keyswitch == 1
+	if(KeySwitch == 1 && System_State == 1)  //keyswitch == 1
 	{
 		//binne die keydrive if
 		if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp == 0) && (Charger_status == 0))
