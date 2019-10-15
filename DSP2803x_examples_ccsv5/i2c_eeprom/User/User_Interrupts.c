@@ -151,9 +151,9 @@ __interrupt void cpu_timer2_isr(void)
 	EDIS;
 }
 
-__interrupt void i2c_int1a_isr(void)     // I2C-A
+__interrupt void i2c_int1a_isr(void)     														// I2C-A
 {
-	Uint16 IntSource;
+	Uint16 IntSource;																			//reset all during whatchdog restart???
 
 	// Read interrupt source
 	IntSource = I2caRegs.I2CISRC.all;
