@@ -109,7 +109,7 @@ volatile float Ifilter = 0.27;
 volatile float Tmax = 50;
 volatile float Tmin = 0;
 
-volatile float SOC = 50;
+volatile float SOC = 50;//
 
 volatile float Vauxmin = 12.3;
 volatile float AuxChargeTime = 1800;
@@ -125,7 +125,7 @@ volatile float balancing_bottom_level = 3.48; //4.475
 /* These coordinates correspond to the points illustrated in the above graph */
 /////////////////////////////////////////////////////////////////////////////////////////////////
 long sine_x[5] = {0, 10, 30, 60, 100};
-long sine_y[5] = {2880, 3202, 3270, 3293, 3349};
+long sine_y[5] = {2880, 3202, 3270, 3293, 3340};	//3349
 
 struct table_1d sine_table = {
     5,      /* Number of data points */

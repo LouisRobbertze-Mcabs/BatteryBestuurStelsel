@@ -43,12 +43,12 @@ Uint16 I2CA_WriteData(unsigned char Register, unsigned char Data)
 	DataBuffer[0] = (0x08) << 1;
 	DataBuffer[1] = Register;
 	DataBuffer[2] = Data;
-	DataBuffer[3] = CRC8(DataBuffer, 3, 7); //bereken crc
+	DataBuffer[3] = CRC8(DataBuffer, 3, 7); 								//Calculate CRC
 
 	// Setup data to send
 	I2caRegs.I2CDXR = Register;
 	I2caRegs.I2CDXR = Data;
-	I2caRegs.I2CDXR = DataBuffer[3];                            //send crc
+	I2caRegs.I2CDXR = DataBuffer[3];                            			//Send CRC
 
 	// Send start as master transmitter
 	I2caRegs.I2CMDR.all = 0x6E20;
@@ -57,9 +57,9 @@ Uint16 I2CA_WriteData(unsigned char Register, unsigned char Data)
 
 	while(CurrentMsgPtr->MsgStatus == I2C_MSGSTAT_WRITE_BUSY);
 
-	if(CurrentMsgPtr->MsgStatus == 0xFF)									//check to see if write was succesfull
+	if(CurrentMsgPtr->MsgStatus == 0xFF)									//check to see if write was successful
 	{
-		I2CA_WriteData(Register, Data);
+		I2CA_WriteData(Register, Data);										//try to send again if not successful
 	}
 
 	return I2C_SUCCESS;

@@ -3,10 +3,10 @@
 // $Release Date: March 30, 2013 $
 
 //To Do List:
-//Check if CRC is correct, and BQ is responding // werk watchdog reg????
-//Doen ekstra reset flag so that if new data is not returned contactor cant close / toets..
-//Check CAN reset procedure to ensure always sending data
-//
+//Check if CRC is correct, and BQ is responding
+//Doen ekstra reset flag so that if new data is not returned contactor can't close / toets..
+//Check CAN reset procedure to ensure always sending data -- Looks positive
+//Add Temperature influence on SOC
 //###########################################################################
 
 #include "User\User_Defines.h"
