@@ -9,74 +9,89 @@
 
 void Shut_D_BQ(void)                        //bq turn off sequence
 {
-	I2CA_WriteData(0x04,0x00);
-	I2CA_WriteData(0x04,0x02);
-	I2CA_WriteData(0x04,0x01);
-	I2CA_WriteData(0x04,0x02);
+    I2CA_WriteData(0x04,0x00);
+    I2CA_WriteData(0x04,0x02);
+    I2CA_WriteData(0x04,0x01);
+    I2CA_WriteData(0x04,0x02);
 }
 
 void  Bq76940_Init(void)
 {
-	Uint16 temp;
-	Uint16 temp2;
-	int OV;
-	int UV;
-	Uint16 Reset;
+    Uint16 temp;
+    Uint16 temp2;
+    int OV;
+    int UV;
+    Uint16 Reset;
 
-	BQEnable = 1;                                           //turn on BQ chip
-	while(counter_2Hz != 1);                                //toets delay
 
-	Reset = I2CA_ReadData(&I2cMsgIn1,0x00, 1);
+    BQEnable = 1;                                           //turn on BQ chip
+    while(counter_2Hz != 1);                                //toets delay
 
-	if(Reset != 00)
-		I2CA_WriteData(0x00,(char)Reset);
+    Reset = I2CA_ReadData(&I2cMsgIn1,0x00, 1);
 
-	I2CA_WriteData(0x04,0x18);                                  //Sit metings aan
+    if(Reset != 00)
+        I2CA_WriteData(0x00,(char)Reset);
 
-	I2CA_WriteData(0x01,0x00);
-	I2CA_WriteData(0x02,0x00);
-	I2CA_WriteData(0x03,0x00);
+    I2CA_WriteData(0x04,0x18);                                  //Sit metings aan
 
-	I2CA_WriteData(0x08,0x08);                                  //protect 3
+    I2CA_WriteData(0x01,0x00);
+    I2CA_WriteData(0x02,0x00);
+    I2CA_WriteData(0x03,0x00);
 
-	I2CA_WriteData(0x0B,0x19);
+    I2CA_WriteData(0x08,0x08);                                  //protect 3
 
-	I2CA_WriteData(0x05,0x03);                                  //turn on outputs (CHG+DSG)       sit miskien eers op 'n latere stadium dit aan? ?
+    I2CA_WriteData(0x0B,0x19);
 
-	//lees adc gain en offset
-	temp = I2CA_ReadData(&I2cMsgIn1,0x50, 1);
+    I2CA_WriteData(0x05,0x03);                                  //turn on outputs (CHG+DSG)       sit miskien eers op 'n latere stadium dit aan? ?
 
-	temp2 = I2CA_ReadData(&I2cMsgIn1,0x59, 1);
+    //lees adc gain en offset
+    temp = I2CA_ReadData(&I2cMsgIn1,0x50, 1);
 
-	temp2 = temp2 >> 5;
-	temp2= temp2 & 0x07;
+    temp2 = I2CA_ReadData(&I2cMsgIn1,0x59, 1);
 
-	temp = temp<<1;
-	temp = temp & 0x0C;
+    temp2 = temp2 >> 5;
+    temp2= temp2 & 0x07;
 
-	temp = temp2 | temp;
+    temp = temp<<1;
+    temp = temp & 0x0C;
 
-	ADCgain = ((float)temp + 365)* 0.000001;
+    temp = temp2 | temp;
 
-	ADCoffset = ((I2CA_ReadData(&I2cMsgIn1,0x51, 1))) * 0.001;
+    ADCgain = ((float)temp + 365)*0.000001;
 
-	//Over voltage = 3.7 V
-	OV = (3.7-ADCoffset)/ADCgain;
-	OV = (OV>>4) & 0xFF;
 
-	I2CA_WriteData(0x09, (char)OV);                             //Stel OV_trip op
+   // temp = (I2CA_ReadData(&I2cMsgIn1,0x51, 1));
+    temp = 0x80;
 
-	//Under voltage = 2.4 V
-	UV = (2.4-ADCoffset)/ADCgain;
-	UV = (UV>>4) & 0xFF;
+    // If a positive value, return it
+    if ((temp & 0x80) == 0)
+    {
+        ADCoffset = temp * 0.001;
+    }
+    else                                                                // Otherwise perform the 2's complement math on the value
+    {
+        ADCoffset = ((~(temp - 0x01)) & 0xFF) * 0.001;
+    }
 
-	I2CA_WriteData(0x0A,(char)UV);                              //Stel UV_trip op
+//   ADCoffset = ((I2CA_ReadData(&I2cMsgIn1,0x51, 1))) * 0.001;
 
-	BQEnable = 0;                                               //pull low to allow BQ to measure temp
+    //Over voltage = 3.7 V
+    OV = (3.7-ADCoffset)/ADCgain;
+    OV = (OV>>4) & 0xFF;
 
-	EALLOW;
+    I2CA_WriteData(0x09, (char)OV);                             //Stel OV_trip op
 
-	GpioCtrlRegs.GPAMUX1.bit.GPIO3 = 0;     //BQenable
-	GpioCtrlRegs.GPADIR.bit.GPIO3 = 0;      //Bq enable as input
-	EDIS;
+    //Under voltage = 2.4 V
+    UV = (2.4-ADCoffset)/ADCgain;
+    UV = (UV>>4) & 0xFF;
+
+    I2CA_WriteData(0x0A,(char)UV);                              //Stel UV_trip op
+
+    BQEnable = 0;                                               //pull low to allow BQ to measure temp
+
+    EALLOW;
+
+    GpioCtrlRegs.GPAMUX1.bit.GPIO3 = 0;     //BQenable
+    GpioCtrlRegs.GPADIR.bit.GPIO3 = 0;      //Bq enable as input
+    EDIS;
 }

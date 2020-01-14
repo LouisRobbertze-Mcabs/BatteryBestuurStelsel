@@ -111,7 +111,7 @@ volatile float Tmin = 0;
 
 volatile float SOC = 50;//
 
-volatile float Vauxmin = 12.3;
+volatile float Vauxmin = 13;
 volatile float AuxChargeTime = 1800;
 
 volatile float Vchargedflagreset = 3.35;
