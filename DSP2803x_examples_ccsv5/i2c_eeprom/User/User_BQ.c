@@ -60,8 +60,7 @@ void  Bq76940_Init(void)
     ADCgain = ((float)temp + 365)*0.000001;
 
 
-   // temp = (I2CA_ReadData(&I2cMsgIn1,0x51, 1));
-    temp = 0x80;
+   temp = (I2CA_ReadData(&I2cMsgIn1,0x51, 1));
 
     // If a positive value, return it
     if ((temp & 0x80) == 0)
