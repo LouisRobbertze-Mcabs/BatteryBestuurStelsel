@@ -59,7 +59,6 @@ void  Bq76940_Init(void)
 
     ADCgain = ((float)temp + 365)*0.000001;
 
-
    temp = (I2CA_ReadData(&I2cMsgIn1,0x51, 1));
 
     // If a positive value, return it
@@ -69,9 +68,8 @@ void  Bq76940_Init(void)
     }
     else                                                                // Otherwise perform the 2's complement math on the value
     {
-        ADCoffset = ((~(temp - 0x01)) & 0xFF) * 0.001;
+        ADCoffset = ((~(temp - 0x01)) & 0xFF) * -0.001;
     }
-
 //   ADCoffset = ((I2CA_ReadData(&I2cMsgIn1,0x51, 1))) * 0.001;
 
     //Over voltage = 3.7 V
