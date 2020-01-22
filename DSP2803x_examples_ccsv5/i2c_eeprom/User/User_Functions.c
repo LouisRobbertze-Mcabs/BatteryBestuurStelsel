@@ -809,8 +809,8 @@ void Calculate_SOC()
 	{
 		SOC_t = 0;
 	}
-	SOCc = SOC - (Current*0.000185);				//coulomb counter      Ampere sec -> Ampere huur						1/150A*3600s
-
+	SOCc = SOC - (Current*0.000164);				//coulomb counter      Ampere sec -> Ampere huur	1/150A*3600s    0.000185
+	                                                //                                                  1/170A*3600s    0.000164
 	if(SOC_t > 5400)								//delay of 90 min maybe do 60 min?
 		Wsoc = 0;
 	else
