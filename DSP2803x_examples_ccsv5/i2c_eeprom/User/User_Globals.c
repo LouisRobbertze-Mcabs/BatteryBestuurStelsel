@@ -109,7 +109,7 @@ volatile float Ifilter = 0.27;
 volatile float Tmax = 50;
 volatile float Tmin = 0;
 
-volatile float SOC = 50;//
+volatile float SOC ;//
 
 volatile float Vauxmin = 13;
 volatile float AuxChargeTime = 1800;
