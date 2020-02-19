@@ -248,22 +248,22 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
         }
         else                                                                                 //Charger flag set. typically power disconnected
         {
-            if(delay == 1)
-            {
+          //  if(delay == 1)
+          //  {
                 //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                                //disconnect charger
-                delay--;
-                Charger_status = 0;
-            }
-            else if(delay == 0)
-            {
+           //     delay--;
+           //     Charger_status = 0;
+          //  }
+         //   else if(delay == 0)
+         //   {
 
                 //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                              //disconnect charger
                 ContactorOut = 0;                                                           //turn off contactor
-
+                delay = 0;
                 Charger_status = 0;															//add counter to monitor if charger is unplugged?
                 Charging_animation = 0;
                 Current_max = 5;															//speel rond om charge stabiel te kry
-            }
+         //   }
         }
 
         ChargerVoltage = ChgVoltage;

@@ -107,3 +107,16 @@ void Reset_ADC(void)
 
 	I2CA_WriteData(0x05,0x03);			//testing
 }
+
+void Reset_MCU(int flag)
+{
+    static int delay = 0;
+
+    if(ECanaRegs.CANES.bit.EP == 1)
+        delay++;
+    else
+        delay=0;
+
+    if(flag == 1 && delay > 300 && ECanaRegs.CANES.bit.EP == 1 && KeySwitch == 0)   //5 min intervals
+        for(;;){}
+}

@@ -52,6 +52,9 @@ void main(void)
 
 			counter_2Hz = 0;
 			Reset_ADC();
+
+			//add in issue function check
+			Reset_MCU(1);
 		}
 	}
 }
