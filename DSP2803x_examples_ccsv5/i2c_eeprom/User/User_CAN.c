@@ -225,7 +225,11 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
                         SOC = 100;						//Hierdie is toets fase om SOC by 100 te kry!
                     }
 
-                    Charging_animation = 1;												//0 - not plugged in, 1 -plugged in
+                    if(flagCharged == 1)
+                        Charging_animation = 0;
+                    else
+                        Charging_animation = 1;	                                            //0 - not plugged in, 1 -plugged in
+
                     CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8);             //charging started
                     PreCharge = 1;                          								//turn on precharge resistor
                 }
