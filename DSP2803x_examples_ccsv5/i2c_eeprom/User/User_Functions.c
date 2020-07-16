@@ -325,6 +325,18 @@ void Calculate_Current(void)
 {
 	Current = ((test_current)-Current_CAL )* 0.122;                   //2095    maal, moenie deel nie!!!!     0.0982--200/2048          /*Current_CAL/*
 
+    float error;
+
+    if(Aux_Control == 0 && ContactorOut == 0 && Charger_status == 0)
+    {
+        error = (-Current);                                             //as percentage
+        Current_CAL = Current_CAL -0.002* error * Current_CAL;                                           //maybe add slow filter to dampen the fault?
+
+        if(Current_CAL>2200)                                                                            //set maximum limit
+            Current_CAL = 2200;
+        if(Current_CAL<2000)                                                                            //set minimum limit
+            Current_CAL = 2000;
+    }
 }
 
 void Read_System_Status(void)
@@ -826,8 +838,7 @@ void Calculate_SOC()
 
 void Calibrate_Current_charger()
 {
-	//Reset the watchdog counter
-	ServiceDog();
+	//ServiceDog();
 	float error;
 
 	static float old_ChargerCurrent;
