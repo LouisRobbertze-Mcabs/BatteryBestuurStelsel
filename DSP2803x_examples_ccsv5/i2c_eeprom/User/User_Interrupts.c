@@ -211,6 +211,7 @@ __interrupt void can_rx_isr(void)
 	if (ECanaRegs.CANRMP.bit.RMP1 == 1)
 	{
 		//CANSlaveReception();                    // Handle the received message
+	    int OBD_debug = 1;
 	}
 	else if (ECanaRegs.CANRMP.bit.RMP2 == 1)
 	{

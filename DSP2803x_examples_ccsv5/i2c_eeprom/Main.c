@@ -52,6 +52,7 @@ void main(void)
 
 			counter_2Hz = 0;
 			Reset_ADC();
+
 		}
 	}
 }
