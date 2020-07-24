@@ -366,19 +366,19 @@ void CAN_Output_All(void)
     //Battery data
     if((Aux_Control == 1) && (Auxilliary_counter > 1))
     {
-        TxData.asFloat=Voltage_total; CANTransmit(0x700, 4, TxData.asUint,5);
+     /*   TxData.asFloat=Voltage_total; CANTransmit(0x700, 4, TxData.asUint,5);
 
         //	queue_insert(0x700, 4, TxData.asUint, 5, &CAN_queue); //insert into queue
         for(i=0;i<1500;i++){};
 
 
-        TxData.asFloat=Current /*(float)test_current*/; CANTransmit(0x700, 5, TxData.asUint,5);
+        TxData.asFloat=Current /*(float)test_current; CANTransmit(0x700, 5, TxData.asUint,5);
 
         //	queue_insert(0x700, 5, TxData.asUint, 5, &CAN_queue); //insert into queue
         for(i=0;i<1500;i++){};
 
 
-        TxData.asFloat=Voltage_low/* (float)testcounter*/; CANTransmit(0x700, 6, TxData.asUint,5);								///////////xcbxcb
+        TxData.asFloat=Voltage_low/* (float)testcounter; CANTransmit(0x700, 6, TxData.asUint,5);								///////////xcbxcb
 
         //	queue_insert(0x700, 6, TxData.asUint, 5, &CAN_queue);
         for(i=0;i<1500;i++){};
@@ -389,7 +389,7 @@ void CAN_Output_All(void)
         for(i=0;i<1500;i++){};
 
 
-        TxData.asFloat=Voltage_high/*(float)testvariable*/; CANTransmit(0x700, 8, TxData.asUint,5);									///////////ljdfvbhsd
+        TxData.asFloat=Voltage_high/*(float)testvariable*/; /*CANTransmit(0x700, 8, TxData.asUint,5);									///////////ljdfvbhsd
 
         //	queue_insert(0x700, 8, TxData.asUint, 5, &CAN_queue);
         for(i=0;i<1500;i++){};
@@ -400,13 +400,13 @@ void CAN_Output_All(void)
         for(i=0;i<1500;i++){};
 
 
-        TxData.asFloat=Voltage_avg/*(float)testvariable2*/; CANTransmit(0x700, 10, TxData.asUint,5);							/////////////lksbhodfhx
+        TxData.asFloat=Voltage_avg/*(float)testvariable2; CANTransmit(0x700, 10, TxData.asUint,5);							/////////////lksbhodfhx
 
         //	queue_insert(0x700, 10, TxData.asUint, 5, &CAN_queue);
         for(i=0;i<1500;i++){};
 
 
-        TxData.asFloat=Temperature_high /*(float)trip_counter*/; CANTransmit(0x700, 11, TxData.asUint,5); 						/////////dhjdghj
+        TxData.asFloat=Temperature_high /*(float)trip_counter; CANTransmit(0x700, 11, TxData.asUint,5); 						/////////dhjdghj
 
         //	queue_insert(0x700, 11, TxData.asUint, 5, &CAN_queue);
         for(i=0;i<1500;i++){};
@@ -624,7 +624,7 @@ void CAN_Output_All(void)
         for(i=0;i<1500;i++){};
         //toets2 = ((int)(SOC*100)) & 0xFF;
 
-
+*/
         CANTransmit(0x718, 0x4, ((int)(Voltage_total*10)), 5); //Voltage
 
         for(i=0;i<1500;i++){};

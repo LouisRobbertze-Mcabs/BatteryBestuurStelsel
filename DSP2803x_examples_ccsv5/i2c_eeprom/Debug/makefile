@@ -4,7 +4,7 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := C:/ti/ccsv6/tools/compiler/c2000_6.2.5
+CG_TOOL_ROOT := C:/Program Files (x86)/Texas Instruments/C2000 Code Generation Tools 6.0.3
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
@@ -31,7 +31,7 @@ ORDERED_OBJS += \
 "./User/User_I2C.obj" \
 "./User/User_Interrupts.obj" \
 "./User/User_Queue.obj" \
-"C:/Users/Bartho Horn/Documents/Github/BatteryBestuurStelsel/DSP2803x_headers/cmd/DSP2803x_Headers_nonBIOS.cmd" \
+"C:/Users/barth/Documents/Github/BatteryBestuurStelsel/DSP2803x_headers/cmd/DSP2803x_Headers_nonBIOS.cmd" \
 "../F28035.cmd" \
 "../IQmath.lib" \
 $(GEN_CMDS__FLAG) \
@@ -160,7 +160,7 @@ all: Example_2803xI2C_eeprom.out
 Example_2803xI2C_eeprom.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: C2000 Linker'
-	"C:/ti/ccsv6/tools/compiler/c2000_6.2.5/bin/cl2000" -v28 -ml -mt --cla_support=cla0 -g --define="_DEBUG" --define="LARGE_MODEL" --quiet --verbose_diagnostics --diag_warning=225 --issue_remarks --output_all_syms --cdebug_asm_data -z -m"Example_2803xI2C_eeprom.map" --stack_size=0x780 --warn_sections -i"C:/ti/ccsv6/tools/compiler/c2000_6.2.5/lib" -i"C:/ti/ccsv6/tools/compiler/c2000_6.2.5/include" -i"C:/Users/Bartho Horn/Documents/Github/BatteryBestuurStelsel/DSP2803x_examples_ccsv5/i2c_eeprom" -i"C:/Users/Bartho Horn/Documents/Github/BatteryBestuurStelsel/DSP2803x_common/lib" -i"C:/Users/Bartho Horn/libs/math/IQmath/v160/lib" --reread_libs --verbose_diagnostics --issue_remarks --xml_link_info="Example_2803xI2C_eeprom_linkInfo.xml" --entry_point=code_start --rom_model -o "Example_2803xI2C_eeprom.out" $(ORDERED_OBJS)
+	"C:/Program Files (x86)/Texas Instruments/C2000 Code Generation Tools 6.0.3/bin/cl2000" -v28 -ml -mt --cla_support=cla0 -g --define="_DEBUG" --define="LARGE_MODEL" --quiet --verbose_diagnostics --diag_warning=225 --issue_remarks --output_all_syms --cdebug_asm_data -z -m"Example_2803xI2C_eeprom.map" --stack_size=0x780 --warn_sections -i"C:/Program Files (x86)/Texas Instruments/C2000 Code Generation Tools 6.0.3/lib" -i"C:/Program Files (x86)/Texas Instruments/C2000 Code Generation Tools 6.0.3/include" -i"C:/Users/barth/Documents/Github/BatteryBestuurStelsel/DSP2803x_examples_ccsv5/i2c_eeprom" -i"C:/Users/barth/Documents/Github/BatteryBestuurStelsel/DSP2803x_common/lib" -i"C:/Users/barth/libs/math/IQmath/v160/lib" --reread_libs --verbose_diagnostics --issue_remarks --xml_link_info="Example_2803xI2C_eeprom_linkInfo.xml" --entry_point=code_start --rom_model -o "Example_2803xI2C_eeprom.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
