@@ -358,8 +358,8 @@ void CAN_Output_All(void)
     union bits32 TxData;
     int i;
 
-    if(OBD_debug == 1)
-    {
+   /* if(OBD_debug == 1)
+    {*/
         //Battery data
         TxData.asFloat=Voltage_total; CANTransmit(0x700, 4, TxData.asUint,5);
         //	queue_insert(0x700, 4, TxData.asUint, 5, &CAN_queue); //insert into queue
@@ -549,8 +549,8 @@ void CAN_Output_All(void)
         CANTransmit(0x718, 0x88, Acewell_Data & 0xF, 5); //LEDS*/
         //queue_insert(0x718, 0x88, Acewell_Data & 0xF, 5, &CAN_queue);
 
-        OBD_debug = 0;
-    }
+    /*    OBD_debug = 1;
+    }*/
 }
 
 void CANSlaveConfig(void)
