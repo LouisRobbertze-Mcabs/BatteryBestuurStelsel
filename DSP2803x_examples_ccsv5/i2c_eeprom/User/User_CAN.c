@@ -114,7 +114,7 @@ void CANMailboxConfig(void)
 {
     ECanaRegs.CANGAM.all = 0x00000000;              // Global All-Pass Mask (Don't care: 1, Match: 0)
 
-    ECanaRegs.CANMD.all = 0x0000000E;               // Message Direction (Rx: 1, Tx: 0)                                 //bartho    0x00000006
+    ECanaRegs.CANMD.all = 0x000000FE;               // Message Direction (Rx: 1, Tx: 0)         //bartho    0x00000006
 
     // Tx Mailbox (0x00000001)
     ECanaMboxes.MBOX0.MSGCTRL.all = 0x00000004; // Transmit 4 bytes of data
@@ -123,23 +123,53 @@ void CANMailboxConfig(void)
     ECanaMboxes.MBOX1.MSGID.all = 0;                // Standard ID length, acceptance masks used, no remote frames
     ECanaMboxes.MBOX1.MSGID.bit.STDMSGID = NodeID;  // Current address loaded
     ECanaLAMRegs.LAM1.all = 0x00000000;             // Accept standard IDs with matching address
-
     ECanaMboxes.MBOX1.MSGCTRL.all = 0x00000005; // Receive 4 bytes of data
 
     // Rx Mailbox (0x00000003)
     ECanaMboxes.MBOX2.MSGID.all = 0;                // Standard ID length, acceptance masks used, no remote frames      //bartho
     ECanaMboxes.MBOX2.MSGID.bit.STDMSGID = 0x0611;  // Current address loaded                                           //bartho
     ECanaLAMRegs.LAM2.all = 0x00000000;             // Accept standard IDs with matching address                        //bartho
-    ECanaMboxes.MBOX2.MSGCTRL.all = 0x00000008; // Receive 8 bytes of data                                              //bartho
+    ECanaMboxes.MBOX2.MSGCTRL.all = 0x00000008;     // Receive 8 bytes of data                                              //bartho
 
 
     // Rx Mailbox (0x00000004)
     ECanaMboxes.MBOX3.MSGID.all = 0;                // Standard ID length, acceptance masks used, no remote frames      //bartho
-    ECanaMboxes.MBOX3.MSGID.bit.STDMSGID = 0x011;  // Current address loaded                                           //bartho
+    ECanaMboxes.MBOX3.MSGID.bit.STDMSGID = 0x011;   // Current address loaded                                           //bartho
     ECanaLAMRegs.LAM3.all = 0x00000000;             // Accept standard IDs with matching address                        //bartho
-    ECanaMboxes.MBOX3.MSGCTRL.all = 0x00000005; // Receive 5 bytes of data                                              //bartho
+    ECanaMboxes.MBOX3.MSGCTRL.all = 0x00000005;     // Receive 5 bytes of data                                              //bartho
 
-    ECanaRegs.CANME.all = 0x0000000E;               // Enable Rx Mailbox                                                //bartho    0x00000006
+
+    // Bartho Edit to ADD CANopen receive and transmit mailboxes
+
+    // Rx Mailbox (0x00000005)                      // NMT_MOSI
+    ECanaMboxes.MBOX4.MSGID.all = 0;                // Standard ID length, acceptance masks used, no remote frames
+    ECanaMboxes.MBOX4.MSGID.bit.STDMSGID = 0x1D;    // Current address loaded
+    ECanaLAMRegs.LAM4.all = 0x00000000;             // Accept standard IDs with matching address
+    ECanaMboxes.MBOX4.MSGCTRL.all = 0x00000002;     // Receive 2 bytes of data
+
+    // Rx Mailbox (0x00000006)                      // PDO1_MOSI
+    ECanaMboxes.MBOX5.MSGID.all = 0;                // Standard ID length, acceptance masks used, no remote frames
+    ECanaMboxes.MBOX5.MSGID.bit.STDMSGID = 0x21D;   // Current address loaded
+    ECanaLAMRegs.LAM5.all = 0x00000000;             // Accept standard IDs with matching address
+    ECanaMboxes.MBOX5.MSGCTRL.all = 0x00000008;     // Receive 8 bytes of data
+
+    // Rx Mailbox (0x00000007)                      // SDO_MOSI
+    ECanaMboxes.MBOX6.MSGID.all = 0;                // Standard ID length, acceptance masks used, no remote frames
+    ECanaMboxes.MBOX6.MSGID.bit.STDMSGID = 0x61D;   // Current address loaded
+    ECanaLAMRegs.LAM6.all = 0x00000000;             // Accept standard IDs with matching address
+    ECanaMboxes.MBOX6.MSGCTRL.all = 0x00000008;     // Receive 8 bytes of data
+
+    // Tx Mailbox (0x00000008)                      // Heartbeat_MISO
+    ECanaMboxes.MBOX7.MSGCTRL.all = 0x00000001;     // Transmit 1 bytes of data
+
+    // Tx Mailbox (0x00000009)                      // PDO1_MISO
+    ECanaMboxes.MBOX8.MSGCTRL.all = 0x00000008;     // Transmit 4 bytes of data
+
+    // Tx Mailbox (0x000000010)                     // SDO_MISO
+    ECanaMboxes.MBOX9.MSGCTRL.all = 0x00000008;     // Transmit 4 bytes of data
+
+
+    ECanaRegs.CANME.all = 0x000000FE;               // Enable Rx Mailbox    //bartho    0x00000006
 
     // The Tx Mailbox MSGID has to be set as required and then enabled
 }
@@ -252,22 +282,22 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
         }
         else                                                                                 //Charger flag set. typically power disconnected
         {
-          //  if(delay == 1)
-          //  {
-                //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                                //disconnect charger
-           //     delay--;
-           //     Charger_status = 0;
-          //  }
-         //   else if(delay == 0)
-         //   {
+            //  if(delay == 1)
+            //  {
+            //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                                //disconnect charger
+            //     delay--;
+            //     Charger_status = 0;
+            //  }
+            //   else if(delay == 0)
+            //   {
 
-                //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                              //disconnect charger
-                ContactorOut = 0;                                                           //turn off contactor
-                delay = 0;
-                Charger_status = 0;															//add counter to monitor if charger is unplugged?
-                Charging_animation = 0;
-                Current_max = 5;															//speel rond om charge stabiel te kry
-         //   }
+            //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                              //disconnect charger
+            ContactorOut = 0;                                                           //turn off contactor
+            delay = 0;
+            Charger_status = 0;															//add counter to monitor if charger is unplugged?
+            Charging_animation = 0;
+            Current_max = 5;															//speel rond om charge stabiel te kry
+            //   }
         }
 
         ChargerVoltage = ChgVoltage;
@@ -366,7 +396,7 @@ void CAN_Output_All(void)
     //Battery data
     if((Aux_Control == 1) && (Auxilliary_counter > 1))
     {
-     /*   TxData.asFloat=Voltage_total; CANTransmit(0x700, 4, TxData.asUint,5);
+        /*   TxData.asFloat=Voltage_total; CANTransmit(0x700, 4, TxData.asUint,5);
 
         //	queue_insert(0x700, 4, TxData.asUint, 5, &CAN_queue); //insert into queue
         for(i=0;i<1500;i++){};
@@ -624,7 +654,7 @@ void CAN_Output_All(void)
         for(i=0;i<1500;i++){};
         //toets2 = ((int)(SOC*100)) & 0xFF;
 
-*/
+         */
         CANTransmit(0x718, 0x4, ((int)(Voltage_total*10)), 5); //Voltage
 
         for(i=0;i<1500;i++){};
@@ -705,6 +735,8 @@ void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Byte
     {
         //Start transmit
         ECanaRegs.CANME.all = 0x0000000E;                   	// Disable Tx Mailbox
+
+       // ECanaRegs.CANME.bit.ME0 = 0;                            // Disable Tx Mailbox
 
         //Bytes
         ECanaMboxes.MBOX0.MSGCTRL.all = Bytes;              	// Transmit x bytes of data
