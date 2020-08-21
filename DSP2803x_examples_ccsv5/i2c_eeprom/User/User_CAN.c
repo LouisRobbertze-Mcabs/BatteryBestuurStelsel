@@ -163,10 +163,10 @@ void CANMailboxConfig(void)
     ECanaMboxes.MBOX7.MSGCTRL.all = 0x00000001;     // Transmit 1 bytes of data
 
     // Tx Mailbox (0x00000009)                      // PDO1_MISO
-    ECanaMboxes.MBOX8.MSGCTRL.all = 0x00000008;     // Transmit 4 bytes of data
+    ECanaMboxes.MBOX8.MSGCTRL.all = 0x00000008;     // Transmit 8 bytes of data
 
     // Tx Mailbox (0x000000010)                     // SDO_MISO
-    ECanaMboxes.MBOX9.MSGCTRL.all = 0x00000008;     // Transmit 4 bytes of data
+    ECanaMboxes.MBOX9.MSGCTRL.all = 0x00000008;     // Transmit 8 bytes of data
 
 
     ECanaRegs.CANME.all = 0x000000FE;               // Enable Rx Mailbox    //bartho    0x00000006
@@ -180,8 +180,8 @@ void CANInterruptConfig(void)
 
     EALLOW;
     ECanaRegs.CANGIM.all = 0x00000003;              // Enable ECAN0INT and ECAN0INT interrupt lines
-    ECanaRegs.CANMIM.all = 0x0000000F;              // Allow interrupts for Mailbox 0 and 1 , 2,3
-    ECanaRegs.CANMIL.all = 0x00000001;              // Mailbox 0 triggers ECAN1INT line, Mailbox 1 triggers ECAN0INT line       //1 bartho
+    ECanaRegs.CANMIM.all = 0x000003FF;              // Allow interrupts for Mailbox 0 ~ 10
+    ECanaRegs.CANMIL.all = 0x00000381;              // Mailbox 0 triggers ECAN1INT line, Mailbox 1 triggers ECAN0INT line
     PieVectTable.ECAN0INTA = &can_rx_isr;           // Link Rx ISR function
     PieVectTable.ECAN1INTA = &can_tx_isr;           // Link Tx ISR function
     EDIS;
@@ -260,7 +260,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
                     else
                         Charging_animation = 1;	                                            //0 - not plugged in, 1 -plugged in
 
-                    CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8);             //charging started
+                    CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8, 0);             //charging started
                     PreCharge = 1;                          								//turn on precharge resistor
                 }
             }
@@ -268,12 +268,12 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
             {
                 if(delay == 1)                                                              //sit miskien check in om met die charger Vbat te meet
                 {
-                    CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                            //disconnect charger
+                    CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                            //disconnect charger
                     delay--;
                 }
                 else if(delay == 0)
                 {                                                   //turn off contactor
-                    CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                            //disconnect charger
+                    CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                            //disconnect charger
                     if(flagCharged == 1)
                         ContactorOut = 0;
                     Charging_animation = 0;
@@ -284,14 +284,14 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
         {
             //  if(delay == 1)
             //  {
-            //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                                //disconnect charger
+            //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                                //disconnect charger
             //     delay--;
             //     Charger_status = 0;
             //  }
             //   else if(delay == 0)
             //   {
 
-            //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                              //disconnect charger
+            //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                              //disconnect charger
             ContactorOut = 0;                                                           //turn off contactor
             delay = 0;
             Charger_status = 0;															//add counter to monitor if charger is unplugged?
@@ -322,66 +322,66 @@ void CANSlaveReception(void)
 
     switch (RxData)
     {
-    case 4: {TxData.asFloat=Voltage_total; CANTransmit(0, 4, TxData.asUint,5); break;}
-    case 5: {TxData.asFloat=Current; CANTransmit(0, 5, TxData.asUint,5); break;}
+    case 4: {TxData.asFloat=Voltage_total; CANTransmit(0, 4, TxData.asUint,5, 0); break;}
+    case 5: {TxData.asFloat=Current; CANTransmit(0, 5, TxData.asUint,5, 0); break;}
 
-    case 6: {TxData.asFloat=Voltage_low; CANTransmit(0, 6, TxData.asUint,5); break;}
-    case 7: {TxData.asFloat=Voltage_low_cell; CANTransmit(0, 7, TxData.asUint,5); break;}
+    case 6: {TxData.asFloat=Voltage_low; CANTransmit(0, 6, TxData.asUint,5, 0); break;}
+    case 7: {TxData.asFloat=Voltage_low_cell; CANTransmit(0, 7, TxData.asUint,5, 0); break;}
 
-    case 8: {TxData.asFloat=Voltage_high; CANTransmit(0, 8, TxData.asUint,5); break;}
-    case 9: {TxData.asFloat=Voltage_high_cell; CANTransmit(0, 9, TxData.asUint,5); break;}
+    case 8: {TxData.asFloat=Voltage_high; CANTransmit(0, 8, TxData.asUint,5, 0); break;}
+    case 9: {TxData.asFloat=Voltage_high_cell; CANTransmit(0, 9, TxData.asUint,5, 0); break;}
 
-    case 10: {TxData.asFloat=Voltage_avg; CANTransmit(0, 10, TxData.asUint,5); break;}
+    case 10: {TxData.asFloat=Voltage_avg; CANTransmit(0, 10, TxData.asUint,5, 0); break;}
 
-    case 11: {TxData.asFloat=Temperature_high; CANTransmit(0, 11, TxData.asUint,5); break;}
-    case 12: {TxData.asFloat=Temperature_high_cell; CANTransmit(0, 12, TxData.asUint, 5); break;}
+    case 11: {TxData.asFloat=Temperature_high; CANTransmit(0, 11, TxData.asUint,5, 0); break;}
+    case 12: {TxData.asFloat=Temperature_high_cell; CANTransmit(0, 12, TxData.asUint, 5, 0); break;}
 
-    case 13: {TxData.asFloat=Temperature_low; CANTransmit(0, 13, TxData.asUint,5); break;}
-    case 14: {TxData.asFloat=Temperature_low_cell; CANTransmit(0, 14, TxData.asUint, 5); break;}
+    case 13: {TxData.asFloat=Temperature_low; CANTransmit(0, 13, TxData.asUint,5, 0); break;}
+    case 14: {TxData.asFloat=Temperature_low_cell; CANTransmit(0, 14, TxData.asUint, 5, 0); break;}
 
-    case 15: {TxData.asFloat=Temperature_avg; CANTransmit(0, 15, TxData.asUint,5); break;}
+    case 15: {TxData.asFloat=Temperature_avg; CANTransmit(0, 15, TxData.asUint,5, 0); break;}
 
-    case 16: {TxData.asFloat=Auxilliary_Voltage; CANTransmit(0, 16, TxData.asUint, 5); break;}
-    case 17: {TxData.asFloat=SOC*100; CANTransmit(0, 17, TxData.asUint, 5); break;}
+    case 16: {TxData.asFloat=Auxilliary_Voltage; CANTransmit(0, 16, TxData.asUint, 5, 0); break;}
+    case 17: {TxData.asFloat=SOC*100; CANTransmit(0, 17, TxData.asUint, 5, 0); break;}
 
-    case 18: {TxData.asFloat= SOH_avg ; CANTransmit(0, 18, TxData.asUint,5); break;}					//r_avg
-    case 19: {TxData.asFloat=SOH_max; CANTransmit(0, 19, TxData.asUint,5); break;}						//rmaks
-    case 20: {TxData.asFloat=SOH_max_cell; CANTransmit(0, 20, TxData.asUint, 5); break;}				//rcell
+    case 18: {TxData.asFloat= SOH_avg ; CANTransmit(0, 18, TxData.asUint,5, 0); break;}					//r_avg
+    case 19: {TxData.asFloat=SOH_max; CANTransmit(0, 19, TxData.asUint,5, 0); break;}						//rmaks
+    case 20: {TxData.asFloat=SOH_max_cell; CANTransmit(0, 20, TxData.asUint, 5, 0); break;}				//rcell
 
     //cell voltage values
-    case 21: {TxData.asFloat=Voltages[0]; CANTransmit(0, 21, TxData.asUint,5); break;}
-    case 22: {TxData.asFloat=Voltages[1]; CANTransmit(0, 22, TxData.asUint,5); break;}
-    case 23: {TxData.asFloat=Voltages[2]; CANTransmit(0, 23, TxData.asUint,5); break;}
-    case 24: {TxData.asFloat=Voltages[3]; CANTransmit(0, 24, TxData.asUint,5); break;}
-    case 25: {TxData.asFloat=Voltages[4]; CANTransmit(0, 25, TxData.asUint,5); break;}
-    case 26: {TxData.asFloat=Voltages[5]; CANTransmit(0, 26, TxData.asUint,5); break;}
-    case 27: {TxData.asFloat=Voltages[6]; CANTransmit(0, 27, TxData.asUint,5); break;}
-    case 28: {TxData.asFloat=Voltages[7]; CANTransmit(0, 28, TxData.asUint,5); break;}
-    case 29: {TxData.asFloat=Voltages[8]; CANTransmit(0, 29, TxData.asUint,5); break;}
-    case 30: {TxData.asFloat=Voltages[9]; CANTransmit(0, 30, TxData.asUint,5); break;}
-    case 31: {TxData.asFloat=Voltages[10]; CANTransmit(0, 31, TxData.asUint,5); break;}
-    case 32: {TxData.asFloat=Voltages[11]; CANTransmit(0, 32, TxData.asUint,5); break;}
-    case 33: {TxData.asFloat=Voltages[12]; CANTransmit(0, 33, TxData.asUint,5); break;}
-    case 34: {TxData.asFloat=Voltages[13]; CANTransmit(0, 34, TxData.asUint,5); break;}
-    case 35: {TxData.asFloat=Voltages[14]; CANTransmit(0, 35, TxData.asUint,5); break;}
+    case 21: {TxData.asFloat=Voltages[0]; CANTransmit(0, 21, TxData.asUint,5, 0); break;}
+    case 22: {TxData.asFloat=Voltages[1]; CANTransmit(0, 22, TxData.asUint,5, 0); break;}
+    case 23: {TxData.asFloat=Voltages[2]; CANTransmit(0, 23, TxData.asUint,5, 0); break;}
+    case 24: {TxData.asFloat=Voltages[3]; CANTransmit(0, 24, TxData.asUint,5, 0); break;}
+    case 25: {TxData.asFloat=Voltages[4]; CANTransmit(0, 25, TxData.asUint,5, 0); break;}
+    case 26: {TxData.asFloat=Voltages[5]; CANTransmit(0, 26, TxData.asUint,5, 0); break;}
+    case 27: {TxData.asFloat=Voltages[6]; CANTransmit(0, 27, TxData.asUint,5, 0); break;}
+    case 28: {TxData.asFloat=Voltages[7]; CANTransmit(0, 28, TxData.asUint,5, 0); break;}
+    case 29: {TxData.asFloat=Voltages[8]; CANTransmit(0, 29, TxData.asUint,5, 0); break;}
+    case 30: {TxData.asFloat=Voltages[9]; CANTransmit(0, 30, TxData.asUint,5, 0); break;}
+    case 31: {TxData.asFloat=Voltages[10]; CANTransmit(0, 31, TxData.asUint,5, 0); break;}
+    case 32: {TxData.asFloat=Voltages[11]; CANTransmit(0, 32, TxData.asUint,5, 0); break;}
+    case 33: {TxData.asFloat=Voltages[12]; CANTransmit(0, 33, TxData.asUint,5, 0); break;}
+    case 34: {TxData.asFloat=Voltages[13]; CANTransmit(0, 34, TxData.asUint,5, 0); break;}
+    case 35: {TxData.asFloat=Voltages[14]; CANTransmit(0, 35, TxData.asUint,5, 0); break;}
 
     //cell Temperature values
-    case 36: {TxData.asFloat=Temperatures[0]; CANTransmit(0, 36, TxData.asUint,5); break;}
-    case 37: {TxData.asFloat=Temperatures[1]; CANTransmit(0, 37, TxData.asUint,5); break;}
-    case 38: {TxData.asFloat=Temperatures[2]; CANTransmit(0, 38, TxData.asUint,5); break;}
-    case 39: {TxData.asFloat=Temperatures[3]; CANTransmit(0, 39, TxData.asUint,5); break;}
-    case 40: {TxData.asFloat=Temperatures[4]; CANTransmit(0, 40, TxData.asUint,5); break;}
-    case 41: {TxData.asFloat=Temperatures[5]; CANTransmit(0, 41, TxData.asUint,5); break;}
-    case 42: {TxData.asFloat=Temperatures[6]; CANTransmit(0, 42, TxData.asUint,5); break;}
-    case 43: {TxData.asFloat=Temperatures[7]; CANTransmit(0, 43, TxData.asUint,5); break;}
-    case 44: {TxData.asFloat=Temperatures[8]; CANTransmit(0, 44, TxData.asUint,5); break;}
-    case 45: {TxData.asFloat=Temperatures[9]; CANTransmit(0, 45, TxData.asUint,5); break;}
-    case 46: {TxData.asFloat=Temperatures[10]; CANTransmit(0, 46, TxData.asUint,5); break;}
-    case 47: {TxData.asFloat=Temperatures[11]; CANTransmit(0, 47, TxData.asUint,5); break;}
-    case 48: {TxData.asFloat=Temperatures[12]; CANTransmit(0, 48, TxData.asUint,5); break;}
-    case 49: {TxData.asFloat=Temperatures[13]; CANTransmit(0, 49, TxData.asUint,5); break;}
-    case 50: {TxData.asFloat=Temperatures[14]; CANTransmit(0, 50, TxData.asUint,5); break;}
-    case 51: {TxData.asFloat=Temperatures[15]; CANTransmit(0, 51, TxData.asUint,5); break;}
+    case 36: {TxData.asFloat=Temperatures[0]; CANTransmit(0, 36, TxData.asUint,5, 0); break;}
+    case 37: {TxData.asFloat=Temperatures[1]; CANTransmit(0, 37, TxData.asUint,5, 0); break;}
+    case 38: {TxData.asFloat=Temperatures[2]; CANTransmit(0, 38, TxData.asUint,5, 0); break;}
+    case 39: {TxData.asFloat=Temperatures[3]; CANTransmit(0, 39, TxData.asUint,5, 0); break;}
+    case 40: {TxData.asFloat=Temperatures[4]; CANTransmit(0, 40, TxData.asUint,5, 0); break;}
+    case 41: {TxData.asFloat=Temperatures[5]; CANTransmit(0, 41, TxData.asUint,5, 0); break;}
+    case 42: {TxData.asFloat=Temperatures[6]; CANTransmit(0, 42, TxData.asUint,5, 0); break;}
+    case 43: {TxData.asFloat=Temperatures[7]; CANTransmit(0, 43, TxData.asUint,5, 0); break;}
+    case 44: {TxData.asFloat=Temperatures[8]; CANTransmit(0, 44, TxData.asUint,5, 0); break;}
+    case 45: {TxData.asFloat=Temperatures[9]; CANTransmit(0, 45, TxData.asUint,5, 0); break;}
+    case 46: {TxData.asFloat=Temperatures[10]; CANTransmit(0, 46, TxData.asUint,5, 0); break;}
+    case 47: {TxData.asFloat=Temperatures[11]; CANTransmit(0, 47, TxData.asUint,5, 0); break;}
+    case 48: {TxData.asFloat=Temperatures[12]; CANTransmit(0, 48, TxData.asUint,5, 0); break;}
+    case 49: {TxData.asFloat=Temperatures[13]; CANTransmit(0, 49, TxData.asUint,5, 0); break;}
+    case 50: {TxData.asFloat=Temperatures[14]; CANTransmit(0, 50, TxData.asUint,5, 0); break;}
+    case 51: {TxData.asFloat=Temperatures[15]; CANTransmit(0, 51, TxData.asUint,5, 0); break;}
     //case 52: {if(RxData2==0x8){Fan_Control = 1;}else if(RxData2==0x4){Fan_Control = 0;}; break;}
     }
 }
@@ -430,13 +430,13 @@ void CAN_Output_All(void)
         for(i=0;i<1500;i++){};
 
 
-        TxData.asFloat=Voltage_avg/*(float)testvariable2; CANTransmit(0x700, 10, TxData.asUint,5);							/////////////lksbhodfhx
+        TxData.asFloat=Voltage_avg(float)testvariable2; CANTransmit(0x700, 10, TxData.asUint,5);
 
         //	queue_insert(0x700, 10, TxData.asUint, 5, &CAN_queue);
         for(i=0;i<1500;i++){};
 
 
-        TxData.asFloat=Temperature_high /*(float)trip_counter; CANTransmit(0x700, 11, TxData.asUint,5); 						/////////dhjdghj
+        TxData.asFloat=Temperature_high (float)trip_counter; CANTransmit(0x700, 11, TxData.asUint,5);
 
         //	queue_insert(0x700, 11, TxData.asUint, 5, &CAN_queue);
         for(i=0;i<1500;i++){};
@@ -655,7 +655,7 @@ void CAN_Output_All(void)
         //toets2 = ((int)(SOC*100)) & 0xFF;
 
          */
-        CANTransmit(0x718, 0x4, ((int)(Voltage_total*10)), 5); //Voltage
+        CANTransmit(0x718, 0x4, ((int)(Voltage_total*10)), 5, 0); //Voltage
 
         for(i=0;i<1500;i++){};
 
@@ -663,9 +663,9 @@ void CAN_Output_All(void)
 
 
         if(Charging_animation == 1)
-            CANTransmit(0x718, 0x11, ((int)(Charging_Animation(SOC))), 5);
+            CANTransmit(0x718, 0x11, ((int)(Charging_Animation(SOC))), 5, 0);
         else
-            CANTransmit(0x718, 0x11, ((int)(SOC)), 5); //SOC
+            CANTransmit(0x718, 0x11, ((int)(SOC)), 5, 0); //SOC
         //	queue_insert(0x718, 0x11, ((int)(SOC*100)) & 0xFF, 5, &CAN_queue);
 
         for(i=0;i<1500;i++){};
@@ -682,7 +682,7 @@ void CAN_Output_All(void)
             Acewell_Data = Acewell_Data + 4;
 
 
-        CANTransmit(0x718, 0x88, Acewell_Data & 0xF, 5); //LEDS*/
+        CANTransmit(0x718, 0x88, Acewell_Data & 0xF, 5, 0); //LEDS*/
 
 
     }
@@ -727,43 +727,76 @@ void CANSlaveConfig(void)
     }
 }
 
-void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Bytes)      //destination, txdataH, txdataL,  bytes
+void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Bytes, Uint16 Mailbox)      //destination, txdataH, txdataL, bytes, Mailbox
 {
-    //struct ECAN_REGS ECanaShadow;
+    //maybe add check when mailbox is busy transmitting?
 
     if (ECanaRegs.CANES.all == 0 || ECanaRegs.CANES.all == 0x30000 || ECanaRegs.CANES.all == 0x30001)		//Maybe add more??     	CAN bus ready for action		/*|| ECanaRegs.CANES.all == 0x10000*/
     {
-        //Start transmit
-        ECanaRegs.CANME.all = 0x0000000E;                   	// Disable Tx Mailbox
 
-       // ECanaRegs.CANME.bit.ME0 = 0;                            // Disable Tx Mailbox
+        switch(Bytes)
+        {
+        case 0 :
+            if(ECanaRegs.CANTRS.bit.TRS0 == 0)                          // Check to see if previous transmit has completed
+            {
+                ECanaRegs.CANME.bit.ME0 = 0;                            // Disable Tx Mailbox
+                ECanaMboxes.MBOX0.MSGCTRL.all = Bytes;              	// Transmit x bytes of data
+                ECanaMboxes.MBOX0.MSGID.all = 0;                    	// Standard ID length, acceptance masks used, no remote frames
+                ECanaMboxes.MBOX0.MSGID.bit.STDMSGID = Destination; 	// Load destination address
+                ECanaMboxes.MBOX0.MDL.all = TxDataL;
+                ECanaMboxes.MBOX0.MDH.all = TxDataH;
 
-        //Bytes
-        ECanaMboxes.MBOX0.MSGCTRL.all = Bytes;              	// Transmit x bytes of data
-        ECanaMboxes.MBOX0.MSGID.all = 0;                    	// Standard ID length, acceptance masks used, no remote frames
-        ECanaMboxes.MBOX0.MSGID.bit.STDMSGID = Destination; 	// Load destination address   Destination
+                ECanaRegs.CANME.bit.ME0 = 1;                  	        // Enable Tx Mailbox
+                ECanaRegs.CANTRS.bit.TRS0 = 1;                          // Set transmit request
+            }
+            break;
+        case 7 :
+            if(ECanaRegs.CANTRS.bit.TRS7 == 0)                          // Check to see if previous transmit has completed
+            {
+                ECanaRegs.CANME.bit.ME7 = 0;                            // Disable Tx Mailbox
+                ECanaMboxes.MBOX7.MSGCTRL.all = Bytes;                  // Transmit x bytes of data
+                ECanaMboxes.MBOX7.MSGID.all = 0;                        // Standard ID length, acceptance masks used, no remote frames
+                ECanaMboxes.MBOX7.MSGID.bit.STDMSGID = Destination;     // Load destination address
+                ECanaMboxes.MBOX7.MDL.all = TxDataL;
+                ECanaMboxes.MBOX7.MDH.all = TxDataH;
 
-        ECanaMboxes.MBOX0.MDL.all = TxDataL;
-        ECanaMboxes.MBOX0.MDH.all = TxDataH;
+                ECanaRegs.CANME.bit.ME7 = 1;                            // Enable Tx Mailbox
+                ECanaRegs.CANTRS.bit.TRS7 = 1;                          // Set transmit request
+            }
+            break;
+        case 8 :
+            if(ECanaRegs.CANTRS.bit.TRS8 == 0)                          // Check to see if previous transmit has completed
+            {
+                ECanaRegs.CANME.bit.ME8 = 0;                            // Disable Tx Mailbox
+                ECanaMboxes.MBOX8.MSGCTRL.all = Bytes;                  // Transmit x bytes of data
+                ECanaMboxes.MBOX8.MSGID.all = 0;                        // Standard ID length, acceptance masks used, no remote frames
+                ECanaMboxes.MBOX8.MSGID.bit.STDMSGID = Destination;     // Load destination address
+                ECanaMboxes.MBOX8.MDL.all = TxDataL;
+                ECanaMboxes.MBOX8.MDH.all = TxDataH;
 
-        ECanaRegs.CANME.all = 0x0000000F;                   	// Enable Tx Mailbox
-        ECanaRegs.CANTRS.all = 0x00000001;                  	// Set transmit request
+                ECanaRegs.CANME.bit.ME8 = 1;                            // Enable Tx Mailbox
+                ECanaRegs.CANTRS.bit.TRS8 = 1;                          // Set transmit request
+            }
+            break;
+        case 9 :
+            if(ECanaRegs.CANTRS.bit.TRS9 == 0)                          // Check to see if previous transmit has completed
+            {
+                ECanaRegs.CANME.bit.ME9 = 0;                            // Disable Tx Mailbox
+                ECanaMboxes.MBOX9.MSGCTRL.all = Bytes;                  // Transmit x bytes of data
+                ECanaMboxes.MBOX9.MSGID.all = 0;                        // Standard ID length, acceptance masks used, no remote frames
+                ECanaMboxes.MBOX9.MSGID.bit.STDMSGID = Destination;     // Load destination address
+                ECanaMboxes.MBOX9.MDL.all = TxDataL;
+                ECanaMboxes.MBOX9.MDH.all = TxDataH;
+
+                ECanaRegs.CANME.bit.ME9 = 1;                            // Enable Tx Mailbox
+                ECanaRegs.CANTRS.bit.TRS9 = 1;                          // Set transmit request
+            }
+            break;
+        }
     }
-    else 														//reset fault on CAN bus
+    else 														    //reset fault on CAN bus
     {
-        ECanaRegs.CANES.all = 0xFFF0000;						//reset flags		0x1BB0000
+        ECanaRegs.CANES.all = 0xFFF0000;						    //reset flags		0x1BB0000
         //add reset error warning, maybe to BMS flags
     }
-    /*	else if (ECanaRegs.CANES.bit.EP == 1)						//Warning, Error-passive state - Turn bus off
-	{
-		ECanaRegs.CANES.all = 0xFFFFFFFF;						//acknowledge all errors
-
-		EALLOW;
-		// Configure Master Control register
-		ECanaShadow.CANMC.all = ECanaRegs.CANMC.all;
-		ECanaShadow.CANMC.bit.PDR = 1; 							//request powerdown
-		ECanaShadow.CANMC.bit.WUBA = 1;							//Bartho testing Wake up on bus activity..
-		ECanaRegs.CANMC.all = ECanaShadow.CANMC.all;
-		EDIS;
-	}*/
 }

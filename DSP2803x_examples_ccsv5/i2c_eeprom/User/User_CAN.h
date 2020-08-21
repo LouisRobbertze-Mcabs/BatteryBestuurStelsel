@@ -18,6 +18,6 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH);
 void CANSlaveReception(void);
 void CAN_Output_All(void);
 void CANSlaveConfig(void);
-void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Bytes);
+void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Bytes, Uint16 Mailbox);
 
 #endif /* USER_USER_CAN_H_ */

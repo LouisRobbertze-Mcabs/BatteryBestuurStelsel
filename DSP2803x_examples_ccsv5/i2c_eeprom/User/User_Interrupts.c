@@ -222,6 +222,7 @@ __interrupt void can_rx_isr(void)
     }
     else if (ECanaRegs.CANRMP.bit.RMP3 == 1)                          //NMT_MOSI
     {
+        //Add CANTRANSMIT here to deal with the answer? Maybe?
         //CAN_Charger_dataL = ECanaMboxes.MBOX3.MDL.all;                // Data taken out of direct mailbox
         ECanaRegs.CANRMP.bit.RMP3 = 1;
 
@@ -246,13 +247,28 @@ __interrupt void can_rx_isr(void)
         ECanaRegs.CANRMP.bit.RMP6 = 1;
     }
 
-    //ECanaRegs.CANRMP.all = 0xFFFFFFFF;          // Reset receive mailbox flags
-    PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;     // Acknowledge this interrupt to receive more interrupts from group 9
+    //ECanaRegs.CANRMP.all = 0xFFFFFFFF;            // Reset receive mailbox flags
+    PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9
 }
 
 __interrupt void can_tx_isr(void)
 {
+    if(ECanaRegs.CANTA.bit.TA0 == 1)                //normal CAN transmit for CHG and speedometer
+    {
+        ECanaRegs.CANTA.bit.TA0 = 1;
+    }
+    else if(ECanaRegs.CANTA.bit.TA7 == 1)            //Heartbeat_MISO CAN transmit
+    {
+        ECanaRegs.CANTA.bit.TA7 = 1;
+    }
+    else if(ECanaRegs.CANTA.bit.TA8 == 1)            //PDO1_MISO CAN transmit
+    {
+        ECanaRegs.CANTA.bit.TA8 = 1;
+    }
+    else if(ECanaRegs.CANTA.bit.TA9 == 1)            //SDO_MISO CAN transmit
+    {
+        ECanaRegs.CANTA.bit.TA9 = 1;
+    }
 
-    ECanaRegs.CANTA.all = 0xFFFFFFFF;           // Reset tranmission flags
-    PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;     // Acknowledge this interrupt to receive more interrupts from group 9
+    PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9
 }
