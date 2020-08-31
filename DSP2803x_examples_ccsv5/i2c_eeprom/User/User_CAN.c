@@ -143,7 +143,7 @@ void CANMailboxConfig(void)
 
     // Rx Mailbox (0x00000005)                      // NMT_MOSI
     ECanaMboxes.MBOX4.MSGID.all = 0;                // Standard ID length, acceptance masks used, no remote frames
-    ECanaMboxes.MBOX4.MSGID.bit.STDMSGID = 0x1D;    // Current address loaded
+    ECanaMboxes.MBOX4.MSGID.bit.STDMSGID = 0x00;    // Current address loaded
     ECanaLAMRegs.LAM4.all = 0x00000000;             // Accept standard IDs with matching address
     ECanaMboxes.MBOX4.MSGCTRL.all = 0x00000002;     // Receive 2 bytes of data
 

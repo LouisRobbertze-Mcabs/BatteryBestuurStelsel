@@ -73,7 +73,8 @@ void Initialise_BMS(void)
     Bq76940_Init();
     //Shut_D_BQ();
 
-    //Calibrate_Current();
+
+    NMT_State = 0x7F;                                       //Enter NMT pre-operational state from initialisation state
 
     // Enable the watchdog
     EALLOW;

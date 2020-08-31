@@ -36,7 +36,7 @@ void main(void)
 			CANChargerReception(CAN_Charger_dataL, CAN_Charger_dataH);
 
 			Balance(5,Vbalance);
-			//Calculate_Current();
+
 			Battery_Status();
 			CAN_Output_All();
 
