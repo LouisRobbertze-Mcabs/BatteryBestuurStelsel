@@ -28,13 +28,15 @@ extern volatile Uint16 DataOut2;
 extern volatile Uint16 Received;
 
 /////////////////////////////////////////////
-extern volatile Uint16 flagTemp;
+extern volatile Uint16 flagTemp_Discharge;
+extern volatile Uint16 flagTemp_Charge;
 extern volatile Uint16 flagCurrent;
 extern volatile Uint16 flagVoltage;
 
 extern volatile Uint16 flagCharged;
 extern volatile Uint16 flagDischarged;
 extern volatile Uint16 balance;
+extern volatile Uint16 flag_Pre_Charge;
 /////////////////////////////////////////////
 
 extern volatile Uint16 counter_2Hz;
@@ -42,6 +44,9 @@ extern volatile Uint16 counter_2Hz;
 extern float Ireference;
 
 extern volatile Uint16 Charger_status;
+extern volatile Uint16 Charging;
+extern volatile Uint16 Heating;
+extern volatile Uint16 Cooling;
 extern volatile int system_status;
 
 extern volatile float ChargerVoltage;
@@ -177,7 +182,8 @@ extern volatile Uint32 CAN_Charger_dataH;
 
 extern volatile Uint32 System_State;
 
-extern volatile Uint32 BMS_Status;
+extern volatile Uint16 BMS_Status;
+extern volatile Uint16 BMS_Error;
 extern volatile long trip_counter;
 extern volatile Uint32 testcounter;
 
@@ -192,5 +198,8 @@ extern volatile long timecounterseconds;
 extern volatile float Charging_animation;
 
 extern volatile Uint32 NMT_State;
+
+extern volatile Uint16 SOP_discharge;
+extern volatile Uint16 SOP_charge;
 
 #endif /* USER_GLOBALS_H_ */

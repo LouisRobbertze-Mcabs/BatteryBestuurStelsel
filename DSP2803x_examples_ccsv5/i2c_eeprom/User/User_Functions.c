@@ -159,7 +159,7 @@ void  Read_Cell_Voltages(void)
 {
     // Read data from EEPROM section //
     int i;
-    Voltage_total = 0;
+    //Voltage_total = 0;                                  //foutief! mag nie nal verwys nie............
     //reset values
     //Voltage_low = 10;
     float Voltages_backup5 = Voltages[5];
@@ -251,7 +251,7 @@ void Process_Voltages(void)
 
     Auxilliary_counter++;
 
-/////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     if(Current < 80)                                                                //check current to reduce false trips
     {
 
@@ -284,7 +284,7 @@ void Process_Voltages(void)
             PreCharge = 1;
         }
     }
-/////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
 
     if(Voltage_high<Vchargedflagreset )
         flagCharged = 0;
@@ -511,47 +511,24 @@ void Read_Temperatures(void)
         Temperature_high_cell = temp_high_cell;
         Temperature_low =temp_Temperature_low;
         Temperature_low_cell = temp_low_cell;
-
-        if(Temperature_high> Tmax || Temperature_low<Tmin)
-        {
-            //flag = 1;
-        }
-
-
-        /*	if((Temperature_avg - Temperatures[15])> 4 && Temperatures[15]<50 && Temperature_avg>10&& Voltage_low > Vmin && balance == 0 && temptimer ==0)				//4.5 en 25sit net aan bo 25 grade celsius
-		{
-			Fan_Control = 1;
-			temptimer = 1;
-		}
-
-		if(temptimer > 0)
-			temptimer++;
-		if (temptimer > 180)
-		{
-			temptimer = 0;
-			Fan_Control = 0;
-		}*/
-
-
-
-
-        /*	if((Temperature_avg - Temperatures[15])> 4.5 && Temperatures[15]<50 && Temperature_avg>10&& Voltage_low > Vmin && balance == 0)				//4.5 en 25sit net aan bo 25 grade celsius
-		{
-			Fan_Control = 1;
-			temptimer
-		}
-		else if(GpioDataRegs.GPADAT.bit.GPIO19 == 1 && (Temperature_avg - Temperatures[15])> 3 && Temperature_avg>8 && Voltage_low > Vmin && balance == 0)//bly aan solank 3.5 en 23
-		{
-			Fan_Control = 1;
-		}
-		else
-			Fan_Control = 0;*/			//0
     }
+}
 
-    if(flag == 1)
-        flagTemp = 1;
-    else if(flag == 0)
-        flagTemp = 0;
+void Process_Temperatures(void)
+{
+    if(Temperature_high > 55 || Temperature_low < -10)
+    {
+        flagTemp_Discharge = 1;
+    }
+    else
+        flagTemp_Discharge = 0;
+
+    if(Temperature_high > 50 || Temperature_low < 0)
+    {
+        flagTemp_Charge = 1;
+    }
+    else
+        flagTemp_Charge = 0;
 }
 
 void Balance(int period, float reference)
@@ -827,7 +804,7 @@ void Calculate_SOC()
         SOC_t = 0;
     }
     SOCc = SOC - (Current*0.000164);				//coulomb counter      Ampere sec -> Ampere huur  	0.000185			1/150A*3600s
-                                                       //                                                0.000164            1/170*2*3600s
+    //                                                0.000164            1/170*2*3600s
     if(SOC_t > 5400)								//delay of 90 min maybe do 60 min?
         Wsoc = 0;
     else
@@ -873,25 +850,65 @@ void Calibrate_Current_charger()
 
 void Battery_Status(void)
 {
-    BMS_Status = 0;
+    //check this
 
-    if(balance == 1)
-        BMS_Status = BMS_Status + 1;
-    if(flagCharged == 1)
-        BMS_Status = BMS_Status + 2;
-    if(flagCurrent == 1)
-        BMS_Status = BMS_Status + 4;
-    if(flagVoltage == 1)
-        BMS_Status = BMS_Status + 8;
-    if(flagTemp == 1)
-        BMS_Status = BMS_Status + 16;
+    Uint16 BMS_Status_Temp = 0;
+
+    if(GpioDataRegs.GPADAT.bit.GPIO20 == 1)                 //48V supply (High Current)
+        BMS_Status_Temp = BMS_Status_Temp + 1;
+    if(GpioDataRegs.GPADAT.bit.GPIO15 == 1)                 //12V supply (High Current)
+        BMS_Status_Temp = BMS_Status_Temp + 2;
+    if(GpioDataRegs.GPADAT.bit.GPIO6 == 1)                  //12V supply (low Current)    - check if inverse
+        BMS_Status_Temp = BMS_Status_Temp + 4;
+    if(GpioDataRegs.GPADAT.bit.GPIO21 == 1)                 //Pre-charge
+        BMS_Status_Temp = BMS_Status_Temp + 8;
+    if(balance == 1)                                        //cell balancing
+        BMS_Status_Temp = BMS_Status_Temp + 16;
+    if(Charging == 1)                                       //add charging flag
+        BMS_Status_Temp = BMS_Status_Temp + 32;
+    if(Charger_status == 1)                                 //add charger connected flag
+        BMS_Status_Temp = BMS_Status_Temp + 64;
+    if(GpioDataRegs.GPADAT.bit.GPIO22 == 1)                 //add keyswitch 1 flag        - still outstanding (Hardware changed)
+        BMS_Status_Temp = BMS_Status_Temp + 128;
+    if(GpioDataRegs.GPADAT.bit.GPIO24 == 1)                 //add keyswitch 2 flag
+        BMS_Status_Temp = BMS_Status_Temp + 256;
+    if(Cooling == 1)                                        //add cooling flag
+        BMS_Status_Temp = BMS_Status_Temp + 512;
+    if(Heating == 1)                                        //add heating flag
+        BMS_Status_Temp = BMS_Status_Temp + 1024;
+
+    BMS_Status = BMS_Status_Temp;                               //update setup
+}
+
+void Battery_Error(void)
+{
+    Uint16 BMS_Error_Temp = 0;
+
+    if(flagVoltage == 1)                                    //voltage flag
+        BMS_Error_Temp = BMS_Error_Temp + 1;
+    if(flagDischarged == 2)                                 //voltage critical flag
+        BMS_Error_Temp = BMS_Error_Temp + 2;
+    if(flagCurrent == 1)                                    //over current flag
+        BMS_Error_Temp = BMS_Error_Temp + 4;
+    if(flag_Pre_Charge == 1)                                //pre-charge error
+        BMS_Error_Temp = BMS_Error_Temp + 8;
+    if(flagTemp_Discharge == 1)
+        BMS_Error_Temp = BMS_Error_Temp + 16;
+    if(flagTemp_Charge == 1)
+        BMS_Error_Temp = BMS_Error_Temp + 32;
+
+
+    //tempBMS
+    //end of life
+
     if(flagDischarged == 1)
-        BMS_Status = BMS_Status + 32;
+        BMS_Error_Temp = BMS_Error_Temp + 64;
     if(Charger_status == 1)
-        BMS_Status = BMS_Status + 64;
-    if(KeySwitch == 1)
-        BMS_Status = BMS_Status + 128;
-    //Extra flags are a possibility
+        BMS_Error_Temp = BMS_Error_Temp + 128;
+
+        //Extra flags are a possibility
+
+    BMS_Error = BMS_Error_Temp;                               //update setup
 }
 
 float Charging_Animation(float real_SOC)

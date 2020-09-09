@@ -114,7 +114,7 @@ void CANMailboxConfig(void)
 {
     ECanaRegs.CANGAM.all = 0x00000000;              // Global All-Pass Mask (Don't care: 1, Match: 0)
 
-    ECanaRegs.CANMD.all = 0x000000FE;               // Message Direction (Rx: 1, Tx: 0)         //bartho    0x00000006
+    ECanaRegs.CANMD.all = 0x0000007E;               // Message Direction (Rx: 1, Tx: 0)         //bartho    0x00000006
 
     // Tx Mailbox (0x00000001)
     ECanaMboxes.MBOX0.MSGCTRL.all = 0x00000004; // Transmit 4 bytes of data
@@ -169,7 +169,7 @@ void CANMailboxConfig(void)
     ECanaMboxes.MBOX9.MSGCTRL.all = 0x00000008;     // Transmit 8 bytes of data
 
 
-    ECanaRegs.CANME.all = 0x000000FE;               // Enable Rx Mailbox    //bartho    0x00000006
+    ECanaRegs.CANME.all = 0x0000007E;               // Enable Rx Mailbox    //bartho    0x00000006
 
     // The Tx Mailbox MSGID has to be set as required and then enabled
 }
@@ -229,7 +229,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
         if(ChgStatus == 0 || ChgStatus == 0x08)                        //Charger ready to charge || battery voltage low flag || Comms issue
         {
             Charger_status = 1;																//0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????											//charger connected
-            if(flagCurrent == 0 && flagTemp == 0 && flagCharged == 0 && KeySwitch == 0 /*&& flagDischarged != 2*/)     //check flags to ensure charging is allowed
+            if(flagCurrent == 0 && flagTemp_Charge == 0 && flagCharged == 0 && KeySwitch == 0 /*&& flagDischarged != 2*/)     //flagTemp_Charge check flags to ensure charging is allowed
             {
                 if(delay == 0)                                                              //sit miskien check in om met die charger Vbat te meet
                 {
@@ -262,6 +262,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 
                     CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8, 0);             //charging started
                     PreCharge = 1;                          								//turn on precharge resistor
+                    Charging = 1;
                 }
             }
             else																			//BMS flag high. Stop charging and disconnect blah blah
@@ -274,6 +275,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
                 else if(delay == 0)
                 {                                                   //turn off contactor
                     CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                            //disconnect charger
+                    Charging = 0;
                     if(flagCharged == 1)
                         ContactorOut = 0;
                     Charging_animation = 0;
@@ -678,7 +680,7 @@ void CAN_Output_All(void)
         if (SOC<12)
             Acewell_Data = Acewell_Data + 1;
 
-        if((flagDischarged >= 1) || (flagCurrent == 1)  || (flagTemp == 1))
+        if((flagDischarged >= 1) || (flagCurrent == 1)  || (flagTemp_Discharge == 1))
             Acewell_Data = Acewell_Data + 4;
 
 
@@ -729,74 +731,68 @@ void CANSlaveConfig(void)
 
 void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Bytes, Uint16 Mailbox)      //destination, txdataH, txdataL, bytes, Mailbox
 {
-    //maybe add check when mailbox is busy transmitting?
-
-    if (ECanaRegs.CANES.all == 0 || ECanaRegs.CANES.all == 0x30000 || ECanaRegs.CANES.all == 0x30001)		//Maybe add more??     	CAN bus ready for action		/*|| ECanaRegs.CANES.all == 0x10000*/
+    switch(Mailbox)
     {
-
-        switch(Bytes)
+    case 0 :
+        if(ECanaRegs.CANTRS.bit.TRS0 == 0)                          // Check to see if previous transmit has completed
         {
-        case 0 :
-            if(ECanaRegs.CANTRS.bit.TRS0 == 0)                          // Check to see if previous transmit has completed
-            {
-                ECanaRegs.CANME.bit.ME0 = 0;                            // Disable Tx Mailbox
-                ECanaMboxes.MBOX0.MSGCTRL.all = Bytes;              	// Transmit x bytes of data
-                ECanaMboxes.MBOX0.MSGID.all = 0;                    	// Standard ID length, acceptance masks used, no remote frames
-                ECanaMboxes.MBOX0.MSGID.bit.STDMSGID = Destination; 	// Load destination address
-                ECanaMboxes.MBOX0.MDL.all = TxDataL;
-                ECanaMboxes.MBOX0.MDH.all = TxDataH;
+            ECanaRegs.CANME.bit.ME0 = 0;                            // Disable Tx Mailbox
+            ECanaMboxes.MBOX0.MSGCTRL.all = Bytes;              	// Transmit x bytes of data
+            ECanaMboxes.MBOX0.MSGID.all = 0;                    	// Standard ID length, acceptance masks used, no remote frames
+            ECanaMboxes.MBOX0.MSGID.bit.STDMSGID = Destination; 	// Load destination address
+            ECanaMboxes.MBOX0.MDL.all = TxDataL;
+            ECanaMboxes.MBOX0.MDH.all = TxDataH;
 
-                ECanaRegs.CANME.bit.ME0 = 1;                  	        // Enable Tx Mailbox
-                ECanaRegs.CANTRS.bit.TRS0 = 1;                          // Set transmit request
-            }
-            break;
-        case 7 :
-            if(ECanaRegs.CANTRS.bit.TRS7 == 0)                          // Check to see if previous transmit has completed
-            {
-                ECanaRegs.CANME.bit.ME7 = 0;                            // Disable Tx Mailbox
-                ECanaMboxes.MBOX7.MSGCTRL.all = Bytes;                  // Transmit x bytes of data
-                ECanaMboxes.MBOX7.MSGID.all = 0;                        // Standard ID length, acceptance masks used, no remote frames
-                ECanaMboxes.MBOX7.MSGID.bit.STDMSGID = Destination;     // Load destination address
-                ECanaMboxes.MBOX7.MDL.all = TxDataL;
-                ECanaMboxes.MBOX7.MDH.all = TxDataH;
-
-                ECanaRegs.CANME.bit.ME7 = 1;                            // Enable Tx Mailbox
-                ECanaRegs.CANTRS.bit.TRS7 = 1;                          // Set transmit request
-            }
-            break;
-        case 8 :
-            if(ECanaRegs.CANTRS.bit.TRS8 == 0)                          // Check to see if previous transmit has completed
-            {
-                ECanaRegs.CANME.bit.ME8 = 0;                            // Disable Tx Mailbox
-                ECanaMboxes.MBOX8.MSGCTRL.all = Bytes;                  // Transmit x bytes of data
-                ECanaMboxes.MBOX8.MSGID.all = 0;                        // Standard ID length, acceptance masks used, no remote frames
-                ECanaMboxes.MBOX8.MSGID.bit.STDMSGID = Destination;     // Load destination address
-                ECanaMboxes.MBOX8.MDL.all = TxDataL;
-                ECanaMboxes.MBOX8.MDH.all = TxDataH;
-
-                ECanaRegs.CANME.bit.ME8 = 1;                            // Enable Tx Mailbox
-                ECanaRegs.CANTRS.bit.TRS8 = 1;                          // Set transmit request
-            }
-            break;
-        case 9 :
-            if(ECanaRegs.CANTRS.bit.TRS9 == 0)                          // Check to see if previous transmit has completed
-            {
-                ECanaRegs.CANME.bit.ME9 = 0;                            // Disable Tx Mailbox
-                ECanaMboxes.MBOX9.MSGCTRL.all = Bytes;                  // Transmit x bytes of data
-                ECanaMboxes.MBOX9.MSGID.all = 0;                        // Standard ID length, acceptance masks used, no remote frames
-                ECanaMboxes.MBOX9.MSGID.bit.STDMSGID = Destination;     // Load destination address
-                ECanaMboxes.MBOX9.MDL.all = TxDataL;
-                ECanaMboxes.MBOX9.MDH.all = TxDataH;
-
-                ECanaRegs.CANME.bit.ME9 = 1;                            // Enable Tx Mailbox
-                ECanaRegs.CANTRS.bit.TRS9 = 1;                          // Set transmit request
-            }
-            break;
+            ECanaRegs.CANME.bit.ME0 = 1;                  	        // Enable Tx Mailbox
+            ECanaRegs.CANTRS.bit.TRS0 = 1;                          // Set transmit request
         }
+        break;
+    case 7 :
+        if(ECanaRegs.CANTRS.bit.TRS7 == 0)                          // Check to see if previous transmit has completed
+        {
+            ECanaRegs.CANME.bit.ME7 = 0;                            // Disable Tx Mailbox
+            ECanaMboxes.MBOX7.MSGCTRL.all = Bytes;                  // Transmit x bytes of data
+            ECanaMboxes.MBOX7.MSGID.all = 0;                        // Standard ID length, acceptance masks used, no remote frames
+            ECanaMboxes.MBOX7.MSGID.bit.STDMSGID = Destination;     // Load destination address
+            ECanaMboxes.MBOX7.MDL.all = TxDataL;
+            ECanaMboxes.MBOX7.MDH.all = TxDataH;
+
+            ECanaRegs.CANME.bit.ME7 = 1;                            // Enable Tx Mailbox
+            ECanaRegs.CANTRS.bit.TRS7 = 1;                          // Set transmit request
+        }
+        break;
+    case 8 :
+        if(ECanaRegs.CANTRS.bit.TRS8 == 0)                          // Check to see if previous transmit has completed
+        {
+            ECanaRegs.CANME.bit.ME8 = 0;                            // Disable Tx Mailbox
+            ECanaMboxes.MBOX8.MSGCTRL.all = Bytes;                  // Transmit x bytes of data
+            ECanaMboxes.MBOX8.MSGID.all = 0;                        // Standard ID length, acceptance masks used, no remote frames
+            ECanaMboxes.MBOX8.MSGID.bit.STDMSGID = Destination;     // Load destination address
+            ECanaMboxes.MBOX8.MDL.all = TxDataL;
+            ECanaMboxes.MBOX8.MDH.all = TxDataH;
+
+            ECanaRegs.CANME.bit.ME8 = 1;                            // Enable Tx Mailbox
+            ECanaRegs.CANTRS.bit.TRS8 = 1;                          // Set transmit request
+        }
+        break;
+    case 9 :
+        if(ECanaRegs.CANTRS.bit.TRS9 == 0)                          // Check to see if previous transmit has completed
+        {
+            ECanaRegs.CANME.bit.ME9 = 0;                            // Disable Tx Mailbox
+            ECanaMboxes.MBOX9.MSGCTRL.all = Bytes;                  // Transmit x bytes of data
+            ECanaMboxes.MBOX9.MSGID.all = 0;                        // Standard ID length, acceptance masks used, no remote frames
+            ECanaMboxes.MBOX9.MSGID.bit.STDMSGID = Destination;     // Load destination address
+            ECanaMboxes.MBOX9.MDL.all = TxDataL;
+            ECanaMboxes.MBOX9.MDH.all = TxDataH;
+
+            ECanaRegs.CANME.bit.ME9 = 1;                            // Enable Tx Mailbox
+            ECanaRegs.CANTRS.bit.TRS9 = 1;                          // Set transmit request
+        }
+        break;
     }
-    else 														    //reset fault on CAN bus
+
+    if (ECanaRegs.CANES.all != 0 || ECanaRegs.CANES.all != 0x30000 || ECanaRegs.CANES.all != 0x30001)
     {
-        ECanaRegs.CANES.all = 0xFFF0000;						    //reset flags		0x1BB0000
-        //add reset error warning, maybe to BMS flags
+        ECanaRegs.CANES.all = 0xFFF0000;						    //reset flags	//reset fault on CAN bus	0x1BB0000
     }
 }

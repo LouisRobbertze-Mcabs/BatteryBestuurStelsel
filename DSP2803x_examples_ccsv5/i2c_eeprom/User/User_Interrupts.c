@@ -106,7 +106,7 @@ __interrupt void cpu_timer1_isr(void)
     if(KeySwitch == 1 && System_State == 1)  //keyswitch == 1
     {
         //binne die keydrive if
-        if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp == 0) && (Charger_status == 0))
+        if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp_Discharge == 0) && (Charger_status == 0)) //flagTemp_Discharge
         {
             ContactorOut = 1;           //turn on contactor
         }
@@ -130,7 +130,7 @@ __interrupt void cpu_timer1_isr(void)
     if(flagDischarged == 1 || flagDischarged == 2)
         led2 = 1;
 
-    if(flagTemp == 1)
+    if(flagTemp_Discharge == 1)
     {
         led3 = 1;
         led2 = 1;
@@ -206,6 +206,7 @@ __interrupt void i2c_int1a_isr(void)     														// I2C-A
 
 __interrupt void can_rx_isr(void)
 {
+
     //was receive successful? maybe use CANES.All < 3
 
     if (ECanaRegs.CANRMP.bit.RMP1 == 1)
@@ -220,7 +221,7 @@ __interrupt void can_rx_isr(void)
         CAN_Charger_dataH = ECanaMboxes.MBOX2.MDH.all;                // Data taken out of direct mailbox
         ECanaRegs.CANRMP.bit.RMP2 = 1;
     }
-    else if (ECanaRegs.CANRMP.bit.RMP3 == 1)                          //NMT_MOSI
+    else if (ECanaRegs.CANRMP.bit.RMP3 == 1)
     {
         //Add CANTRANSMIT here to deal with the answer if answer is short?
         //what to do with BMS state? execute state change?
@@ -235,9 +236,9 @@ __interrupt void can_rx_isr(void)
         static Uint16 NMT_Command_Address = 0;
 
         NMT_Command = ECanaMboxes.MBOX4.MDL.all & 0xFF;                            //needs testing
-        NMT_Command_Address = (ECanaMboxes.MBOX4.MDH.all >>8 ) & 0xFF;             //
+        NMT_Command_Address = (ECanaMboxes.MBOX4.MDL.all >>8 ) & 0xFF;             //
 
-        if(NMT_Command_Address == 0x1D)             //should also listen to 0x0
+        if(NMT_Command_Address == 0x1D || NMT_Command_Address == 0x00)             //should also listen to 0x0
         {
             switch(NMT_Command) {
             case 0x1 :
@@ -249,11 +250,11 @@ __interrupt void can_rx_isr(void)
             case 0x80 :
                 NMT_State = 0x7F;                  //Enter Pre-operational state
                 break;
-            case 0x81 :                             //Enter Reset the Device - (initialization  sub-state)
+            case 0x81 :                             //Enter Reset the Device - (initialization sub-state)
                 NMT_State = 0x0;
                 while(NMT_State<0x100){;}           //reset using watchdog timer
                 break;
-            case 0x82 :                             //Reset the CAN bus - (initialization  sub-state)
+            case 0x82 :                             //Reset the CAN bus - (initialization sub-state)
                 NMT_State = 0x0;
                 //add reset function
                 break;
@@ -268,53 +269,70 @@ __interrupt void can_rx_isr(void)
     {
         static Uint16 PDO_Command = 0;
 
-        PDO_Command = ECanaMboxes.MBOX5.MDL.all & 0xFF;                            //needs testing
+        PDO_Command = ECanaMboxes.MBOX5.MDL.all & 0xFF;
 
         if(NMT_State == 0x5)
         {
-            switch(PDO_Command) {
-            case 0x1 :
-                NMT_State = 0x5;                   //Enter operational state
-                break;
+            //bit 0 -> high PWR 48V output - initiate pre-charge
+            if((PDO_Command & 0x1) == 1)
+                PreCharge = 1;                                 //follow Pre-charge pin - add contactor closing later
+            else
+            {
+                PreCharge = 0;                                 //follow Pre-charge pin
+                ContactorOut = 0;                               //turn off contactor
             }
 
-            //function to get all battery stats and states
+            //bit 1 -> high PWR 12V output - turn on 12V
+            Aux_Control = ((PDO_Command>>1 ) & 0x1);
 
-            //CANTransmit(0x19C, 0x0, 0x0, 0x1, 7); //Destination: 0x71C, Mailbox_high: 0, Mailbox_low: 0, bytes: 8, Mailbox: 8
+            //bit 2 -> Low PWR 12V output - turn on 12V - usually ON but should maybe be inverse
+            Aux_Control2 = ((PDO_Command>>2 ) & 0x1);
 
+            //bit 3 -> Reset Flag - Current_flag = 0;
+            if((PDO_Command>>3 & 0x1) == 1)
+            {
+                flagCurrent = 0;
+            }
 
-            ECanaRegs.CANRMP.bit.RMP5 = 1;
+            CANTransmit(0x19C, 0xFFFF & (int16)(Voltage_total*Current), (((Uint32)BMS_Error)<<16) | (Uint32)BMS_Status, 0x8, 8); //Destination: 0x71C, Mailbox_high: 0, Mailbox_low: 0, bytes: 8, Mailbox: 8
+
         }
-        else if (ECanaRegs.CANRMP.bit.RMP6 == 1)                          //SDO_MOSI
-        {
-            //if(specefic value, return answer)
-            //CAN_Charger_dataL = ECanaMboxes.MBOX6.MDL.all;                // Data taken out of direct mailbox
-            //CAN_Charger_dataH = ECanaMboxes.MBOX6.MDH.all;                // Data taken out of direct mailbox
-            ECanaRegs.CANRMP.bit.RMP6 = 1;
-        }
+        //else return nothing
 
-        //ECanaRegs.CANRMP.all = 0xFFFFFFFF;            // Reset receive mailbox flags
-        PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9
+        ECanaRegs.CANRMP.bit.RMP5 = 1;
     }
-
-    __interrupt void can_tx_isr(void)
+    else if (ECanaRegs.CANRMP.bit.RMP6 == 1)                          //SDO_MOSI
     {
-        if(ECanaRegs.CANTA.bit.TA0 == 1)                //normal CAN transmit for CHG and speedometer
-        {
-            ECanaRegs.CANTA.bit.TA0 = 1;
-        }
-        else if(ECanaRegs.CANTA.bit.TA7 == 1)            //Heartbeat_MISO CAN transmit
-        {
-            ECanaRegs.CANTA.bit.TA7 = 1;
-        }
-        else if(ECanaRegs.CANTA.bit.TA8 == 1)            //PDO1_MISO CAN transmit
-        {
-            ECanaRegs.CANTA.bit.TA8 = 1;
-        }
-        else if(ECanaRegs.CANTA.bit.TA9 == 1)            //SDO_MISO CAN transmit
-        {
-            ECanaRegs.CANTA.bit.TA9 = 1;
-        }
-
-        PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9
+        //if(specefic value, return answer)
+        //CAN_Charger_dataL = ECanaMboxes.MBOX6.MDL.all;                // Data taken out of direct mailbox
+        //CAN_Charger_dataH = ECanaMboxes.MBOX6.MDH.all;                // Data taken out of direct mailbox
+        ECanaRegs.CANRMP.bit.RMP6 = 1;
     }
+
+    //ECanaRegs.CANRMP.all = 0xFFFFFFFF;            // Reset receive mailbox flags
+    PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9
+}
+
+
+
+__interrupt void can_tx_isr(void)
+{
+    if(ECanaRegs.CANTA.bit.TA0 == 1)                //normal CAN transmit for CHG and speedometer
+    {
+        ECanaRegs.CANTA.bit.TA0 = 1;
+    }
+    else if(ECanaRegs.CANTA.bit.TA7 == 1)            //Heartbeat_MISO CAN transmit
+    {
+        ECanaRegs.CANTA.bit.TA7 = 1;
+    }
+    else if(ECanaRegs.CANTA.bit.TA8 == 1)            //PDO1_MISO CAN transmit
+    {
+        ECanaRegs.CANTA.bit.TA8 = 1;
+    }
+    else if(ECanaRegs.CANTA.bit.TA9 == 1)            //SDO_MISO CAN transmit
+    {
+        ECanaRegs.CANTA.bit.TA9 = 1;
+    }
+
+    PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9
+}

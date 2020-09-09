@@ -33,13 +33,16 @@ volatile Uint16 Received;
 struct BMS_STATUS_FLAGS;
 
 /////////////////////////////////////////////
-volatile Uint16 flagTemp=0;
+volatile Uint16 flagTemp_Discharge=0;
+volatile Uint16 flagTemp_Charge=0;
+
 volatile Uint16 flagCurrent=0;
 volatile Uint16 flagVoltage=0;
 
 volatile Uint16 flagCharged=0;											//*****
 volatile Uint16 flagDischarged=0;
 volatile Uint16 balance = 0;
+volatile Uint16 flag_Pre_Charge = 0;
 /////////////////////////////////////////////
 
 volatile Uint16 counter_2Hz = 0;
@@ -47,6 +50,10 @@ volatile Uint16 counter_2Hz = 0;
 float current_reference;
 
 volatile Uint16 Charger_status = 0;
+volatile Uint16 Charging = 0;
+volatile Uint16 Heating = 0;
+volatile Uint16 Cooling = 0;
+
 volatile int system_status= 0;
 
 volatile float ChargerVoltage=0;
@@ -185,7 +192,8 @@ volatile Uint32 CAN_Charger_dataH = 0;
 
 volatile Uint32 System_State = 0;
 
-volatile Uint32 BMS_Status = 0;
+volatile Uint16 BMS_Status = 0;
+volatile Uint16 BMS_Error = 0;
 volatile long trip_counter = 0;
 volatile Uint32 testcounter = 0;
 
@@ -200,3 +208,6 @@ volatile long timecounterseconds = 0;
 volatile float Charging_animation = 0;
 
 volatile Uint32 NMT_State = 0x0;               //Initialization state
+
+volatile Uint16 SOP_discharge = 50;
+volatile Uint16 SOP_charge = 25;

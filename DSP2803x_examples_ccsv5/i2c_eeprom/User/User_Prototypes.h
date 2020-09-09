@@ -32,6 +32,7 @@ void Toggle_LED(void);
 void Read_Cell_Voltages(void);
 void Process_Voltages(void);
 void Read_Temperatures(void);
+void Process_Temperatures(void);
 Uint32 ChgCalculator(float Voltage, float Current);
 void Calculate_Current(void);
 void Read_System_Status(void);
@@ -52,6 +53,7 @@ void Balance(int period, float reference);
 unsigned char CRC8(unsigned char *ptr, unsigned char len,unsigned char key);
 
 void Battery_Status(void);
+void Battery_Error(void);
 
 float Charging_Animation(float real_SOC);
 

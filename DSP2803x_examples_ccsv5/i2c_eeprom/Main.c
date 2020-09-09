@@ -30,6 +30,8 @@ void main(void)
 			Process_Voltages();
 
 			Read_Temperatures();
+			Process_Voltages();
+
 
 			ServiceDog();
 
@@ -38,6 +40,7 @@ void main(void)
 			Balance(5,Vbalance);
 
 			Battery_Status();
+			Battery_Error();
 			CAN_Output_All();
 
 			ServiceDog();
