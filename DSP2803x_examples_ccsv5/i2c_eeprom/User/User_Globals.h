@@ -142,6 +142,11 @@ extern long I2_y[2];
 
 extern struct table_1d trip2_table;
 
+extern long time3_x[4];
+extern long I3_y[4];
+
+extern struct table_1d trip3_table;
+
 
 extern volatile float Current_CAL;
 //extern volatile Uint16 Current_Sum;

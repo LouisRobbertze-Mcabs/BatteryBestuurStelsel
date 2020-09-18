@@ -17,6 +17,9 @@ __interrupt void  adc_isr(void)
 
     static long trip_timer;
 
+    //sample time variable?
+
+
     test_current = current_p + (0.00314*(AdcResult.ADCRESULT1-current_p));     		//   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
     current_p=test_current;
 
@@ -68,7 +71,7 @@ __interrupt void  adc_isr(void)
     //testvariable = trip_counter;
 
 
-    if(trip_counter > 1200000)
+    if(trip_counter  > 1200000)
     {
         ContactorOut = 0;       														//turn off contactor
         flagCurrent = 1;
@@ -78,6 +81,18 @@ __interrupt void  adc_isr(void)
         trip_counter = 0;
 
     //timecounter++;
+
+
+    //do some series testing here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if(trip_counter > 2000)
+    {
+        SOP_discharge = ((interpolate_table_1d(&trip3_table, trip_counter) - 2048) * 122)/1000 * (Uint16)Voltage_total;
+    }
+    else if(trip_counter < 2000)
+    {
+        SOP_discharge = ((interpolate_table_1d(&trip3_table, 2000) - 2048) * 122)/1000 * (Uint16)Voltage_total;
+    }
+
 
     AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
     PieCtrlRegs.PIEACK.bit.ACK10 = 1;   		// Acknowledge interrupt to PIE
