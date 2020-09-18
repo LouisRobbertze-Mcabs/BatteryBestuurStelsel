@@ -296,6 +296,13 @@ void Process_Voltages(void)
         PreCharge = 1;
         Aux_Control2 = 1;
     }
+
+    if(Voltage_high<3.4)
+    {
+        SOP_charge = 50;
+    }
+    else
+        SOP_charge = 0;                             //maybe add in PI controller for reference
 }
 
 void Calculate_SOH(void)

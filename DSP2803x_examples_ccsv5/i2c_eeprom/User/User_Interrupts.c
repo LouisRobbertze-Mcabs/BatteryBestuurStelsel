@@ -92,7 +92,7 @@ __interrupt void  adc_isr(void)
     {
         SOP_discharge = ((interpolate_table_1d(&trip3_table, 2000) - 2048) * 122)/1000 * (Uint16)Voltage_total;
     }
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
     PieCtrlRegs.PIEACK.bit.ACK10 = 1;   		// Acknowledge interrupt to PIE
