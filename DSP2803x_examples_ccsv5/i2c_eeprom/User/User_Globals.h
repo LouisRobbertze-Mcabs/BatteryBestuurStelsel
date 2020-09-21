@@ -149,6 +149,7 @@ extern struct table_1d trip3_table;
 
 
 extern volatile float Current_CAL;
+
 //extern volatile Uint16 Current_Sum;
 //extern volatile Uint16 Current_Counter;
 

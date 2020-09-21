@@ -158,13 +158,15 @@ struct table_1d trip2_table = {
 	I2_y  /* Array of y-coordinates */
 };
 
-long time3_x[4] = {1200000, 10000, 1000, 20};        //10ms, 0.5s, 5s, 600s                          {20, 1000, 10000, 1200000}
-long I3_y[4] = {3031,3359 ,3686 ,4050};          //  4050 = 245A, 3686=200A, 3359=160A, 3032=120A    {4050, 3686, 3359, 3031}
+long time3_x[4] = {4050,3686,3359,3031  };         //10ms, 0.5s, 5s, 600s                          {20, 1000, 10000, 1200000}
+
+
+long I3_y[4] =      {20,1000,10000,1200000   };    //  4050 = 245A, 3686=200A, 3359=160A, 3032=120A    {4050, 3686, 3359, 3031}
 
 struct table_1d trip3_table = {
     4,      /* Number of data points */
-    I3_y,  /* Array of y-coordinates */
-    time3_x /* Array of x-coordinates */
+    time3_x, /* Array of x-coordinates */
+    I3_y  /* Array of y-coordinates */
 };
 
 volatile float Current_CAL = 2080;			//=2095

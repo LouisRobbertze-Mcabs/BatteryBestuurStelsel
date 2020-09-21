@@ -17,6 +17,8 @@ __interrupt void  adc_isr(void)
 
     static long trip_timer;
 
+
+
     //sample time variable?
 
 
@@ -57,9 +59,6 @@ __interrupt void  adc_isr(void)
     {
         trip_timer = interpolate_table_1d(&trip_table, Filter_SC);						//Non-linear heating
         trip_counter = trip_counter + (1200000/trip_timer);
-        /*		if( Filter_SC> testvariable2)
-			testvariable2 = Filter_SC;
-		testvariable++;*/
     }
     else																				//current smaller than -120 A
     {
@@ -67,30 +66,22 @@ __interrupt void  adc_isr(void)
         trip_counter = trip_counter + (1200000/trip_timer);
     }
 
-    //if(trip_counter > testvariable)
-    //testvariable = trip_counter;
-
-
     if(trip_counter  > 1200000)
     {
         ContactorOut = 0;       														//turn off contactor
         flagCurrent = 1;
     }
-
-    if(trip_counter < 0)																//counter out of bounds
+    else if(trip_counter < 0)															//counter out of bounds
         trip_counter = 0;
-
-    //timecounter++;
-
 
     //do some series testing here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     if(trip_counter > 2000)
     {
-        SOP_discharge = ((interpolate_table_1d(&trip3_table, trip_counter) - 2048) * 122)/1000 * (Uint16)Voltage_total;
+        SOP_discharge = (((interpolate_table_1d(&trip3_table, trip_counter) - 2048) * 122)/1000 * (Uint16)Voltage_total)/100;
     }
     else if(trip_counter < 2000)
     {
-        SOP_discharge = ((interpolate_table_1d(&trip3_table, 2000) - 2048) * 122)/1000 * (Uint16)Voltage_total;
+        SOP_discharge = (((interpolate_table_1d(&trip3_table, 2000) - 2048) * 122)/1000 * (Uint16)Voltage_total)/100 ;
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -247,8 +238,8 @@ __interrupt void can_rx_isr(void)
     }
     else if (ECanaRegs.CANRMP.bit.RMP4 == 1)                          //NMT_MOSI
     {
-        static Uint16 NMT_Command = 0;
-        static Uint16 NMT_Command_Address = 0;
+        Uint16 NMT_Command = 0;
+        Uint16 NMT_Command_Address = 0;
 
         NMT_Command = ECanaMboxes.MBOX4.MDL.all & 0xFF;                            //needs testing
         NMT_Command_Address = (ECanaMboxes.MBOX4.MDL.all >>8 ) & 0xFF;             //
@@ -286,15 +277,16 @@ __interrupt void can_rx_isr(void)
 
         PDO_Command = ECanaMboxes.MBOX5.MDL.all & 0xFF;
 
-        if(NMT_State == 0x5)
+        if(NMT_State == 0x5)                                    //ensure system is in operational state
         {
             //bit 0 -> high PWR 48V output - initiate pre-charge
             if((PDO_Command & 0x1) == 1)
                 PreCharge = 1;                                 //follow Pre-charge pin - add contactor closing later
+            //Make use of timer to ensure Contactor closes after 2 seconds?
             else
             {
                 PreCharge = 0;                                 //follow Pre-charge pin
-                ContactorOut = 0;                               //turn off contactor
+                ContactorOut = 0;                              //turn off contactor
             }
 
             //bit 1 -> high PWR 12V output - turn on 12V
@@ -309,8 +301,7 @@ __interrupt void can_rx_isr(void)
                 flagCurrent = 0;
             }
 
-            CANTransmit(0x19C, 0xFFFF & (int16)(Voltage_total*Current), (((Uint32)BMS_Error)<<16) | (Uint32)BMS_Status, 0x8, 8); //Destination: 0x71C, Mailbox_high: 0, Mailbox_low: 0, bytes: 8, Mailbox: 8
-
+            CANTransmit(0x19C, (((Uint32)((SOP_charge<<8)|SOP_discharge))<<16) | (int16)(Voltage_total*Current), (((Uint32)BMS_Error)<<16) | (Uint32)BMS_Status, 0x8, 8); //Destination: 0x71C, Mailbox_high: 0, Mailbox_low: 0, bytes: 8, Mailbox: 8
         }
         //else return nothing
 
@@ -318,14 +309,130 @@ __interrupt void can_rx_isr(void)
     }
     else if (ECanaRegs.CANRMP.bit.RMP6 == 1)                          //SDO_MOSI
     {
-        //if(specefic value, return answer)
-        //CAN_Charger_dataL = ECanaMboxes.MBOX6.MDL.all;                // Data taken out of direct mailbox
-        //CAN_Charger_dataH = ECanaMboxes.MBOX6.MDH.all;                // Data taken out of direct mailbox
+        Uint16 SDO_MOSI_Ctrl = 0;
+        Uint16 SDO_MOSI_Index = 0;
+        Uint32 SDO_MISO_Ctrl = 0;
+        Uint32 SDO_MISO_Data = 0;
+
+        SDO_MOSI_Ctrl = ECanaMboxes.MBOX6.MDL.all & 0xFF;
+        SDO_MOSI_Index = (ECanaMboxes.MBOX6.MDL.all>>8) & 0xFF;
+
+        if(NMT_State != 0x4 && SDO_MOSI_Ctrl == 0x42)                 //ensure system is not in stopped state
+        {
+            switch(SDO_MOSI_Index)
+            {
+            case 0x0900 :                                             //Voltage_total
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = (int16)(Voltage_total*100);
+                break;
+            case 0x0902 :
+                NMT_State = 0x5;                                        //Current
+                break;
+            case 0x0904 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0906 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0908 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x090A :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x090C :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x090E :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0910 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0912 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0914 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0916 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0918 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x091A :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x091C :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x091E :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0920 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0922 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0924 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0926 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0928 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x092A :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x092C :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x092E :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0930 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0932 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0934 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0936 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x0938 :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x093A :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x093C :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            case 0x093E :
+                NMT_State = 0x5;                   //Enter operational state
+                break;
+            default:
+                //return error status
+            }
+            CANTransmit(0x59C, SDO_MISO_Data, SDO_MISO_Ctrl, 0x8, 0x9); //Destination: 0x59C, Mailbox_high: 0, Mailbox_low: NMT_State, bytes: 8, Mailbox: 9,
+
+
+        }
+
+        //return answer
+
+
         ECanaRegs.CANRMP.bit.RMP6 = 1;
     }
 
-    //ECanaRegs.CANRMP.all = 0xFFFFFFFF;            // Reset receive mailbox flags
-    PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9
+    PieCtrlRegs.PIEACK.bit.ACK9 = 1;                // Acknowledge this interrupt to receive more interrupts from group 9
 }
 
 
@@ -349,5 +456,5 @@ __interrupt void can_tx_isr(void)
         ECanaRegs.CANTA.bit.TA9 = 1;
     }
 
-    PieCtrlRegs.PIEACK.all = PIEACK_GROUP9;         // Acknowledge this interrupt to receive more interrupts from group 9
+    PieCtrlRegs.PIEACK.bit.ACK9 = 1;                // Acknowledge this interrupt to receive more interrupts from group 9
 }
