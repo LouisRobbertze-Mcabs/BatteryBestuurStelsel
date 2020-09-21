@@ -645,7 +645,7 @@ void CAN_Output_All(void)
 
         //	queue_insert(0x700, 50, TxData.asUint, 5, &CAN_queue);
         for(i=0;i<1500;i++){};
-*/
+
         TxData.asFloat=Temperatures[15]; CANTransmit(0x700, 51, TxData.asUint,5);
 
         //	queue_insert(0x700, 51, TxData.asUint, 5, &CAN_queue);

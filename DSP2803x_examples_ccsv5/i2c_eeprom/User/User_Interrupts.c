@@ -323,100 +323,143 @@ __interrupt void can_rx_isr(void)
             {
             case 0x0900 :                                             //Voltage_total
                 SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
-                SDO_MISO_Data = (int16)(Voltage_total*100);
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_total*100);
                 break;
-            case 0x0902 :
-                NMT_State = 0x5;                                        //Current
+            case 0x0902 :                                             //Current
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Current*100);
                 break;
-            case 0x0904 :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x0904 :                                             //Power
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Current*Voltage_total);
                 break;
-            case 0x0906 :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x0906 :                                              //Voltage_low
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_low*1000);
                 break;
-            case 0x0908 :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x0908 :                                              //Voltage_low_cell
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_low_cell);
                 break;
-            case 0x090A :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x090A :                                              //Voltage_high
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_high*1000);
                 break;
-            case 0x090C :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x090C :                                              //Voltage_high_cell
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_high_cell);
                 break;
-            case 0x090E :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x090E :                                              //Voltage_avg
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_avg*1000);
                 break;
-            case 0x0910 :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x0910 :                                               //Temperature_high
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_high*10);
                 break;
-            case 0x0912 :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x0912 :                                               //Temperature_high_cell
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_high_cell);
                 break;
-            case 0x0914 :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x0914 :                                              //Temperature_low
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_low*10);
                 break;
-            case 0x0916 :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x0916 :                                              //Temperature_low_cell
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_low_cell);
                 break;
-            case 0x0918 :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x0918 :                                               //Temp_avg
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_avg*10);
                 break;
-            case 0x091A :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x091A :                                               //Aux_Voltage
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Auxilliary_Voltage*1000);
                 break;
-            case 0x091C :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x091C :                                               //SOC
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(SOC);
                 break;
-            case 0x091E :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x091E :                                               //Impedance     Review calculation
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(resistance*1000000);
                 break;
-            case 0x0920 :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x0920 :                                               //Maximum cell impedance      Review calculation
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(SOH_max*1000000);
                 break;
-            case 0x0922 :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x0922 :                                               //Maximum impedance cell number
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(SOH_max_cell);
                 break;
-            case 0x0924 :
-                NMT_State = 0x5;                   //Enter operational state
+            case 0x0924 :                                               //Cell 0
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[0]*1000);
                 break;
             case 0x0926 :
-                NMT_State = 0x5;                   //Enter operational state
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[1]*1000);
                 break;
             case 0x0928 :
-                NMT_State = 0x5;                   //Enter operational state
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[2]*1000);
                 break;
             case 0x092A :
-                NMT_State = 0x5;                   //Enter operational state
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[3]*1000);
                 break;
             case 0x092C :
-                NMT_State = 0x5;                   //Enter operational state
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[4]*1000);
                 break;
             case 0x092E :
-                NMT_State = 0x5;                   //Enter operational state
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[5]*1000);
                 break;
             case 0x0930 :
-                NMT_State = 0x5;                   //Enter operational state
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[6]*1000);
                 break;
             case 0x0932 :
-                NMT_State = 0x5;                   //Enter operational state
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[7]*1000);
                 break;
             case 0x0934 :
-                NMT_State = 0x5;                   //Enter operational state
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[8]*1000);
                 break;
             case 0x0936 :
-                NMT_State = 0x5;                   //Enter operational state
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[9]*1000);
                 break;
             case 0x0938 :
-                NMT_State = 0x5;                   //Enter operational state
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[10]*1000);
                 break;
             case 0x093A :
-                NMT_State = 0x5;                   //Enter operational state
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[11]*1000);
                 break;
             case 0x093C :
-                NMT_State = 0x5;                   //Enter operational state
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[12]*1000);
                 break;
             case 0x093E :
-                NMT_State = 0x5;                   //Enter operational state
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[13]*1000);
+                break;
+            case 0x0940 :
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[14]*1000);
+                break;
+            case 0x0942 :
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+               // SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[15]*1000);
+                break;
+            case 0x0944 :
+                //SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[13]*1000);
                 break;
             default:
                 //return error status
