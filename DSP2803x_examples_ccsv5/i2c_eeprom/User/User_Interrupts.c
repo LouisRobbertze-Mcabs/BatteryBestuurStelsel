@@ -455,17 +455,83 @@ __interrupt void can_rx_isr(void)
                 break;
             case 0x0942 :
                 SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
-               // SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[15]*1000);
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperatures[0]*10);
                 break;
             case 0x0944 :
-                //SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[13]*1000);
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperatures[1]*10);
+                break;
+            case 0x0946 :
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperatures[2]*10);
+                break;
+            case 0x0948 :
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperatures[3]*10);
+                break;
+            case 0x094A :
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperatures[4]*10);
+                break;
+
+            case 0x094B :
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = (Uint32)(BMS_Status);
+                break;
+            case 0x094E :
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = (Uint32)(BMS_Error);
+                break;
+            case 0x0950 :                                                                   //Battery SOH
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = (Uint32)(SOH);                                              //add SOH calculation....
+                break;
+            case 0x0952 :                                                                   //Peak current
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(I_maximum*100);
+                break;
+            case 0x0954 :                                                                   //Peak Voltage
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_maximum*1000);
+                break;
+            case 0x0956 :                                                                   //Peak Temperature
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_maximum*10);
+                break;
+            case 0x0958 :                                                                   //Minimum current
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(I_minimum*100);
+                break;
+            case 0x095A :                                                                   //Minimum Voltage
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_minimum*1000);
+                break;
+            case 0x095C :                                                                   //Minimum Temperature
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_minimum*10);
+                break;
+            case 0x095E :                                                                   //cycle tracker
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SDO_MISO_Data | (int16)(Cycles*10);
+                break;
+            case 0x0960 :
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = (Uint32)(Initial_Capacity);
+                break;
+            case 0x0962 :                                                                   //State of power discharge
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SOP_discharge;
+                break;
+            case 0x0964 :                                                                   //State of power charge
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = SOP_charge;
                 break;
             default:
                 //return error status
+                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<16 | 0x40;
+                SDO_MISO_Data = 0x06020000;                                                 //Error: Object does not exist
             }
             CANTransmit(0x59C, SDO_MISO_Data, SDO_MISO_Ctrl, 0x8, 0x9); //Destination: 0x59C, Mailbox_high: 0, Mailbox_low: NMT_State, bytes: 8, Mailbox: 9,
-
 
         }
 
