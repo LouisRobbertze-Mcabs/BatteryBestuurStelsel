@@ -221,3 +221,13 @@ volatile Uint32 NMT_State = 0x0;               //Initialization state
 
 volatile Uint16 SOP_discharge = 50;
 volatile Uint16 SOP_charge = 25;
+
+volatile float I_maximum = 0;
+volatile float I_minimum = 0;
+volatile float Initial_Capacity = 80;
+volatile float Temperature_maximum = 0;
+volatile float Temperature_minimum = 0;
+volatile float Voltage_maximum = 0;
+volatile float Voltage_minimum = 0;
+volatile float SOH = 100;
+volatile Uint16 Cycles = 0;

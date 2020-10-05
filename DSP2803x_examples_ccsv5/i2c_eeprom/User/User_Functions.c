@@ -9,6 +9,7 @@
 
 void Initialise_BMS(void)
 {
+    Initial_Capacity = 150;
     flagCurrent = 0;
     System_State = 0;
 
@@ -809,7 +810,7 @@ void Calculate_SOC()
     {
         SOC_t = 0;
     }
-    SOCc = SOC - (Current*0.000164);				//coulomb counter      Ampere sec -> Ampere huur  	0.000185			1/150A*3600s
+    SOCc = SOC - (Current*(1/(Initial_Capacity*3600)));		//coulomb counter      Ampere sec -> Ampere huur  	0.000185	1/150A*3600s
     //                                                0.000164            1/170*2*3600s
     if(SOC_t > 5400)								//delay of 90 min maybe do 60 min?
         Wsoc = 0;

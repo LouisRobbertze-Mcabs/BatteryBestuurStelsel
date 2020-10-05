@@ -208,4 +208,14 @@ extern volatile Uint32 NMT_State;
 extern volatile Uint16 SOP_discharge;
 extern volatile Uint16 SOP_charge;
 
+extern volatile float I_maximum;
+extern volatile float I_minimum;
+extern volatile float Initial_Capacity;
+extern volatile float Temperature_maximum;
+extern volatile float Temperature_minimum;
+extern volatile float Voltage_maximum;
+extern volatile float Voltage_minimum;
+extern volatile float SOH;
+extern volatile Uint16 Cycles;
+
 #endif /* USER_GLOBALS_H_ */
