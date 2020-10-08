@@ -827,16 +827,16 @@ void Calculate_SOC()
 
 void Calibrate_Current()
 {
-    //Calibrate when keyswitch(pos 2,3) is deactivated, result in 48V and 12V supply is 0.
+    //Calibrate when key-switch(position 2,3) is deactivated, result in 48V and 12V supply delivers 0 Watts.
     float error;
     static Uint16 Calibrate_delay = 0;
 
     if(Aux_Control == 0 && ContactorOut == 0)					                    //Vehicle is off (Key-switch position 0)
     {
-        if(Calibrate_delay > 60)                                                    //1 min delay for the vehicle/battery to do shut-off process
+        if(Calibrate_delay > 10)                                                    //10 s delay for the vehicle/battery to do shut-off process
         {
             error = Current;
-            Current_CAL = Current_CAL -(0.02* error * Current_CAL);					//maybe add slow filter to dampen the fault?
+            Current_CAL = Current_CAL + (0.001* error * Current_CAL);					//maybe add slow filter to dampen the fault?
 
             if(Current_CAL>2200)													//set maximum limit
                 Current_CAL = 2200;
