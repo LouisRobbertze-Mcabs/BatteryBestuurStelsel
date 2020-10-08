@@ -45,7 +45,7 @@ void main(void)
 
 			ServiceDog();
 
-			Calibrate_Current_charger();
+			Calibrate_Current();                     //hierdie moet verander kalibreer volgens 48V, 12V output
 
 			Read_System_Status();
 			Process_System_Status();

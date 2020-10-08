@@ -44,9 +44,9 @@ void Calculate_SOC();
 long interpolate_segment(long x0, long y0, long x1, long y1, long x);
 long interpolate_table_1d(struct table_1d *table, long x);
 
-//void Calibrate_Current(void);
 
-void Calibrate_Current_charger(void);
+
+void Calibrate_Current(void);
 
 void Balance(int period, float reference);
 

@@ -825,34 +825,29 @@ void Calculate_SOC()
         SOC = 0.01;
 }
 
-void Calibrate_Current_charger()
+void Calibrate_Current()
 {
-    //Reset the watchdog counter
-    ServiceDog();
+    //Calibrate when keyswitch(pos 2,3) is deactivated, result in 48V and 12V supply is 0.
     float error;
+    static Uint16 Calibrate_delay = 0;
 
-    static float old_ChargerCurrent;
-    float ChargerCurrent_di;
-
-    static float old_Current;
-    float Current_di;
-
-    ChargerCurrent_di = ChargerCurrent - old_ChargerCurrent;
-    Current_di = Current - old_Current;
-
-    if(ChargerCurrent > 24 && Aux_Control == 0 && ChargerCurrent_di<1 && Current_di<1)					//15 charger busy charging and aux charger turned off
+    if(Aux_Control == 0 && ContactorOut == 0)					                    //Vehicle is off (Key-switch position 0)
     {
-        error = (Current + ChargerCurrent-0.1)/Current;												//as percentage
-        Current_CAL = Current_CAL -0.02* error * Current_CAL;											//maybe add slow filter to dampen the fault?
+        if(Calibrate_delay > 60)                                                    //1 min delay for the vehicle/battery to do shut-off process
+        {
+            error = Current;
+            Current_CAL = Current_CAL -(0.02* error * Current_CAL);					//maybe add slow filter to dampen the fault?
 
-        if(Current_CAL>2200)																			//set maximum limit
-            Current_CAL = 2200;
-        if(Current_CAL<2000)																			//set minimum limit
-            Current_CAL = 2000;
+            if(Current_CAL>2200)													//set maximum limit
+                Current_CAL = 2200;
+            if(Current_CAL<2000)													//set minimum limit
+                Current_CAL = 2000;
+        }
+        else
+            Calibrate_delay++;
     }
-
-    old_ChargerCurrent = ChargerCurrent;
-    old_Current = Current;
+    else
+        Calibrate_delay=0;
 }
 
 void Battery_Status(void)
@@ -913,7 +908,7 @@ void Battery_Error(void)
     if(Charger_status == 1)
         BMS_Error_Temp = BMS_Error_Temp + 128;
 
-        //Extra flags are a possibility
+    //Extra flags are a possibility
 
     BMS_Error = BMS_Error_Temp;                               //update setup
 }
