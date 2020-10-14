@@ -42,7 +42,8 @@ void main(void)
 
 			ServiceDog();
 
-			Calibrate_Current_charger();
+			//Calibrate_Current_charger();
+			Calibrate_Current();
 
 			Read_System_Status();
 			Process_System_Status();

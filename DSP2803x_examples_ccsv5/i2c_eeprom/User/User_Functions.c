@@ -865,6 +865,31 @@ void Calibrate_Current_charger()
 	old_Current = Current;
 }
 
+void Calibrate_Current()
+{
+    //Calibrate when key-switch(position 2,3) is deactivated, result in 48V and 12V supply delivers 0 Watts.
+    float error;
+    static Uint16 Calibrate_delay = 0;
+
+    if(Aux_Control == 0 && ContactorOut == 0)                                       //Vehicle is off (Key-switch position 0)
+    {
+        if(Calibrate_delay > 10)                                                    //10 s delay for the vehicle/battery to do shut-off process
+        {
+            error = Current;
+            Current_CAL = Current_CAL + (0.001* error * Current_CAL);                   //maybe add slow filter to dampen the fault?
+
+            if(Current_CAL>2200)                                                    //set maximum limit
+                Current_CAL = 2200;
+            if(Current_CAL<2000)                                                    //set minimum limit
+                Current_CAL = 2000;
+        }
+        else
+            Calibrate_delay++;
+    }
+    else
+        Calibrate_delay=0;
+}
+
 void Battery_Status(void)
 {
 	BMS_Status = 0;
