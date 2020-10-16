@@ -825,7 +825,7 @@ void Calculate_SOC()
     {
         SOC_t = 0;
     }
-    SOCc = SOC - (Current*0.000185);				//coulomb counter      Ampere sec -> Ampere huur  	0.000185			1/150A*3600s
+    SOCc = SOC - (Current*0.000164);				//coulomb counter      Ampere sec -> Ampere huur  	0.000185			1/150A*3600s
                                                        //                                                0.000164            1/170*2*3600s
     if(SOC_t > 5400)								//delay of 90 min maybe do 60 min?
         Wsoc = 0;
@@ -868,6 +868,31 @@ void Calibrate_Current_charger()
 
     old_ChargerCurrent = ChargerCurrent;
     old_Current = Current;
+}
+
+void Calibrate_Current()
+{
+    //Calibrate when key-switch(position 2,3) is deactivated, result in 48V and 12V supply delivers 0 Watts.
+    float error;
+    static Uint16 Calibrate_delay = 0;
+
+    if(Aux_Control == 0 && ContactorOut == 0)                                       //Vehicle is off (Key-switch position 0)
+    {
+        if(Calibrate_delay > 10)                                                    //10 s delay for the vehicle/battery to do shut-off process
+        {
+            error = Current;
+            Current_CAL = Current_CAL + (0.001* error * Current_CAL);                   //maybe add slow filter to dampen the fault?
+
+            if(Current_CAL>2200)                                                    //set maximum limit
+                Current_CAL = 2200;
+            if(Current_CAL<2000)                                                    //set minimum limit
+                Current_CAL = 2000;
+        }
+        else
+            Calibrate_delay++;
+    }
+    else
+        Calibrate_delay=0;
 }
 
 void Battery_Status(void)
