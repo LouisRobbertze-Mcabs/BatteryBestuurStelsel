@@ -125,8 +125,11 @@ void Pre_Charge_Ctrl(void)                              //should be controlled v
 {
     static long delay_counter = 0;
 
-    if(delay_counter>604800 || flagDischarged == 2)                        //3600s*24*7 = 1 week
+    if(delay_counter>60 || flagDischarged == 2)                        //3600s*24*7 = 1 week = 604800
+    {
         PreCharge = 0;
+        delay_counter = 61;
+    }
     else if(flagDischarged == 0)
         PreCharge = 1;
 

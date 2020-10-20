@@ -114,7 +114,7 @@ __interrupt void cpu_timer1_isr(void)
         }
         else
         {
-            if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp == 0) && (Charger_status == 0) && (PreCharge_Timer > 4000))
+            if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp == 0) && (Charger_status == 0) && (PreCharge_Timer > 6000))
             {
                 ContactorOut = 1;           //turn on contactor
             }
@@ -152,10 +152,8 @@ __interrupt void cpu_timer1_isr(void)
 
 __interrupt void cpu_timer2_isr(void)
 {
-    PreCharge_Timer++;                                  // 4000 = 2 sekondes
-
-    if(PreCharge_Timer > 4100)
-        PreCharge_Timer=4100;
+    if(PreCharge_Timer < 6100)
+        PreCharge_Timer++;                                  // 4000 = 2 sekondes
 
     EALLOW;
     CpuTimer2.InterruptCount++;

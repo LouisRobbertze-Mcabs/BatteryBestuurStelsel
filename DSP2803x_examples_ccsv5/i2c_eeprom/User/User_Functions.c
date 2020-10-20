@@ -815,7 +815,7 @@ void Calculate_SOC()
 
     SOC_t++;
 
-    if(Current>3 || Current<-3 || Charger_status == 1)
+    if(Current>2 || Current<-2 || Charger_status == 1)
     {
         SOC_t = 0;
     }

@@ -154,7 +154,7 @@ struct table_1d trip2_table = {
 
 volatile float Current_CAL = 2080;			//=2095
 
-volatile float SOC_t;
+volatile float SOC_t =0;                //added zero start
 
 float volatile Wsoc = 1;
 float volatile SOCv = 0.5;
