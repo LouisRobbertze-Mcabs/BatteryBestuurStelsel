@@ -78,8 +78,8 @@ void  Bq76940_Init(void)
 
     I2CA_WriteData(0x09, (char)OV);                             //Stel OV_trip op
 
-    //Under voltage = 2.4 V
-    UV = (2.4-ADCoffset)/ADCgain;
+    //Under voltage = 2.45 V
+    UV = (2.45-ADCoffset)/ADCgain;
     UV = (UV>>4) & 0xFF;
 
     I2CA_WriteData(0x0A,(char)UV);                              //Stel UV_trip op

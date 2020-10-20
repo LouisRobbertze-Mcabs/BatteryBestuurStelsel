@@ -191,4 +191,6 @@ extern volatile long timecounterseconds;
 
 extern volatile float Charging_animation;
 
+extern volatile Uint32 PreCharge_Timer;
+
 #endif /* USER_GLOBALS_H_ */

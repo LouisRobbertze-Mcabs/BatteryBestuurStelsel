@@ -73,8 +73,6 @@ void Initialise_BMS(void)
     Bq76940_Init();
     //Shut_D_BQ();
 
-    //Calibrate_Current();
-
     // Enable the watchdog
     EALLOW;
     SysCtrlRegs.WDCR = 0x002F;
@@ -230,7 +228,7 @@ void  Read_Cell_Voltages(void)
 
 void Process_Voltages(void)
 {
-    //	static int delay = 0;
+    //Maximum voltage limit check
     if(Voltage_high > Vmax)     //3.65
     {
         balance = 1;            //start balancing
@@ -238,63 +236,59 @@ void Process_Voltages(void)
         ContactorOut = 0;																						//kan hierdie wees wat die contactor oopmaak
     }
 
-    if(Voltage_low > Vmin && Auxilliary_Voltage < Vauxmin && Auxilliary_Voltage > 7 && Aux_Control == 0)
+    //12V - 20A Supply control
+    if(Voltage_low > Vmin &&  Auxilliary_Voltage > 7 && Aux_Control == 0)               //Auxilliary_Voltage < Vauxmin &&
     {
         Auxilliary_counter = 0;															//turn on aux supply
         Aux_Control = 1;
     }
-    else if(Auxilliary_counter > AuxChargeTime || Auxilliary_Voltage < 7)
+    else if( Auxilliary_Voltage < 7)                                                    //Auxilliary_counter > AuxChargeTime ||
     {
         Aux_Control = 0;																//turn off aux supply
     }
-
-    Auxilliary_counter++;
+                                                                                        //Auxilliary_counter++;
 
 /////////////////////////////////////////////////////////////////////////////////////////
+    //Minimum voltage limit check
     if(Current < 80)                                                                //check current to reduce false trips
     {
-
         if(Voltage_low < Vmin && Voltage_low > Vcritical && Charger_status == 0)
         {
-            //Aux_Control = 0;
             flagDischarged = 1;
             //		led3 = 1;               //turn on red led
             //ContactorOut = 0;       //turn off contactor
-            PreCharge = 1;
         }
         else if(Voltage_low < Vcritical && Charger_status == 0)						//Maybe make this a bit smaller --> 2.7 or even 2.6??
         {
             Aux_Control = 0;
             flagDischarged = 2;
-            //		led3 = 1;               //turn on red led
-            PreCharge = 0;
             ContactorOut = 0;       //turn off contactor
             Aux_Control2 = 0;
         }
     }
     else
     {
-        if(Voltage_low < 2.5 && Voltage_low > Vcritical && Charger_status == 0)
+        if(Voltage_low < 2.5 && Charger_status == 0)
         {
-            //Aux_Control = 0;
             flagDischarged = 1;
-            //      led3 = 1;               //turn on red led
             ContactorOut = 0;       //turn off contactor
-            PreCharge = 1;
         }
     }
 /////////////////////////////////////////////////////////////////////////////////////
 
+    //Reset BMS status flags
     if(Voltage_high<Vchargedflagreset )
         flagCharged = 0;
 
     if(Voltage_low>Vdischargedflagreset )
     {
         flagDischarged = 0;
-        //		led3 = 0;               //turn off red led
         PreCharge = 1;
         Aux_Control2 = 1;
     }
+
+    //Pre-charge control
+    Pre_Charge_Ctrl();
 }
 
 void Calculate_SOH(void)

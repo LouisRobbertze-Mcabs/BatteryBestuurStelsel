@@ -120,3 +120,20 @@ void Reset_MCU(int flag)
     if(flag == 1 && delay > 300 && ECanaRegs.CANES.bit.EP == 1 && KeySwitch == 0)   //5 min intervals
         for(;;){}
 }
+
+void Pre_Charge_Ctrl(void)                              //should be controlled via
+{
+    static long delay_counter = 0;
+
+    if(delay_counter>604800 || flagDischarged == 2)                        //3600s*24*7 = 1 week
+        PreCharge = 0;
+    else if(flagDischarged == 0)
+        PreCharge = 1;
+
+    if((KeySwitch == 1) || (Charger_status == 1))
+    {
+        delay_counter=0;
+    }
+    else
+        delay_counter++;
+}
