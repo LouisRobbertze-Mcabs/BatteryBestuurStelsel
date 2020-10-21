@@ -35,6 +35,7 @@ extern volatile Uint16 flagVoltage;
 extern volatile Uint16 flagCharged;
 extern volatile Uint16 flagDischarged;
 extern volatile Uint16 balance;
+extern volatile Uint16 flagPreCharge;
 /////////////////////////////////////////////
 
 extern volatile Uint16 counter_2Hz;

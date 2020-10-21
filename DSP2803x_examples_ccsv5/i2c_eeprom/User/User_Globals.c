@@ -40,6 +40,7 @@ volatile Uint16 flagVoltage=0;
 volatile Uint16 flagCharged=0;											//*****
 volatile Uint16 flagDischarged=0;
 volatile Uint16 balance = 0;
+volatile Uint16 flagPreCharge = 0;
 /////////////////////////////////////////////
 
 volatile Uint16 counter_2Hz = 0;

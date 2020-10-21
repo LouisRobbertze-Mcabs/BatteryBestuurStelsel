@@ -1,6 +1,4 @@
 //###########################################################################
-// $TI Release: F2803x C/C++ Header Files and Peripheral Examples V127 $
-// $Release Date: March 30, 2013 $
 
 //To Do List:
 //Check if CRC is correct, and BQ is responding
@@ -41,7 +39,6 @@ void main(void)
 
 			ServiceDog();
 
-			//Calibrate_Current_charger();
 			Calibrate_Current();
 
 			Read_System_Status();

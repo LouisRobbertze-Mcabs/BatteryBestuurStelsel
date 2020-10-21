@@ -239,14 +239,14 @@ void Process_Voltages(void)
     //12V - 20A Supply control
     if(Voltage_low > Vmin &&  Auxilliary_Voltage > 7 && Aux_Control == 0)               //Auxilliary_Voltage < Vauxmin &&
     {
-        													                            //Auxilliary_counter = 0;		turn on aux supply
+        Auxilliary_counter = 0;														    //	turn on aux supply
         Aux_Control = 1;
     }
     else if( Auxilliary_Voltage < 7)                                                    //Auxilliary_counter > AuxChargeTime ||
     {
         Aux_Control = 0;																//turn off aux supply
     }
-                                                                                        //Auxilliary_counter++;
+    Auxilliary_counter++;
 
 /////////////////////////////////////////////////////////////////////////////////////////
     //Minimum voltage limit check
