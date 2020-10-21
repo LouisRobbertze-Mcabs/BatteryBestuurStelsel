@@ -104,7 +104,7 @@ __interrupt void cpu_timer1_isr(void)
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// testing
     if(KeySwitch == 1 && System_State == 1)  //keyswitch == 1
-    {   //binne die keydrive if
+    {
         //Add nog 'n pre_charge loop..
         if(PreCharge == 0)
         {
@@ -114,13 +114,12 @@ __interrupt void cpu_timer1_isr(void)
         }
         else
         {
-            if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp == 0) && (Charger_status == 0) && (PreCharge_Timer > 6000))
+            if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp == 0) && (Charger_status == 0) && (PreCharge_Timer > 10000))//5 sekonds
             {
                 ContactorOut = 1;           //turn on contactor
             }
             else
             {
-                //Maybe this should just always show????
                 ContactorOut = 0;           //turn off contactor
                 //led3 = 1;
             }
@@ -152,7 +151,7 @@ __interrupt void cpu_timer1_isr(void)
 
 __interrupt void cpu_timer2_isr(void)
 {
-    if(PreCharge_Timer < 6100)
+    if(PreCharge_Timer < 10100)
         PreCharge_Timer++;                                  // 4000 = 2 sekondes
 
     EALLOW;
