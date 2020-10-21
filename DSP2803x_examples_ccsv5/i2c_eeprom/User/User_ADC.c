@@ -124,11 +124,12 @@ void Reset_MCU(int flag)
 void Pre_Charge_Ctrl(void)                              //should be controlled via
 {
     static long delay_counter = 0;
+    const int delay_PreCharge = 604800;                 //3600s*24*7 = 1 week = 604800
 
-    if(delay_counter>604800 || flagDischarged == 2)                        //3600s*24*7 = 1 week = 604800
+    if(delay_counter>delay_PreCharge || flagDischarged == 2)
     {
         PreCharge = 0;
-        delay_counter = 604800 + 1;                                           //needs more testing
+        delay_counter = delay_PreCharge + 1;                                           //needs more testing
     }
     else if(flagDischarged == 0)
         PreCharge = 1;
