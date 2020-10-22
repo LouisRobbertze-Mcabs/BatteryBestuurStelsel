@@ -112,7 +112,7 @@ void Reset_MCU(int flag)
 {
     static int delay = 0;
 
-    if(ECanaRegs.CANES.bit.EP == 1)
+    if(ECanaRegs.CANES.bit.EP == 1)                 //maybe add other flags as well
         delay++;
     else
         delay=0;
@@ -121,7 +121,7 @@ void Reset_MCU(int flag)
         for(;;){}
 }
 
-void Pre_Charge_Ctrl(void)                              //should be controlled via
+void Pre_Charge_Ctrl(void)                              //
 {
     static long delay_counter = 0;
     const int delay_PreCharge = 604800;                 //3600s*24*7 = 1 week = 604800
@@ -129,7 +129,7 @@ void Pre_Charge_Ctrl(void)                              //should be controlled v
     if(delay_counter>delay_PreCharge || flagDischarged == 2)
     {
         PreCharge = 0;
-        delay_counter = delay_PreCharge + 1;                                           //needs more testing
+        delay_counter = delay_PreCharge + 1;            //needs more testing
     }
     else if(flagDischarged == 0)
         PreCharge = 1;
