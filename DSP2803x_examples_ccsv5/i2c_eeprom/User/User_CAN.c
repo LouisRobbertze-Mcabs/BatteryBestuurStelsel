@@ -196,7 +196,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
         //Read Charger Status
         ChgStatus = RxDataH & 0xFF;
 
-        if(ChgStatus == 0 || ChgStatus == 0x08)                        //Charger ready to charge || battery voltage low flag || Comms issue
+        if(ChgStatus == 0 || ChgStatus == 0x08)                                             //Charger ready to charge || battery voltage low flag || Comms issue
         {
             Charger_status = 1;																//0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????											//charger connected
             if(flagCurrent == 0 && flagTemp == 0 && flagCharged == 0 && KeySwitch == 0 /*&& flagDischarged != 2*/)     //check flags to ensure charging is allowed
@@ -252,22 +252,12 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
         }
         else                                                                                 //Charger flag set. typically power disconnected
         {
-          //  if(delay == 1)
-          //  {
-                //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                                //disconnect charger
-           //     delay--;
-           //     Charger_status = 0;
-          //  }
-         //   else if(delay == 0)
-         //   {
-
                 //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                              //disconnect charger
                 ContactorOut = 0;                                                           //turn off contactor
                 delay = 0;
                 Charger_status = 0;															//add counter to monitor if charger is unplugged?
                 Charging_animation = 0;
                 Current_max = 5;															//speel rond om charge stabiel te kry
-         //   }
         }
 
         ChargerVoltage = ChgVoltage;
@@ -364,7 +354,7 @@ void CAN_Output_All(void)
     int i;
 
     //Battery data
-    if((Aux_Control == 1) && (Auxilliary_counter > 1))
+    if((Aux_Control == 1) && (Auxilliary_counter > 1))                  //just do counter inside loop
     {
         CANTransmit(0x718, 0x4, ((int)(Voltage_total*10)), 5); //Voltage
 

@@ -333,8 +333,7 @@ void Calculate_SOH(void)
 
 void Calculate_Current(void)
 {
-    Current = ((test_current)-Current_CAL )* 0.122;                   //2095    maal, moenie deel nie!!!!     0.0982--200/2048          /*Current_CAL/*
-
+    Current = ((test_current)-Current_CAL )* 0.122;                   //2095    maal, moenie deel nie!!!!     0.0982--200/2048
 }
 
 void Read_System_Status(void)
@@ -815,12 +814,12 @@ void Calculate_SOC()
 
     SOC_t++;
 
-    if(Current>2 || Current<-2 || Charger_status == 1)
+    if(Current > 2 || Current < -2 || Charger_status == 1)
     {
         SOC_t = 0;
     }
-    SOCc = SOC - (Current*0.000164);				//coulomb counter      Ampere sec -> Ampere huur  	0.000185			1/150A*3600s
-                                                       //                                                0.000164            1/170*2*3600s
+    SOCc = SOC - (Current*0.000164);				//coulomb counter  Ampere sec -> Ampere huur  	0.000185			1/150A*3600s
+                                                    //                                              0.000164            1/170*2*3600s
     if(SOC_t > 5400)								//delay of 90 min maybe do 60 min?
         Wsoc = 0;
     else
@@ -837,7 +836,7 @@ void Calculate_SOC()
 void Calibrate_Current_charger()
 {
     //Reset the watchdog counter
-    ServiceDog();
+    //ServiceDog();
     float error;
 
     static float old_ChargerCurrent;
@@ -875,7 +874,7 @@ void Calibrate_Current()
         if(Calibrate_delay > 10)                                                    //10 s delay for the vehicle/battery to do shut-off process
         {
             error = Current;
-            Current_CAL = Current_CAL + (0.001* error * Current_CAL);                   //maybe add slow filter to dampen the fault?
+            Current_CAL = Current_CAL + (0.001* error * Current_CAL);               //maybe add slow filter to dampen the fault?
 
             if(Current_CAL>2200)                                                    //set maximum limit
                 Current_CAL = 2200;

@@ -1,5 +1,4 @@
 //###########################################################################
-
 //To Do List:
 //Check if CRC is correct, and BQ is responding
 //Doen ekstra reset flag so that if new data is not returned contactor can't close / toets..

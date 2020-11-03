@@ -110,7 +110,7 @@ volatile float Ifilter = 0.27;
 volatile float Tmax = 50;
 volatile float Tmin = 0;
 
-volatile float SOC ;//
+volatile float SOC  ;//
 
 volatile float Vauxmin = 13;
 volatile float AuxChargeTime = 1800;
@@ -157,9 +157,9 @@ volatile float Current_CAL = 2080;			//=2095
 
 volatile float SOC_t =0;                //added zero start
 
-float volatile Wsoc = 1;
-float volatile SOCv = 0.5;
-float volatile SOCc = 0;
+volatile float Wsoc = 1;
+volatile float SOCv = 0.5;
+volatile float  SOCc = 0;
 
 float ChgCurrent = 0;
 
@@ -182,7 +182,6 @@ int temptimer = 0;
 
 volatile Uint32 CAN_Charger_dataL = 0;
 volatile Uint32 CAN_Charger_dataH = 0;
-
 
 volatile Uint32 System_State = 0;
 
