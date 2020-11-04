@@ -200,3 +200,4 @@ volatile long timecounterseconds = 0;
 volatile float Charging_animation = 0;
 
 volatile Uint32 PreCharge_Timer = 0;
+volatile Uint16 Charger_Error_flag = 0;

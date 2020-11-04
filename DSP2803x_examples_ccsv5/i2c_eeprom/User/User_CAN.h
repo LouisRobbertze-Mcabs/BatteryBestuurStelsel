@@ -19,5 +19,6 @@ void CANSlaveReception(void);
 void CAN_Output_All(void);
 void CANSlaveConfig(void);
 void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Bytes);
+float Charger_inputData_parse(Uint32 data);
 
 #endif /* USER_USER_CAN_H_ */

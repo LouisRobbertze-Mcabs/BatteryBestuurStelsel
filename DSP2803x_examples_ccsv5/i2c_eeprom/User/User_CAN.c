@@ -169,8 +169,8 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
     float ChgVoltage = 0;
 
     Uint16 ChgStatus = 0;
-    Uint16 temp = 0;
-    Uint16 temp2 = 0;
+   // Uint16 temp = 0;
+   // Uint16 temp2 = 0;
 
     static volatile float Current_max = 5;
     static volatile int timeout = 0;
@@ -180,19 +180,21 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
     if(RxDataL != 0 || RxDataH != 0)
     {
         timeout = 0;
+        ChgVoltage = Charger_inputData_parse(RxDataL);                                      //calculate charger voltage
+        ChgCurrent = Charger_inputData_parse((RxDataL& 0xFFFF0000)>>16);                    //calculate charger current
 
         //put this in another function
         //Read Charger Voltage
-        temp = RxDataL;
+    /*    temp = RxDataL;
         temp2 = (temp & 0xFF) << 8;
         temp2 = ((temp &0xFF00)>>8) | temp2;
-        ChgVoltage = (float)temp2*0.1;
+        ChgVoltage = (float)temp2*0.1;*/
 
         //Read Charger Current
-        temp = (RxDataL& 0xFFFF0000)>>16;
+      /*  temp = (RxDataL& 0xFFFF0000)>>16;
         temp2 = (temp & 0xFF) << 8;
         temp2 = ((temp &0xFF00)>>8) | temp2;
-        ChgCurrent = (float)temp2*0.1;
+        ChgCurrent = (float)temp2*0.1;*/
 
         //Read Charger Status
         ChgStatus = RxDataH & 0xFF;
@@ -204,7 +206,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
             {
                 if(ChgVoltage < 45)
                 {
-                    CANTransmit(0x618, 0, ChgCalculator(48, 0.2), 8);                     //charging started
+                    CANTransmit(0x618, 0, ChgCalculator(48, 0.2), 8);                       //charging started
                     PreCharge = 1;                                                          //turn on pre-charge resistor
                     delay++;
                 }
@@ -235,7 +237,6 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
                         Charging_animation = 1;	                                            //0 - not plugged in, 1 -plugged in
 
                     CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8);             //charging started
-                    //PreCharge = 1;                          								//turn on precharge resistor
                 }
             }
             else																			//BMS flag high. Stop charging and disconnect blah blah
@@ -249,20 +250,30 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
                 {                                                                             //turn off contactor
                     CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                            //disconnect charger
                     //if(flagCharged == 1)                                                    //maybe always disconnects the battery?
+
                     ContactorOut = 0;                                                         //keyswitch;
                     Charging_animation = 0;
                 }
             }
         }
-        else if(ChgStatus == 0x4)                                                                                //Charger input voltage error (ChgStatus = 0x4)
+        else if((ChgStatus & 0x4) == 0x4)                                                   //Charger input voltage error - Shutting down
         {
-                ContactorOut = 0;                                                           //turn off contactor
-                delay = 0;
-                Charger_status = 0;															//add counter to monitor if charger is unplugged?
-                Charging_animation = 0;
-                Current_max = 5;															//speel rond om charge stabiel te kry
+            ContactorOut = 0;                                                           //turn off contactor
+            delay = 0;
+            Charger_status = 0;															//add counter to monitor if charger is unplugged?
+            Charging_animation = 0;
+            Current_max = 5;															//speel rond om charge stabiel te kry
         }
-        //add else for different fault signals- Temperature error (ChgStatus = 0x2), Hardware failure (ChgStatus = 0x1) or Comms error (ChgStatus = 0x10)
+        else if((ChgStatus & 0x13) != 0)                                                //Charger error
+        {
+            //Temperature error (ChgStatus = 0x2), Hardware failure (ChgStatus = 0x1) or Comms error (ChgStatus = 0x10)
+            ContactorOut = 0;                                                           //turn off contactor
+            delay = 0;
+            Charger_status = 1;                                                         //add counter to monitor if charger is unplugged?
+            //add error flag - set to active - flash charging LED
+            Charging_animation = 0;
+            Current_max = 5;                                                            //speel rond om charge stabiel te kry
+        }
 
         ChargerVoltage = ChgVoltage;
         ChargerCurrent = ChgCurrent;
@@ -353,6 +364,7 @@ void CANSlaveReception(void)
 void CAN_Output_All(void)
 {
     Uint16 Acewell_Data = 0;
+    static Uint16 temp_CHG_status = 0;
     //Uint32 RxData = 0;
     union bits32 TxData;
     int i;
@@ -374,12 +386,25 @@ void CAN_Output_All(void)
         //sit system error, system charging, charge required
         //check flags for error messages
 
-        Acewell_Data = ((Charger_status & 0x1)<<1);
+        if(Charger_status==1)
+        {
+            if(Charger_Error_flag==0)
+                Acewell_Data = (((Charger_status) & 0x1)<<1);
+            else
+            {
+                temp_CHG_status = temp_CHG_status^0x1;
+                Acewell_Data = (((temp_CHG_status) & 0x1)<<1);
+            }
+
+
+        }
+        else
+            Acewell_Data = (((Charger_status) & 0x1)<<1);
 
         if (SOC<12 || flagPreCharge == 1)
             Acewell_Data = Acewell_Data + 1;
 
-        if((flagDischarged >= 1) || (flagCurrent == 1)  || (flagTemp == 1))
+        if((flagDischarged >= 1) || (flagCurrent == 1)  || (flagTemp == 1))         //service signal
             Acewell_Data = Acewell_Data + 4;
 
         CANTransmit(0x718, 0x88, Acewell_Data & 0xF, 5); //LEDS*/
@@ -460,4 +485,15 @@ void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Byte
 		ECanaRegs.CANMC.all = ECanaShadow.CANMC.all;
 		EDIS;
 	}*/
+}
+
+float Charger_inputData_parse(Uint32 data)
+{
+    Uint16 temp = 0;
+    Uint16 temp2 = 0;
+
+    temp = data;
+    temp2 = (temp & 0xFF) << 8;
+    temp2 = ((temp & 0xFF00)>>8) | temp2;
+    return ((float)temp2*0.1);
 }
