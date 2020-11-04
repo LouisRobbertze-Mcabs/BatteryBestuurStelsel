@@ -377,7 +377,7 @@ void CAN_Output_All(void)
         for(i=0;i<2000;i++){};
 
         if(Charging_animation == 1)
-            CANTransmit(0x718, 0x11, ((int)(Charging_Animation(SOC))), 5);
+            CANTransmit(0x718, 0x11, ((Charging_Animation((int)SOC))), 5);
         else
             CANTransmit(0x718, 0x11, ((int)(SOC)), 5); //SOC
 

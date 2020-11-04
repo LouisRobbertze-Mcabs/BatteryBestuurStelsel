@@ -248,7 +248,7 @@ void Process_Voltages(void)
     }
     Auxilliary_counter++;
 
-/////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////
     //Minimum voltage limit check
     if(Current < 80)                                                                //check current to reduce false trips
     {
@@ -274,7 +274,7 @@ void Process_Voltages(void)
             ContactorOut = 0;       //turn off contactor
         }
     }
-/////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
 
     //Reset BMS status flags
     if(Voltage_high<Vchargedflagreset )
@@ -819,7 +819,7 @@ void Calculate_SOC()
         SOC_t = 0;
     }
     SOCc = SOC - (Current*0.000164);				//coulomb counter  Ampere sec -> Ampere huur  	0.000185			1/150A*3600s
-                                                    //                                              0.000164            1/170*2*3600s
+    //                                              0.000164            1/170*2*3600s
     if(SOC_t > 5400)								//delay of 90 min maybe do 60 min?
         Wsoc = 0;
     else
@@ -911,16 +911,19 @@ void Battery_Status(void)
     //Extra flags are a possibility
 }
 
-float Charging_Animation(float real_SOC)
+int Charging_Animation(int real_SOC)
 {
-    static float previous_SOC = 0;
+    static int previous_SOC = 0;
 
-    previous_SOC = previous_SOC + 12;
+    previous_SOC = previous_SOC + 13;
 
-    if(previous_SOC <= real_SOC - 12)			//bottom animation
-        previous_SOC = real_SOC - 12;
-    else if(previous_SOC > 101 )				//top animation
-        previous_SOC = real_SOC - 12;
+    if(previous_SOC < real_SOC - 13)			//bottom animation
+        previous_SOC = real_SOC - 13;
+    else if(previous_SOC > 102 )				//top animation
+        previous_SOC = real_SOC - 13;
+
+    if(previous_SOC<0)
+        previous_SOC = previous_SOC + 12;
 
     return previous_SOC;
 }

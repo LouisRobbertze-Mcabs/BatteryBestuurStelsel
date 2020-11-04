@@ -43,7 +43,7 @@ void main(void)
 			Read_System_Status();
 			Process_System_Status();
 
-			Calculate_SOC();
+			Calculate_SOC();                                        //set to start up using SOCv
 			Calculate_SOH();
 
 			counter_2Hz = 0;
