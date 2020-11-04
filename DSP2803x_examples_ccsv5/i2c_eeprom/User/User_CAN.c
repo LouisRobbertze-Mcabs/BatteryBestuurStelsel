@@ -167,10 +167,8 @@ void CANInterruptConfig(void)
 void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 { //maybe setup CAN status structure to capture all the info required. -Charger active, battery charging,
     float ChgVoltage = 0;
-
+    float ChgCurrent = 0;
     Uint16 ChgStatus = 0;
-   // Uint16 temp = 0;
-   // Uint16 temp2 = 0;
 
     static volatile float Current_max = 5;
     static volatile int timeout = 0;
@@ -182,22 +180,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
         timeout = 0;
         ChgVoltage = Charger_inputData_parse(RxDataL);                                      //calculate charger voltage
         ChgCurrent = Charger_inputData_parse((RxDataL& 0xFFFF0000)>>16);                    //calculate charger current
-
-        //put this in another function
-        //Read Charger Voltage
-    /*    temp = RxDataL;
-        temp2 = (temp & 0xFF) << 8;
-        temp2 = ((temp &0xFF00)>>8) | temp2;
-        ChgVoltage = (float)temp2*0.1;*/
-
-        //Read Charger Current
-      /*  temp = (RxDataL& 0xFFFF0000)>>16;
-        temp2 = (temp & 0xFF) << 8;
-        temp2 = ((temp &0xFF00)>>8) | temp2;
-        ChgCurrent = (float)temp2*0.1;*/
-
-        //Read Charger Status
-        ChgStatus = RxDataH & 0xFF;
+        ChgStatus = RxDataH & 0xFF;                                                         //Read Charger Status
 
         if(ChgStatus == 0 || ChgStatus == 0x08)                                             //Charger ready to charge || Charger Starting State
         {
@@ -241,7 +224,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
             }
             else																			//BMS flag high. Stop charging and disconnect blah blah
             {
-                if(delay == 1)                                                              //sit miskien check in om met die charger Vbat te meet
+                if(delay > 0)                                                              //sit miskien check in om met die charger Vbat te meet
                 {
                     CANTransmit(0x618,1,ChgCalculator(52.5, 0),8);                            //disconnect charger
                     delay--;

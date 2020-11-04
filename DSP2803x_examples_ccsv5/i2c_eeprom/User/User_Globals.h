@@ -153,7 +153,7 @@ extern volatile float SOCv;
 extern volatile float SOCc;
 
 
-extern float ChgCurrent;
+//extern float ChgCurrent;
 
 extern volatile float SOH_avg;
 extern volatile float SOH_max;
