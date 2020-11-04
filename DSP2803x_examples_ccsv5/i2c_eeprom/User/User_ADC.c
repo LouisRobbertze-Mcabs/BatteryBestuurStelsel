@@ -143,7 +143,7 @@ void Pre_Charge_Ctrl(void)                              //
     else if(flagDischarged == 0)
         PreCharge = 1;
 
-    if((KeySwitch == 1) || (Charger_status == 1))
+    if((KeySwitch == 1))
     {
         delay_counter=0;
     }

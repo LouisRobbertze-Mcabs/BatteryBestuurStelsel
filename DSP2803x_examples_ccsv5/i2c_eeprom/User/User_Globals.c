@@ -118,7 +118,7 @@ volatile float AuxChargeTime = 1800;
 volatile float Vchargedflagreset = 3.35;
 volatile float Vdischargedflagreset = 2.8;
 volatile float kp_constant = 3.5;								//charger
-volatile float kp_multiplier = 30;								//charger
+volatile float kp_multiplier = 50;								//charger - increased from 30
 volatile float balancing_upper_level = 3.49;
 volatile float balancing_bottom_level = 3.48; //4.475
 
