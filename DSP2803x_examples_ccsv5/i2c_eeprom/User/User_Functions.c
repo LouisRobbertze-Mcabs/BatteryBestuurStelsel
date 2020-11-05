@@ -78,6 +78,8 @@ void Initialise_BMS(void)
     SysCtrlRegs.WDCR = 0x002F;
     EDIS;
 
+    SOC = (float)(interpolate_table_1d(&sine_table, (long)(Voltage_low*1000)));
+
     //watchdog timer>>>>>>>>
     //DisableDog();
 }
