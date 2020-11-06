@@ -378,8 +378,6 @@ void CAN_Output_All(void)
                 temp_CHG_status = temp_CHG_status^0x1;
                 Acewell_Data = (((temp_CHG_status) & 0x1)<<1);
             }
-
-
         }
         else
             Acewell_Data = (((Charger_status) & 0x1)<<1);

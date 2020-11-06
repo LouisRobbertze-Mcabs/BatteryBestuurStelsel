@@ -119,13 +119,12 @@ __interrupt void cpu_timer1_isr(void)
             if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp == 0) && (Charger_status == 0) && (PreCharge_Timer > 12000))//5 sekonds
             {
                 ContactorOut = 1;           //turn on contactor
-                flagPreCharge = 0;
             }
             else
             {
                 ContactorOut = 0;           //turn off contactor
-                //led3 = 1;
             }
+            flagPreCharge = 0;
         }
     }
     else if((KeySwitch == 0) && (Charger_status == 0)) //keyswitch == 0
