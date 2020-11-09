@@ -109,7 +109,7 @@ __interrupt void cpu_timer1_isr(void)
         if(PreCharge == 0)
         {
             //initiate pre-charge, reset pre-charge timer
-            PreCharge = 1;
+            PreCharge = 1;                                             //miskien gebruik net hierdie inplaas van flagPrecharge?
             PreCharge_Timer = 0;
             flagPreCharge = 1;
                                                                     //flicker battery LED to signal to driver not to drive..
@@ -119,12 +119,12 @@ __interrupt void cpu_timer1_isr(void)
             if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp == 0) && (Charger_status == 0) && (PreCharge_Timer > 12000))//5 sekonds
             {
                 ContactorOut = 1;           //turn on contactor
+                flagPreCharge = 0;
             }
             else
             {
                 ContactorOut = 0;           //turn off contactor
             }
-            flagPreCharge = 0;
         }
     }
     else if((KeySwitch == 0) && (Charger_status == 0)) //keyswitch == 0

@@ -184,13 +184,15 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 
         if(ChgStatus == 0 || ChgStatus == 0x08)                                             //Charger ready to charge || Charger Starting State
         {
+            flagPreCharge = 0;
+            PreCharge = 1;
             Charger_status = 1;																//0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????											//charger connected
             if(flagCurrent == 0 && flagTemp == 0 && flagCharged == 0 && KeySwitch == 0 )    //check flags to ensure charging is allowed
             {
                 if(ChgVoltage < 45)
                 {
                     CANTransmit(0x618, 0, ChgCalculator(48, 0.2), 8);                       //charging started
-                    PreCharge = 1;                                                          //turn on pre-charge resistor
+                    //PreCharge = 1;                                                          //turn on pre-charge resistor
                     delay++;
                 }
                 else
@@ -376,13 +378,13 @@ void CAN_Output_All(void)
             else
             {
                 temp_CHG_status = temp_CHG_status^0x1;
-                Acewell_Data = (((temp_CHG_status) & 0x1)<<1);
+                Acewell_Data = ((temp_CHG_status & 0x1)<<1);
             }
         }
         else
             Acewell_Data = (((Charger_status) & 0x1)<<1);
 
-        if (SOC<12 || flagPreCharge == 1)
+        if (SOC<12 || flagPreCharge == 1)                 //                          //Battery LED
             Acewell_Data = Acewell_Data + 1;
 
         if((flagDischarged >= 1) || (flagCurrent == 1)  || (flagTemp == 1))         //service signal

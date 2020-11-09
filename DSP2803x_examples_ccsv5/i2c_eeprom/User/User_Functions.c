@@ -78,7 +78,7 @@ void Initialise_BMS(void)
     SysCtrlRegs.WDCR = 0x002F;
     EDIS;
 
-    SOC = (float)(interpolate_table_1d(&sine_table, (long)(Voltage_low*1000)));
+    //SOC = (float)(interpolate_table_1d(&sine_table, (long)(Voltage_low*1000)));
 
     //watchdog timer>>>>>>>>
     //DisableDog();
@@ -816,7 +816,7 @@ void Calculate_SOC()
 
     SOC_t++;
 
-    if(Current > 2 || Current < -2 || Charger_status == 1)
+    if(Charger_status == 1 || Aux_Control == 1 || KeySwitch == 1)         //Current > 2 || Current < -2 ||
     {
         SOC_t = 0;
     }
