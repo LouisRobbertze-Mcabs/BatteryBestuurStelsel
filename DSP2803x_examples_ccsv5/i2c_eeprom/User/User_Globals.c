@@ -201,3 +201,5 @@ volatile float Charging_animation = 0;
 
 volatile Uint32 PreCharge_Timer = 0;
 volatile Uint16 Charger_Error_flag = 0;
+
+const long delay_PreCharge = 604800;                 //3600s*24*7 = 1 week = 604800   // toets weer met 20 sekondes

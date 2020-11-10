@@ -133,20 +133,17 @@ void Reset_MCU(int flag)
 void Pre_Charge_Ctrl(void)                              //
 {
     static long delay_counter = 0;
-    const int delay_PreCharge = 604800;                 //3600s*24*7 = 1 week = 604800   // toets weer met 20 sekondes
 
-    if(delay_counter>delay_PreCharge /*|| flagDischarged == 2*/)        //dont think we need flagDischarged ==2
+    if(delay_counter>delay_PreCharge)
     {
         PreCharge = 0;
-        delay_counter = delay_PreCharge + 1;            //needs more testing
+        delay_counter = delay_PreCharge + 1;                            //needs more testing
     }
     else if(flagDischarged == 0)
         PreCharge = 1;
 
-    if((KeySwitch == 1))
-    {
+    if(KeySwitch == 1)
         delay_counter=0;
-    }
     else
         delay_counter++;
 }

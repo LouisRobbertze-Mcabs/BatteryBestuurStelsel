@@ -195,4 +195,6 @@ extern volatile float Charging_animation;
 extern volatile Uint32 PreCharge_Timer;
 extern volatile Uint16 Charger_Error_flag;
 
+extern const long delay_PreCharge;
+
 #endif /* USER_GLOBALS_H_ */
