@@ -104,6 +104,10 @@ void Init_Gpio(void)
     GpioCtrlRegs.GPADIR.bit.GPIO6 = 1;      //BT reset
     Aux_Control2 = 0;                            //keep BT in reset
 
+    GpioCtrlRegs.GPAMUX1.bit.GPIO12 = 0;    //12 Aux drive
+    GpioCtrlRegs.GPADIR.bit.GPIO12 = 1;     // 12 Aux drive (verander miskien)
+    Temp_Control = 0;
+
     GpioCtrlRegs.GPAMUX1.bit.GPIO15 = 0;    //12 Aux drive
     GpioCtrlRegs.GPADIR.bit.GPIO15 = 1;     // 12 Aux drive (verander miskien)
     Aux_Control = 0;

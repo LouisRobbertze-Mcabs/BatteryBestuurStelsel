@@ -21,6 +21,7 @@
 #define led2 GpioDataRegs.GPADAT.bit.GPIO4
 #define led1 GpioDataRegs.GPADAT.bit.GPIO5
 #define Aux_Control2 GpioDataRegs.GPADAT.bit.GPIO6
+#define Temp_Control GpioDataRegs.GPADAT.bit.GPIO12
 #define Aux_Control GpioDataRegs.GPADAT.bit.GPIO15
 #define KeyDrive GpioDataRegs.GPADAT.bit.GPIO19
 #define ContactorOut GpioDataRegs.GPADAT.bit.GPIO20
