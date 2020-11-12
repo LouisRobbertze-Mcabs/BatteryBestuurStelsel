@@ -23,13 +23,13 @@ __interrupt void  adc_isr(void)
     ////////////
     //insert limits here
     //4095 = maksimum current -> 250??
-    //3686 -> 4.5V = 200 A
-    //3359 -> 4.1V = 160 A
-    //3031 -> 3.7V = 120 A
-    //2048 -> 2.5V= 0 A
-    //1065 -> 1.3V = -120
-    //410 -> 0.5V = -200A
-    //0 -> 0V = -250A
+    //3686 -> 4.5V = 200 A          220   ~  4.7V = 3850
+    //3359 -> 4.1V = 160 A          200   ~  4.5V = 3686
+    //3031 -> 3.7V = 120 A          160   ~  4.1V = 3359
+    //2048 -> 2.5V= 0 A             0 A   ~  2.5V = 2048
+    //1065 -> 1.3V = -120           -160  ~  0.9V = 737
+    //410 -> 0.5V = -200A           -200  ~  0.5V = 410
+    //0 -> 0V = -250A               -220  ~  0.3V = 246
 
     Filter_SC = (100*Filter_SC_past + (27*(AdcResult.ADCRESULT1-Filter_SC_past)))/100;	   //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
     Filter_SC_past=Filter_SC;
@@ -40,17 +40,17 @@ __interrupt void  adc_isr(void)
         ContactorOut = 0;       														//turn off contactor
         flagCurrent = 1;
     }
-    else if(Filter_SC <= 3031 && Filter_SC > 2048)										//current between 0A and 120 A
+    else if(Filter_SC <= 3359 && Filter_SC > 2048)										//current between 0A and 160 A
     {
         trip_timer = interpolate_table_1d(&trip2_table, Filter_SC);						//linear cooling -- straight line
         trip_counter = trip_counter - (1200000/trip_timer);
     }
-    else if(Filter_SC <= 2048 && Filter_SC > 1065)										//current between 0A and -120 A
+    else if(Filter_SC <= 2048 && Filter_SC > 737)										//current between 0A and -160 A
     {
         trip_timer = interpolate_table_1d(&trip2_table, (4096-Filter_SC));				//linear cooling -- straight line
         trip_counter = trip_counter - (1200000/trip_timer);
     }
-    else if(Filter_SC > 3031)															//current larger than 120 A
+    else if(Filter_SC > 3359)															//current larger than 160 A
     {
         trip_timer = interpolate_table_1d(&trip_table, Filter_SC);						//Non-linear heating
         trip_counter = trip_counter + (1200000/trip_timer);
@@ -58,7 +58,7 @@ __interrupt void  adc_isr(void)
 			testvariable2 = Filter_SC;
 		testvariable++;*/
     }
-    else																				//current smaller than -120 A
+    else																				//current smaller than -160 A
     {
         trip_timer = interpolate_table_1d(&trip_table, (4096-Filter_SC));				//Non-linear heating
         trip_counter = trip_counter + (1200000/trip_timer);

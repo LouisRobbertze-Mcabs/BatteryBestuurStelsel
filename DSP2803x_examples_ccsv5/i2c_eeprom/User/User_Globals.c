@@ -135,7 +135,7 @@ struct table_1d sine_table = {
 };
 
 long time_x[4] = {1200000, 10000, 1000, 20};		//10ms, 0.5s, 5s, 600s							{20, 2000, 10000, 1200000}
-long I_y[4] = {3031,3359 ,3686 ,4050};			//  4050 = 245A, 3686=200A, 3359=160A, 3032=120A	{4050, 3686, 3359, 3031}
+long I_y[4] = {3359,3686 ,3850 ,4050};			//  4050 = 245A, 3850=220A, 3686=200A, 3359=160A, 	{4050, 3686, 3359, 3031}
 
 struct table_1d trip_table = {
     4,      /* Number of data points */
@@ -144,7 +144,7 @@ struct table_1d trip_table = {
 };
 
 long time2_x[2] = {300000, 1200000}; //samples-> 300s  , 600s
-long I2_y[2] = {2048, 3031};
+long I2_y[2] = {2048, 3359};
 
 struct table_1d trip2_table = {
     2,      /* Number of data points */
