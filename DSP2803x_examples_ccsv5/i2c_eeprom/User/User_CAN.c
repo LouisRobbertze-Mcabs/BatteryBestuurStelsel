@@ -229,7 +229,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
         if(ChgStatus == 0 || ChgStatus == 0x08)                        //Charger ready to charge || battery voltage low flag || Comms issue
         {
             Charger_status = 1;																//0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????											//charger connected
-            if(flagCurrent == 0 && flagTemp_Charge == 0 && flagCharged == 0 && KeySwitch == 0 /*&& flagDischarged != 2*/)     //flagTemp_Charge check flags to ensure charging is allowed
+            if(flagCurrent == 0 && flagTemp_Charge == 0 && flagCharged == 0 && Key_switch_2 == 0 /*&& flagDischarged != 2*/)     //flagTemp_Charge check flags to ensure charging is allowed
             {
                 if(delay == 0)                                                              //sit miskien check in om met die charger Vbat te meet
                 {

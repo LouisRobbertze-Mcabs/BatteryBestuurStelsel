@@ -100,22 +100,29 @@ void Init_Gpio(void)
     GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 0;     //led1
     GpioCtrlRegs.GPADIR.bit.GPIO5 = 1;      //led1
 
-    GpioCtrlRegs.GPAMUX1.bit.GPIO6 = 0;     //BT reset
-    GpioCtrlRegs.GPADIR.bit.GPIO6 = 1;      //BT reset
-    Aux_Control2 = 0;                            //keep BT in reset
+    GpioCtrlRegs.GPAMUX1.bit.GPIO6 = 0;     //12V Secondary Auxiliary Supply Ctrl
+    GpioCtrlRegs.GPADIR.bit.GPIO6 = 1;      //12V Secondary Auxiliary Supply Ctrl
+    LPwr_Out_Ctrl_1 = 0;                    //12V Secondary Auxiliary Supply Ctrl - off
 
-    GpioCtrlRegs.GPAMUX1.bit.GPIO12 = 0;    //12 Aux drive
-    GpioCtrlRegs.GPADIR.bit.GPIO12 = 1;     // 12 Aux drive (verander miskien)
-    Temp_Control = 0;
+    GpioCtrlRegs.GPAMUX1.bit.GPIO7 = 0;     //Extra Mfet output
+    GpioCtrlRegs.GPADIR.bit.GPIO7 = 1;      //Extra Mfet output
+
+    GpioCtrlRegs.GPAMUX1.bit.GPIO12 = 0;    //Temperature_Control
+    GpioCtrlRegs.GPADIR.bit.GPIO12 = 1;     //Temperature_Control
+    Temperature_Control = 0;                //Switch on Temperature measurements
+
+    GpioCtrlRegs.GPAMUX1.bit.GPIO13 = 0;    //High power 48V ctrl 1
+    GpioCtrlRegs.GPADIR.bit.GPIO13 = 1;     //High power 48V ctrl 1
+    Ctrl_HPwr_48V_O_1 = 0;                  //High power 48V ctrl 1 - dink hierdie moet 1 wees
 
     GpioCtrlRegs.GPAMUX1.bit.GPIO15 = 0;    //12 Aux drive
     GpioCtrlRegs.GPADIR.bit.GPIO15 = 1;     // 12 Aux drive (verander miskien)
     Aux_Control = 0;
 
-    //	GpioCtrlRegs.GPAPUD.bit.GPIO19 = 1;    // Enable pull-up for GPIO19
-    GpioCtrlRegs.GPAMUX2.bit.GPIO19 = 0;    //KeyDrive
-    GpioCtrlRegs.GPADIR.bit.GPIO19 = 1;     //(Output) key drive (raak nou fan control)
-    Fan_Control = 0; 						//turn off fan for now
+    //GpioCtrlRegs.GPAPUD.bit.GPIO19 = 1;    // Enable pull-up for GPIO19
+    GpioCtrlRegs.GPAMUX2.bit.GPIO19 = 0;    //Ctrl_LPwr_48V_O_2
+    GpioCtrlRegs.GPADIR.bit.GPIO19 = 1;     //Ctrl_LPwr_48V_O_2
+    Ctrl_LPwr_48V_O_2 = 0; 					//turn off for now
 
     GpioCtrlRegs.GPAMUX2.bit.GPIO20 = 0;    //contactor output
     GpioCtrlRegs.GPADIR.bit.GPIO20 = 1;     // contactor output
@@ -125,14 +132,21 @@ void Init_Gpio(void)
     GpioCtrlRegs.GPADIR.bit.GPIO21 = 1;     // precharge resistor
     PreCharge = 1;                          //turn on precharge resistor
 
-    GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 0;    //key switch
-    GpioCtrlRegs.GPADIR.bit.GPIO24 = 0;     //key switch
+    GpioCtrlRegs.GPAMUX2.bit.GPIO22 = 0;    //key 1 switch
+    GpioCtrlRegs.GPADIR.bit.GPIO22 = 0;     //key 1 switch
+
+    GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 0;    //key 2 switch
+    GpioCtrlRegs.GPADIR.bit.GPIO24 = 0;     //key 2 switch
 
     GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 0;    //BQ on
     GpioCtrlRegs.GPADIR.bit.GPIO26 = 0;     //BQ on (input)
 
     GpioCtrlRegs.GPAMUX2.bit.GPIO27 = 0;    //CANenable
     GpioCtrlRegs.GPADIR.bit.GPIO27 = 1;     //CANenable (output)
+
+    GpioCtrlRegs.GPBMUX1.bit.GPIO39 = 0;    //Ctrl_LPwr_48V_O_3
+    GpioCtrlRegs.GPBDIR.bit.GPIO39 = 1;     //Ctrl_LPwr_48V_O_3
+    Ctrl_LPwr_48V_O_3 = 0;                  //turn off for now
 
     GpioCtrlRegs.GPBMUX1.bit.GPIO40 = 0;    //led3
     GpioCtrlRegs.GPBDIR.bit.GPIO40 = 1;     //led3
@@ -275,7 +289,7 @@ void Process_Voltages(void)
             //		led3 = 1;               //turn on red led
             PreCharge = 0;
             ContactorOut = 0;       //turn off contactor
-            Aux_Control2 = 0;
+            LPwr_Out_Ctrl_1 = 0;
         }
     }
     else
@@ -299,7 +313,7 @@ void Process_Voltages(void)
         flagDischarged = 0;
         //		led3 = 0;               //turn off red led
         PreCharge = 1;
-        Aux_Control2 = 1;
+        LPwr_Out_Ctrl_1 = 1;
     }
 
     if(Voltage_high<3.4)

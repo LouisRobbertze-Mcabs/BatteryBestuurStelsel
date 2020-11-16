@@ -117,6 +117,6 @@ void Reset_MCU(int flag)
     else
         delay=0;
 
-    if(flag == 1 && delay > 300 && ECanaRegs.CANES.bit.EP == 1 && KeySwitch == 0)   //5 min intervals
+    if(flag == 1 && delay > 300 && ECanaRegs.CANES.bit.EP == 1 && Key_switch_2 == 0)   //5 min intervals
         for(;;){}
 }

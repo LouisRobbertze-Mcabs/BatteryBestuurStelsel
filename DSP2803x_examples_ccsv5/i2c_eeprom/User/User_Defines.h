@@ -20,17 +20,27 @@
 #define BQEnable GpioDataRegs.GPADAT.bit.GPIO3
 #define led2 GpioDataRegs.GPADAT.bit.GPIO4
 #define led1 GpioDataRegs.GPADAT.bit.GPIO5
-#define Aux_Control2 GpioDataRegs.GPADAT.bit.GPIO6
-#define Temp_Control GpioDataRegs.GPADAT.bit.GPIO12
-#define Aux_Control GpioDataRegs.GPADAT.bit.GPIO15
-#define KeyDrive GpioDataRegs.GPADAT.bit.GPIO19
+#define LPwr_Out_Ctrl_1 GpioDataRegs.GPADAT.bit.GPIO6            //BMS N-type MfET output 1
+#define LPwr_Out_Ctrl_2 GpioDataRegs.GPADAT.bit.GPIO7            //BMS N-type MfET output 2
+
+//alert BQ pin GPIO9
+
+#define Temperature_Control GpioDataRegs.GPADAT.bit.GPIO12
+#define Ctrl_HPwr_48V_O_1 GpioDataRegs.GPADAT.bit.GPIO13
+#define Aux_Control GpioDataRegs.GPADAT.bit.GPIO15               //Ctrl_HPwr_48V_O_2
+
+#define Ctrl_LPwr_48V_O_2 GpioDataRegs.GPADAT.bit.GPIO19         //Ctrl_LPwr_48V_O_2
 #define ContactorOut GpioDataRegs.GPADAT.bit.GPIO20
-#define Fan_Control GpioDataRegs.GPADAT.bit.GPIO19
 #define PreCharge GpioDataRegs.GPADAT.bit.GPIO21
-#define KeySwitch GpioDataRegs.GPADAT.bit.GPIO24
+
+#define Key_switch_1 GpioDataRegs.GPADAT.bit.GPIO22              //Key_switch_Position_1
+#define Key_switch_2 GpioDataRegs.GPADAT.bit.GPIO24              //Key_switch_Position_2
 #define BQOn GpioDataRegs.GPADAT.bit.GPIO26
 #define CANEnable GpioDataRegs.GPADAT.bit.GPIO27
-#define led3 GpioDataRegs.GPBDAT.bit.GPIO40
+
+#define Ctrl_LPwr_48V_O_3 GpioDataRegs.GPBDAT.bit.GPIO39         //Ctrl_LPwr_48V_O_3
+
+#define led3 GpioDataRegs.GPBDAT.bit.GPIO40                      //LED Current Sense PCB
 #define CSControl GpioDataRegs.GPBDAT.bit.GPIO44
 
 #endif /* USER_DEFINES_H_ */

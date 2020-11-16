@@ -109,7 +109,7 @@ __interrupt void cpu_timer1_isr(void)
     Aux_Voltage_temp = Auxilliary_Voltage;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// testing
-    if(KeySwitch == 1 && System_State == 1)  //keyswitch == 1
+    if(Key_switch_2 == 1 && System_State == 1)  //keyswitch == 1
     {
         //binne die keydrive if
         if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp_Discharge == 0) && (Charger_status == 0)) //flagTemp_Discharge
@@ -123,7 +123,7 @@ __interrupt void cpu_timer1_isr(void)
             //led3 = 1;
         }
     }
-    else if((KeySwitch == 0) && (Charger_status == 0)) //keyswitch == 0
+    else if((Key_switch_2 == 0) && (Charger_status == 0)) //keyswitch == 0
     {
         flagCurrent = 0;
         ContactorOut = 0;       //turn off contactor
@@ -151,7 +151,7 @@ __interrupt void cpu_timer2_isr(void)
 {
     EALLOW;
     //counter
-    if(KeySwitch == 1 && flagCurrent == 0)
+    if(Key_switch_2 == 1 && flagCurrent == 0)
         testcounter++;
     CpuTimer2.InterruptCount++;
     EDIS;
@@ -293,7 +293,7 @@ __interrupt void can_rx_isr(void)
             Aux_Control = ((PDO_Command>>1 ) & 0x1);
 
             //bit 2 -> Low PWR 12V output - turn on 12V - usually ON but should maybe be inverse
-            Aux_Control2 = ((PDO_Command>>2 ) & 0x1);
+            LPwr_Out_Ctrl_1 = ((PDO_Command>>2 ) & 0x1);
 
             //bit 3 -> Reset Flag - Current_flag = 0;
             if((PDO_Command>>3 & 0x1) == 1)
