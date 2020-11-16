@@ -90,67 +90,84 @@ void Init_Gpio(void)
 {
     EALLOW;
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO3  = 1;     //Disable pull-up for GPIO3
     GpioCtrlRegs.GPAMUX1.bit.GPIO3 = 0;     //BQenable
     GpioCtrlRegs.GPADIR.bit.GPIO3 = 1;      //Bq enable
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO4  = 1;     //Disable pull-up for GPIO4
     GpioCtrlRegs.GPAMUX1.bit.GPIO4 = 0;     //led2
     GpioCtrlRegs.GPADIR.bit.GPIO4 = 1;      //led2
     led2 = 0;
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO5  = 1;     //Disable pull-up for GPIO5
     GpioCtrlRegs.GPAMUX1.bit.GPIO5 = 0;     //led1
     GpioCtrlRegs.GPADIR.bit.GPIO5 = 1;      //led1
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO6  = 1;     //Disable pull-up for GPIO6
     GpioCtrlRegs.GPAMUX1.bit.GPIO6 = 0;     //12V Secondary Auxiliary Supply Ctrl
     GpioCtrlRegs.GPADIR.bit.GPIO6 = 1;      //12V Secondary Auxiliary Supply Ctrl
     LPwr_Out_Ctrl_1 = 0;                    //12V Secondary Auxiliary Supply Ctrl - off
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO7  = 1;     //Disable pull-up for GPIO7
     GpioCtrlRegs.GPAMUX1.bit.GPIO7 = 0;     //Extra Mfet output
     GpioCtrlRegs.GPADIR.bit.GPIO7 = 1;      //Extra Mfet output
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO12  = 1;    //Disable pull-up for GPIO12
     GpioCtrlRegs.GPAMUX1.bit.GPIO12 = 0;    //Temperature_Control
     GpioCtrlRegs.GPADIR.bit.GPIO12 = 1;     //Temperature_Control
     Temperature_Control = 0;                //Switch on Temperature measurements
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO13  = 1;    //Disable pull-up for GPIO13
     GpioCtrlRegs.GPAMUX1.bit.GPIO13 = 0;    //High power 48V ctrl 1
     GpioCtrlRegs.GPADIR.bit.GPIO13 = 1;     //High power 48V ctrl 1
     Ctrl_HPwr_48V_O_1 = 0;                  //High power 48V ctrl 1 - dink hierdie moet 1 wees
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO15  = 1;    //Disable pull-up for GPIO15
     GpioCtrlRegs.GPAMUX1.bit.GPIO15 = 0;    //12 Aux drive
     GpioCtrlRegs.GPADIR.bit.GPIO15 = 1;     // 12 Aux drive (verander miskien)
     Aux_Control = 0;
 
-    //GpioCtrlRegs.GPAPUD.bit.GPIO19 = 1;    // Enable pull-up for GPIO19
+    GpioCtrlRegs.GPAPUD.bit.GPIO19 = 1;     //Disable pull-up for GPIO19
     GpioCtrlRegs.GPAMUX2.bit.GPIO19 = 0;    //Ctrl_LPwr_48V_O_2
     GpioCtrlRegs.GPADIR.bit.GPIO19 = 1;     //Ctrl_LPwr_48V_O_2
     Ctrl_LPwr_48V_O_2 = 0; 					//turn off for now
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO20  = 1;    //Disable pull-up for GPIO20
     GpioCtrlRegs.GPAMUX2.bit.GPIO20 = 0;    //contactor output
     GpioCtrlRegs.GPADIR.bit.GPIO20 = 1;     // contactor output
     ContactorOut = 0;                       //turn off contactor
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO21  = 1;    //Disable pull-up for GPIO21
     GpioCtrlRegs.GPAMUX2.bit.GPIO21 = 0;    //precharge resistor
     GpioCtrlRegs.GPADIR.bit.GPIO21 = 1;     // precharge resistor
     PreCharge = 1;                          //turn on precharge resistor
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO22  = 1;    //Disable pull-up for GPIO22
     GpioCtrlRegs.GPAMUX2.bit.GPIO22 = 0;    //key 1 switch
     GpioCtrlRegs.GPADIR.bit.GPIO22 = 0;     //key 1 switch
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO24  = 1;    //Disable pull-up for GPIO24
     GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 0;    //key 2 switch
     GpioCtrlRegs.GPADIR.bit.GPIO24 = 0;     //key 2 switch
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO26  = 1;    //Disable pull-up for GPIO26
     GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 0;    //BQ on
     GpioCtrlRegs.GPADIR.bit.GPIO26 = 0;     //BQ on (input)
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO27  = 1;    //Disable pull-up for GPIO27
     GpioCtrlRegs.GPAMUX2.bit.GPIO27 = 0;    //CANenable
     GpioCtrlRegs.GPADIR.bit.GPIO27 = 1;     //CANenable (output)
 
+    GpioCtrlRegs.GPBPUD.bit.GPIO39  = 1;    //Disable pull-up for GPIO39
     GpioCtrlRegs.GPBMUX1.bit.GPIO39 = 0;    //Ctrl_LPwr_48V_O_3
     GpioCtrlRegs.GPBDIR.bit.GPIO39 = 1;     //Ctrl_LPwr_48V_O_3
     Ctrl_LPwr_48V_O_3 = 0;                  //turn off for now
 
+    GpioCtrlRegs.GPBPUD.bit.GPIO40  = 1;    //Disable pull-up for GPIO40
     GpioCtrlRegs.GPBMUX1.bit.GPIO40 = 0;    //led3
     GpioCtrlRegs.GPBDIR.bit.GPIO40 = 1;     //led3
 
+    GpioCtrlRegs.GPBPUD.bit.GPIO44  = 1;    //Disable pull-up for GPIO44
     GpioCtrlRegs.GPBMUX1.bit.GPIO44 = 0;    //CScontrol
     GpioCtrlRegs.GPBDIR.bit.GPIO44 = 1;     //CSControl
 
@@ -159,7 +176,7 @@ void Init_Gpio(void)
     CSControl = 0;  //turn CScontrol on for current measurement
 
     //turn off contactor
-    //	ContactorOut = 0;
+    //ContactorOut = 0;
     //turn off PreCharge
     //PreCharge = 0;
 }
@@ -384,53 +401,28 @@ void Process_System_Status(void)
 
 void Read_Temperatures(void)
 {
-    static float Temperatures_resistance_temp[14] = { 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000 };
+    static float Temperatures_resistance_temp[5] = { 1000, 1000, 1000, 1000, 1000};
 
-    //temp meetings
-    //SOC15 - Outside
-    Temperatures_resistance[13] = Temperatures_resistance_temp[13] + (0.02*(((AdcResult.ADCRESULT15))-Temperatures_resistance_temp[13]));
-    Temperatures_resistance_temp[13] = Temperatures_resistance[13];
-
-    //Cells:
-    //SOC0 - Cell0
+    //SOC0 -- New modules: Module 3 Temp 2
     Temperatures_resistance[0] = Temperatures_resistance_temp[0] + (0.02*(((AdcResult.ADCRESULT0))-Temperatures_resistance_temp[0]));
     Temperatures_resistance_temp[0] = Temperatures_resistance[0];
-    //SOC3 - Cell1
+
+    //SOC3 -- New modules: Module 2 Temp 2
     Temperatures_resistance[1] = Temperatures_resistance_temp[1] + (0.02*(((AdcResult.ADCRESULT3))-Temperatures_resistance_temp[1]));
     Temperatures_resistance_temp[1] = Temperatures_resistance[1];
-    //SOC4 - Cell2
+
+    //SOC4 -- New modules: Module 1 Temp 2
     Temperatures_resistance[2] = Temperatures_resistance_temp[2] + (0.02*(((AdcResult.ADCRESULT4))-Temperatures_resistance_temp[2]));
     Temperatures_resistance_temp[2] = Temperatures_resistance[2];
-    //SOC5 - Cell3
+
+    //SOC5 -- New modules: Current Sense Board
     Temperatures_resistance[3] = Temperatures_resistance_temp[3] + (0.02*(((AdcResult.ADCRESULT5))-Temperatures_resistance_temp[3]));
     Temperatures_resistance_temp[3] = Temperatures_resistance[3];
-    //SOC6 - Cell5
+
+    //SOC6 -- New modules: Main BMS Board
     Temperatures_resistance[4] = Temperatures_resistance_temp[4] + (0.02*(((AdcResult.ADCRESULT6))-Temperatures_resistance_temp[4]));		//possibly use for model detection
     Temperatures_resistance_temp[4] = Temperatures_resistance[4];
-    //SOC7 - Cell6
-    Temperatures_resistance[5] = Temperatures_resistance_temp[5] + (0.02*(((AdcResult.ADCRESULT7))-Temperatures_resistance_temp[5]));
-    Temperatures_resistance_temp[5] = Temperatures_resistance[5];
-    //SOC8 - Cell7
-    Temperatures_resistance[6] = Temperatures_resistance_temp[6] + (0.02*(((AdcResult.ADCRESULT8))-Temperatures_resistance_temp[6]));
-    Temperatures_resistance_temp[6] = Temperatures_resistance[6];
-    //SOC9 - Cell8
-    Temperatures_resistance[7] = Temperatures_resistance_temp[7] + (0.02*(((AdcResult.ADCRESULT9))-Temperatures_resistance_temp[7]));
-    Temperatures_resistance_temp[7] = Temperatures_resistance[7];
-    //SOC10 - Cell10
-    Temperatures_resistance[8] = Temperatures_resistance_temp[8] + (0.02*(((AdcResult.ADCRESULT10))-Temperatures_resistance_temp[8]));
-    Temperatures_resistance_temp[8] = Temperatures_resistance[8];
-    //SOC11 - Cell11
-    Temperatures_resistance[9] = Temperatures_resistance_temp[9] + (0.02*(((AdcResult.ADCRESULT11))-Temperatures_resistance_temp[9]));
-    Temperatures_resistance_temp[9] = Temperatures_resistance[9];
-    //SOC12 - Cell12
-    Temperatures_resistance[10] = Temperatures_resistance_temp[10] + (0.02*(((AdcResult.ADCRESULT12))-Temperatures_resistance_temp[10]));
-    Temperatures_resistance_temp[10] = Temperatures_resistance[10];
-    //SOC13 - Cell13
-    Temperatures_resistance[11] = Temperatures_resistance_temp[11] + (0.02*(((AdcResult.ADCRESULT13))-Temperatures_resistance_temp[11]));
-    Temperatures_resistance_temp[11] = Temperatures_resistance[11];
-    //SOC14 - Cell14
-    Temperatures_resistance[12] = Temperatures_resistance_temp[12] + (0.02*(((AdcResult.ADCRESULT14))-Temperatures_resistance_temp[12]));
-    Temperatures_resistance_temp[12] = Temperatures_resistance[12];
+
 
     int i;
     int flag = 0;
@@ -445,46 +437,48 @@ void Read_Temperatures(void)
     float temp_T = 0;
 
     //cells 0-3
-    for(i = 0; i<4; i++)
-    {
-        Vts = (Temperatures_resistance[i]) * 0.00080566;
-        Rts = (33000/Vts) - 10000;
-        Temperatures[i] = (1/((log(Rts/10000))/4000+0.003356))-273;
-    }
 
-    //cells 5-8
-    for(i = 5; i<9; i++)
-    {
-        Vts = (Temperatures_resistance[i-1]) * 0.00080566;
-        Rts = (33000/Vts) - 10000;
-        Temperatures[i] = (1/((log(Rts/10000))/4000+0.003356))-273;
-    }
-
-    //cells 10-14
-    for(i = 10; i<15; i++)
-    {
-        Vts = (Temperatures_resistance[i-2]) * 0.00080566;
-        Rts = (33000/Vts) - 10000;
-        Temperatures[i] = (1/((log(Rts/10000))/4000+0.003356))-273;
-    }
-
-    //cell5,cell10
-    temp_T = I2CA_ReadData(&I2cMsgIn1, 0x2E, 2);
-    Vts = temp_T*ADCgain;
-    Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures[4] = (1/((log(Rts/10000))/4000+0.003356))-273;
-
-    temp_T = I2CA_ReadData(&I2cMsgIn1, 0x30, 2);
-    Vts = temp_T*ADCgain;
-    Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures[9] = (1/((log(Rts/10000))/4000+0.003356))-273;
-
-
-    //Outside
-    Vts = (Temperatures_resistance[13]) * 0.00080566;
+    Vts = (Temperatures_resistance[0]) * 0.00080566;
     Rts = (33000/Vts) - 10000;
-    Temperatures[15] = (1/((log(Rts/10000))/4000+0.003356))-273;
+    Temperatures_Module_3[1] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
+    Vts = (Temperatures_resistance[1]) * 0.00080566;
+    Rts = (33000/Vts) - 10000;
+    Temperatures_Module_2[1] = (1/((log(Rts/10000))/4000+0.003356))-273;
+
+    Vts = (Temperatures_resistance[2]) * 0.00080566;
+    Rts = (33000/Vts) - 10000;
+    Temperatures_Module_1[1] = (1/((log(Rts/10000))/4000+0.003356))-273;
+
+    Vts = (Temperatures_resistance[3]) * 0.00080566;
+    Rts = (33000/Vts) - 10000;
+    Temperatures_CS = (1/((log(Rts/10000))/4000+0.003356))-273;
+
+    Vts = (Temperatures_resistance[4]) * 0.00080566;
+
+    Rts = (10000*Vts)/(3.3-Vts);
+    //Rts = (33000/Vts) - 10000;
+    Temperatures_BMS = (1/((log(Rts/10000))/4000+0.003356))-273;
+
+    //BQ_temp1,BQ_temp2 Add in BQ_temp3
+    temp_T = I2CA_ReadData(&I2cMsgIn1, 0x2C, 2);    //TS1
+    Vts = temp_T*ADCgain;
+    Rts = (10000*Vts)/(3.3-Vts);
+    Temperatures_Module_1[0] = (1/((log(Rts/10000))/4000+0.003356))-273;
+
+    temp_T = I2CA_ReadData(&I2cMsgIn1, 0x2E, 2);    //TS2
+    Vts = temp_T*ADCgain;
+    Rts = (10000*Vts)/(3.3-Vts);
+    Temperatures_Module_2[0] = (1/((log(Rts/10000))/4000+0.003356))-273;
+
+    temp_T = I2CA_ReadData(&I2cMsgIn1, 0x30, 2);    //TS3
+    Vts = temp_T*ADCgain;
+    Rts = (10000*Vts)/(3.3-Vts);
+    Temperatures_Module_3[0] = (1/((log(Rts/10000))/4000+0.003356))-273;
+
+
+
+    /*
     for(i = 0; i<15; i++)
     {
         temperature_avg = temperature_avg+Temperatures[i];					//calculate avg temperature
@@ -536,7 +530,7 @@ void Read_Temperatures(void)
         Temperature_high_cell = temp_high_cell;
         Temperature_low =temp_Temperature_low;
         Temperature_low_cell = temp_low_cell;
-    }
+    }*/
 }
 
 void Process_Temperatures(void)

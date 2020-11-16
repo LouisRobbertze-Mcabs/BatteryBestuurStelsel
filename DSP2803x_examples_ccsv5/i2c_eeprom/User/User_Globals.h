@@ -62,8 +62,15 @@ extern volatile float Voltage_high_cell;
 extern volatile float Voltage_low;
 extern volatile float Voltage_low_cell;
 extern volatile float Temperatures[16];
+
+extern volatile float Temperatures_Module_1[2];
+extern volatile float Temperatures_Module_2[2];
+extern volatile float Temperatures_Module_3[2];
+extern volatile float Temperatures_CS;
+extern volatile float Temperatures_BMS;
+
 extern volatile float Temperature_avg;
-extern volatile float Temperatures_resistance[14];
+extern volatile float Temperatures_resistance[5];
 extern volatile float Temperature_high;
 extern volatile float Temperature_low;
 extern volatile float Temperature_high_cell;

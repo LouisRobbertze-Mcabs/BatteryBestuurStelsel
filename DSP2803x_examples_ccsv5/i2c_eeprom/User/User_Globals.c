@@ -69,8 +69,15 @@ volatile float Voltage_high_cell;
 volatile float Voltage_low=10;
 volatile float Voltage_low_cell;
 volatile float Temperatures[16];
+
+volatile float Temperatures_Module_1[2];
+volatile float Temperatures_Module_2[2];
+volatile float Temperatures_Module_3[2];
+volatile float Temperatures_CS;
+volatile float Temperatures_BMS;
+
 volatile float Temperature_avg;
-volatile float Temperatures_resistance[14];
+volatile float Temperatures_resistance[5];
 volatile float Temperature_high=0;
 volatile float Temperature_low=50;
 volatile float Temperature_high_cell;
