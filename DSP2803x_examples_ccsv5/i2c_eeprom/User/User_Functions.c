@@ -441,31 +441,32 @@ void Read_Temperatures(void)
 
     float temp_T = 0;
 
-    //cells 0-3
-
+    //Module3 Temperature sense2
     Vts = (Temperatures_resistance[0]) * 0.00080566;
-    Rts = (33000/Vts) - 10000;
+    Rts = (10000*Vts)/(3.3-Vts);
     Temperatures_Module_3[1] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
+    //Module2 Temperature sense2
     Vts = (Temperatures_resistance[1]) * 0.00080566;
-    Rts = (33000/Vts) - 10000;
+    Rts = (10000*Vts)/(3.3-Vts);
     Temperatures_Module_2[1] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
+    //Module1 Temperature sense2
     Vts = (Temperatures_resistance[2]) * 0.00080566;
-    Rts = (33000/Vts) - 10000;
+    Rts = (10000*Vts)/(3.3-Vts);
     Temperatures_Module_1[1] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
+    //Current Sensor Temperature
     Vts = (Temperatures_resistance[3]) * 0.00080566;
-    Rts = (33000/Vts) - 10000;
+    Rts = (10000*Vts)/(3.3-Vts);
     Temperatures_CS = (1/((log(Rts/10000))/4000+0.003356))-273;
 
+    //BMS Temperature
     Vts = (Temperatures_resistance[4]) * 0.00080566;
-
     Rts = (10000*Vts)/(3.3-Vts);
-    //Rts = (33000/Vts) - 10000;
     Temperatures_BMS = (1/((log(Rts/10000))/4000+0.003356))-273;
 
-    //BQ_temp1,BQ_temp2 Add in BQ_temp3
+    //BQ_temp1,BQ_temp2 and BQ_temp3
     temp_T = I2CA_ReadData(&I2cMsgIn1, 0x2C, 2);    //TS1
     Vts = temp_T*ADCgain;
     Rts = (10000*Vts)/(3.3-Vts);
@@ -482,7 +483,7 @@ void Read_Temperatures(void)
     Temperatures_Module_3[0] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
 
-
+    //still need to add in temperature logic
     /*
     for(i = 0; i<15; i++)
     {
