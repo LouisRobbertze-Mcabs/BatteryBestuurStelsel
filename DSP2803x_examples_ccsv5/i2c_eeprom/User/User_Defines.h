@@ -35,6 +35,9 @@
 
 #define Key_switch_1 GpioDataRegs.GPADAT.bit.GPIO22              //Key_switch_Position_1
 #define Key_switch_2 GpioDataRegs.GPADAT.bit.GPIO24              //Key_switch_Position_2
+
+#define CHG_J1772_Ctrl GpioDataRegs.GPADAT.bit.GPIO25            //Type 2 charger control pin
+
 #define BQOn GpioDataRegs.GPADAT.bit.GPIO26
 #define CANEnable GpioDataRegs.GPADAT.bit.GPIO27
 

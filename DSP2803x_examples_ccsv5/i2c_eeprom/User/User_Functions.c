@@ -150,6 +150,11 @@ void Init_Gpio(void)
     GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 0;    //key 2 switch
     GpioCtrlRegs.GPADIR.bit.GPIO24 = 0;     //key 2 switch
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO25  = 1;    //Disable pull-up for GPIO25
+    GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 0;    //Type 2 charger control
+    GpioCtrlRegs.GPADIR.bit.GPIO25 = 1;     //Type 2 charger control
+    CHG_J1772_Ctrl = 0;                     //Turn off vehicle charging
+
     GpioCtrlRegs.GPAPUD.bit.GPIO26  = 1;    //Disable pull-up for GPIO26
     GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 0;    //BQ on
     GpioCtrlRegs.GPADIR.bit.GPIO26 = 0;     //BQ on (input)

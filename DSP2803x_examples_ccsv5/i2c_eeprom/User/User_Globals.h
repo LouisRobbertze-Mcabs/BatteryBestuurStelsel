@@ -226,5 +226,7 @@ extern volatile float SOH;
 extern volatile Uint16 Cycles;
 
 extern volatile int Pre_Charge_Measure;
+extern volatile int Proximity_Measure;
+extern volatile int Pilot_Measure;
 
 #endif /* USER_GLOBALS_H_ */
