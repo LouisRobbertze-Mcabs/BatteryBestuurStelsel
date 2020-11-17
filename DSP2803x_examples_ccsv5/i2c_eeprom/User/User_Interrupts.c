@@ -98,15 +98,27 @@ __interrupt void cpu_timer0_isr(void)
 
 __interrupt void cpu_timer1_isr(void)
 {
+    //add in measurements for pre-charge sense, and other charge pins here..
+
+
+
     //check status of all flags as well as the key switch
     static float Aux_Voltage_temp = 0;
+    static int Pre_Charge_Measure_temp = 0;
 
     //Deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^-WcTs
     //adc/4096 *3.3* 10.51/10.51      12.2/2.2
+    //adc: (1.051*3.3)/(0.051*4096) =  0.0167
     //a = 0.015 ~ 0.1Hz, a = 0.12 ~ 1Hz, a = 0.47 ~ 5Hz
 
     Auxilliary_Voltage = Aux_Voltage_temp + (0.47*(((AdcResult.ADCRESULT2)* 0.00442)-Aux_Voltage_temp));					//50hz sny af op 0.1hz
     Aux_Voltage_temp = Auxilliary_Voltage;
+
+
+    Pre_Charge_Measure = Pre_Charge_Measure_temp + (0.47*(((AdcResult.ADCRESULT13*17)/1000)-Pre_Charge_Measure_temp));      //50hz sny af op 0.1hz - 2.3V = 48V
+    Pre_Charge_Measure_temp = Pre_Charge_Measure;
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// testing
     if(Key_switch_2 == 1 && System_State == 1)  //keyswitch == 1

@@ -17,7 +17,7 @@ void configADC(void)
 	AdcRegs.ADCSOC0CTL.bit.CHSEL    = 0x0B; //0     set SOC0 channel select to ADCINB3(dummy sample for rev0 errata workaround)
 	AdcRegs.ADCSOC1CTL.bit.CHSEL    = 0x0B; //0     set SOC1 channel select to ADCINB3
 	AdcRegs.ADCSOC0CTL.bit.TRIGSEL  = 0x03; //  CPU Timer 0  // hierdie was 0x03
-	AdcRegs.ADCSOC1CTL.bit.TRIGSEL  = 0x03; //					// hierdie was 0x03
+	AdcRegs.ADCSOC1CTL.bit.TRIGSEL  = 0x03; //			     // hierdie was 0x03
 	AdcRegs.ADCSOC0CTL.bit.ACQPS    = 20;   //set SOC0 S/H Window to 7 ADC Clock Cycles, (6 ACQPS plus 1)
 	AdcRegs.ADCSOC1CTL.bit.ACQPS    = 20;   //set SOC1 S/H Window to 7 ADC Clock Cycles, (6 ACQPS plus 1)
 
