@@ -70,6 +70,8 @@ volatile float Voltage_low=10;
 volatile float Voltage_low_cell;
 volatile float Temperatures[16];
 
+volatile float Temperatures_Module[3][2];
+
 volatile float Temperatures_Module_1[2];
 volatile float Temperatures_Module_2[2];
 volatile float Temperatures_Module_3[2];
@@ -240,5 +242,5 @@ volatile float SOH = 100;
 volatile Uint16 Cycles = 0;
 
 volatile int Pre_Charge_Measure = 0;
-volatile int Proximity_Measure = 0;
+volatile long Proximity_Measure = 0;
 volatile int Pilot_Measure = 0;

@@ -429,7 +429,7 @@ void Read_Temperatures(void)
     Temperatures_resistance_temp[4] = Temperatures_resistance[4];
 
 
-    int i;
+    int i,j;
     int flag = 0;
     float Vts;
     float Rts;
@@ -444,17 +444,17 @@ void Read_Temperatures(void)
     //Module3 Temperature sense2
     Vts = (Temperatures_resistance[0]) * 0.00080566;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module_3[1] = (1/((log(Rts/10000))/4000+0.003356))-273;
+    Temperatures_Module[2][1] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
     //Module2 Temperature sense2
     Vts = (Temperatures_resistance[1]) * 0.00080566;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module_2[1] = (1/((log(Rts/10000))/4000+0.003356))-273;
+    Temperatures_Module[1][1] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
     //Module1 Temperature sense2
     Vts = (Temperatures_resistance[2]) * 0.00080566;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module_1[1] = (1/((log(Rts/10000))/4000+0.003356))-273;
+    Temperatures_Module[0][1] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
     //Current Sensor Temperature
     Vts = (Temperatures_resistance[3]) * 0.00080566;
@@ -470,73 +470,47 @@ void Read_Temperatures(void)
     temp_T = I2CA_ReadData(&I2cMsgIn1, 0x2C, 2);    //TS1
     Vts = temp_T*ADCgain;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module_1[0] = (1/((log(Rts/10000))/4000+0.003356))-273;
+    Temperatures_Module[0][0] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
     temp_T = I2CA_ReadData(&I2cMsgIn1, 0x2E, 2);    //TS2
     Vts = temp_T*ADCgain;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module_2[0] = (1/((log(Rts/10000))/4000+0.003356))-273;
+    Temperatures_Module[1][0] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
     temp_T = I2CA_ReadData(&I2cMsgIn1, 0x30, 2);    //TS3
     Vts = temp_T*ADCgain;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module_3[0] = (1/((log(Rts/10000))/4000+0.003356))-273;
+    Temperatures_Module[2][0] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
-
-    //still need to add in temperature logic
-    /*
-    for(i = 0; i<15; i++)
+    //Calculate avg cell temperature
+    for(i=0; i<3; i++)
     {
-        temperature_avg = temperature_avg+Temperatures[i];					//calculate avg temperature
-
-        if(temp_Temperature_high<Temperatures[i])							//calculate highest temperature
+        for(j=0;j<2;j++)
         {
-            temp_Temperature_high = Temperatures[i];
-            temp_high_cell = i ;
-
+            temperature_avg = temperature_avg + Temperatures_Module[i][j];
         }
+    }
+    temperature_avg = temperature_avg/6;
 
-        if(temp_Temperature_low>Temperatures[i])							//calculate lowest temperature
-        {
-            temp_Temperature_low = Temperatures[i];
-            temp_low_cell = i;
-        }
+    if(temp_Temperature_high<Temperatures[i])							//calculate highest temperature
+    {
+        temp_Temperature_high = Temperatures[i];
+        temp_high_cell = i ;
 
     }
-    temperature_avg = temperature_avg*0.0667;
 
-    if(Temperatures_resistance[8]<50)										//old bms version       (tipies 20)
+    if(temp_Temperature_low>Temperatures[i])							//calculate lowest temperature
     {
-        Temperature_avg = (Temperatures[4]+Temperatures[9])/2;
-
-        if(Temperatures[4]>Temperatures[9])
-        {
-            Temperature_high = Temperatures[4];
-            Temperature_low = Temperatures[9];
-            Temperature_high_cell = 5;
-            Temperature_low_cell = 10;
-        }
-        else
-        {
-            Temperature_high = Temperatures[9];
-            Temperature_low = Temperatures[4];
-            Temperature_high_cell = 10;
-            Temperature_low_cell = 5;
-        }
-
-        if((Temperatures[4]> Tmax || Temperatures[4]<Tmin) || (Temperatures[9]> Tmax || Temperatures[9]<Tmin))
-            flag = 1;
+        temp_Temperature_low = Temperatures[i];
+        temp_low_cell = i;
     }
-    else																	//new bms version
-    {
-        //led3 = 1;
 
-        Temperature_avg = temperature_avg;
-        Temperature_high = temp_Temperature_high;
-        Temperature_high_cell = temp_high_cell;
-        Temperature_low =temp_Temperature_low;
-        Temperature_low_cell = temp_low_cell;
-    }*/
+
+    Temperature_avg = temperature_avg;
+    Temperature_high = temp_Temperature_high;
+    Temperature_high_cell = temp_high_cell;
+    Temperature_low =temp_Temperature_low;
+    Temperature_low_cell = temp_low_cell;
 }
 
 void Process_Temperatures(void)
