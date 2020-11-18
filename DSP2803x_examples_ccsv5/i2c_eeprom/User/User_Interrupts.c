@@ -100,7 +100,7 @@ __interrupt void cpu_timer1_isr(void)
 {
     //check status of all flags as well as the key switch
     static int Pre_Charge_Measure_temp = 0;
-    static long Proximty_Measure_temp = 0;
+    static int Proximty_Measure_temp = 0;
     static int Pilot_Measure_temp = 0;
 
     //Deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^-WcTs
@@ -111,16 +111,23 @@ __interrupt void cpu_timer1_isr(void)
     Pre_Charge_Measure_temp = Pre_Charge_Measure;
 
     //adc: (2.7k*3.3)/(2.7k+330) =  2.94V (Not connected) OR (407*3.3)/(737) =  1.82V (Connected)
-    Proximity_Measure = 3300*(Proximty_Measure_temp + (AdcResult.ADCRESULT11-Proximty_Measure_temp))/4096;               //50hz calculate f_cut-off - mV measurement
+    //Proximity_Measure = 3300*(Proximty_Measure_temp + (AdcResult.ADCRESULT11-Proximty_Measure_temp))/4096;               //50hz calculate f_cut-off - mV measurement
+    Proximity_Measure = AdcResult.ADCRESULT11 ;
     Proximty_Measure_temp = Proximity_Measure;
-    //Proximity_Measure = ((AdcResult.ADCRESULT11));
+
+    //test software for charger
+   // if(Proximity_Measure<2850)     //2300                 //connected
+    //    CHG_J1772_Ctrl = 1;                         //switch on
+    //else
+    CHG_J1772_Ctrl = 0;                         //switch off
 
 
     //if proximity active, activate charger pin if battery is not charged
 
     //Pilot_Measure not currently in used. Needs to be implemented to monitor higher current charging applications
     //Will require to measure 1kHz pwm duty cycle
-    Pilot_Measure = 3300*(Pilot_Measure_temp + (AdcResult.ADCRESULT11-Pilot_Measure_temp))/4096;                        //50hz calculate f_cut-off - mV measurement
+    //Pilot_Measure = 3300*(Pilot_Measure_temp + (AdcResult.ADCRESULT12-Pilot_Measure_temp))/4096;                        //50hz calculate f_cut-off - mV measurement
+    Pilot_Measure = AdcResult.ADCRESULT12;
     Pilot_Measure_temp = Pilot_Measure;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// testing
