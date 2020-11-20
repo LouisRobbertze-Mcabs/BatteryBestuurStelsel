@@ -26,11 +26,11 @@
 //alert BQ pin GPIO9
 
 #define Temperature_Control GpioDataRegs.GPADAT.bit.GPIO12
-#define Ctrl_HPwr_48V_O_1 GpioDataRegs.GPADAT.bit.GPIO13
+#define Ctrl_HPwr_48V_O_1 GpioDataRegs.GPADAT.bit.GPIO13         //Ctrl_HPwr_48V_O_1
 #define Aux_Control GpioDataRegs.GPADAT.bit.GPIO15               //Ctrl_HPwr_48V_O_2
 
 #define Ctrl_LPwr_48V_O_2 GpioDataRegs.GPADAT.bit.GPIO19         //Ctrl_LPwr_48V_O_2
-#define ContactorOut GpioDataRegs.GPADAT.bit.GPIO20
+#define ContactorOut GpioDataRegs.GPADAT.bit.GPIO20              //Ctrl_LPwr_48V_O_1 -  Dink dis die geval
 #define PreCharge GpioDataRegs.GPADAT.bit.GPIO21
 
 #define Key_switch_1 GpioDataRegs.GPADAT.bit.GPIO22              //Key_switch_Position_1

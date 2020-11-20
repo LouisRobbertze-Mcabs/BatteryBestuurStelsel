@@ -178,7 +178,7 @@ void Init_Gpio(void)
 
     EDIS;
 
-    CSControl = 0;  //turn CScontrol on for current measurement
+    CSControl = 1;  //turn CScontrol on for current measurement
 
     //turn off contactor
     //ContactorOut = 0;
@@ -189,6 +189,23 @@ void Init_Gpio(void)
 void Toggle_LED(void)
 {
     GpioDataRegs.GPATOGGLE.bit.GPIO5 = 1;
+    GpioDataRegs.GPATOGGLE.bit.GPIO4 = 1;
+
+    //Ctrl_LPwr_48V_O_3 = 1;          //GPIO39
+    //GpioDataRegs.GPBTOGGLE.bit.GPIO39 = 1;                working
+
+    //Ctrl_LPwr_48V_O_2          //GPIO19
+    //GpioDataRegs.GPATOGGLE.bit.GPIO19 = 1;                //working
+    Ctrl_LPwr_48V_O_2 = 1;
+
+    //Ctrl_LPwr_48V_O_1 -  Dink dis die geval
+    //GpioDataRegs.GPATOGGLE.bit.GPIO20 = 1;                working
+
+    //Ctrl_HPwr_48V_O_2 - Aux_Control
+    //GpioDataRegs.GPATOGGLE.bit.GPIO15 = 1;                working
+
+    //Ctrl_HPwr_48V_O_1
+    //GpioDataRegs.GPATOGGLE.bit.GPIO13 = 1;                working
 
     System_State = 1; 							//State is good, not state in while loop
 
@@ -409,23 +426,23 @@ void Read_Temperatures(void)
     static float Temperatures_resistance_temp[5] = { 1000, 1000, 1000, 1000, 1000};
 
     //SOC0 -- New modules: Module 3 Temp 2
-    Temperatures_resistance[0] = Temperatures_resistance_temp[0] + (0.02*(((AdcResult.ADCRESULT0))-Temperatures_resistance_temp[0]));
+    Temperatures_resistance[0] = Temperatures_resistance_temp[0] + (0.2*(((AdcResult.ADCRESULT0))-Temperatures_resistance_temp[0]));
     Temperatures_resistance_temp[0] = Temperatures_resistance[0];
 
     //SOC3 -- New modules: Module 2 Temp 2
-    Temperatures_resistance[1] = Temperatures_resistance_temp[1] + (0.02*(((AdcResult.ADCRESULT3))-Temperatures_resistance_temp[1]));
+    Temperatures_resistance[1] = Temperatures_resistance_temp[1] + (0.2*(((AdcResult.ADCRESULT3))-Temperatures_resistance_temp[1]));
     Temperatures_resistance_temp[1] = Temperatures_resistance[1];
 
     //SOC4 -- New modules: Module 1 Temp 2
-    Temperatures_resistance[2] = Temperatures_resistance_temp[2] + (0.02*(((AdcResult.ADCRESULT4))-Temperatures_resistance_temp[2]));
+    Temperatures_resistance[2] = Temperatures_resistance_temp[2] + (0.2*(((AdcResult.ADCRESULT4))-Temperatures_resistance_temp[2]));
     Temperatures_resistance_temp[2] = Temperatures_resistance[2];
 
     //SOC5 -- New modules: Current Sense Board
-    Temperatures_resistance[3] = Temperatures_resistance_temp[3] + (0.02*(((AdcResult.ADCRESULT5))-Temperatures_resistance_temp[3]));
+    Temperatures_resistance[3] = Temperatures_resistance_temp[3] + (0.2*(((AdcResult.ADCRESULT5))-Temperatures_resistance_temp[3]));
     Temperatures_resistance_temp[3] = Temperatures_resistance[3];
 
     //SOC6 -- New modules: Main BMS Board
-    Temperatures_resistance[4] = Temperatures_resistance_temp[4] + (0.02*(((AdcResult.ADCRESULT6))-Temperatures_resistance_temp[4]));		//possibly use for model detection
+    Temperatures_resistance[4] = Temperatures_resistance_temp[4] + (0.2*(((AdcResult.ADCRESULT6))-Temperatures_resistance_temp[4]));		//possibly use for model detection
     Temperatures_resistance_temp[4] = Temperatures_resistance[4];
 
 

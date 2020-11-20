@@ -4,9 +4,11 @@
 
 //To Do List:
 //Check if CRC is correct, and BQ is responding
-//Doen ekstra reset flag so that if new data is not returned contactor can't close / toets..
-//Check CAN reset procedure to ensure always sending data -- Looks positive
+//
+
 //Add Temperature influence on SOC
+
+//set pre-charge active - close contactor when 0.8 * V_total
 //###########################################################################
 
 #include "User\User_Defines.h"
@@ -23,6 +25,7 @@ void main(void)
 		}
 		if(counter_2Hz == 2)
 		{
+
 			Toggle_LED();
 
 			Read_Cell_Voltages();
@@ -31,7 +34,6 @@ void main(void)
 
 			Read_Temperatures();
 			Process_Voltages();
-
 
 			ServiceDog();
 

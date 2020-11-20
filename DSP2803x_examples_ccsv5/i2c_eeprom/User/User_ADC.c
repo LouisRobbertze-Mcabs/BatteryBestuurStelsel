@@ -102,6 +102,8 @@ void configADC(void)
 
 void Reset_ADC(void)
 {
+    //Ek dink ek moet nog so bietjie werk hier in sit - wat moet die funksionaliteit wees?
+    //Reset in watter opsigte? Kan nie net dit terug aansit sonder enige rede nie
 	I2CA_WriteData(0x04,0x8);
 	I2CA_WriteData(0x04,0x18);
 

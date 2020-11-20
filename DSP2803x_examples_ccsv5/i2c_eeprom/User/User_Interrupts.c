@@ -129,6 +129,8 @@ __interrupt void cpu_timer1_isr(void)
     //Pilot_Measure = 3300*(Pilot_Measure_temp + (AdcResult.ADCRESULT12-Pilot_Measure_temp))/4096;                        //50hz calculate f_cut-off - mV measurement
     Pilot_Measure = AdcResult.ADCRESULT12;
     Pilot_Measure_temp = Pilot_Measure;
+//*1051/51      *33/40960
+    Pre_Charge_Measure = (AdcResult.ADCRESULT13 * 34683)/2088960;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// testing
     if(Key_switch_2 == 1 && System_State == 1)  //keyswitch == 1
