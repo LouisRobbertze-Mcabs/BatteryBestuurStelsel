@@ -170,7 +170,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
     float ChgCurrent = 0;
     Uint16 ChgStatus = 0;
 
-    static volatile float Current_max = 5;
+    static volatile float Current_max = 2;
     static volatile int timeout = 0;
     timeout++;
     static volatile int delay = 0;  									// miskien >> count 1 cycle from contactor closes till charger starts
@@ -216,7 +216,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
                         SOC = 100;						                                    //Hierdie is toets fase om SOC by 100 te kry!
                     }
 
-                    if(ChargerCurrent >= 0.1)                                               //flagCharged == 1
+                    if(ChargerCurrent > 0.1)                                               //flagCharged == 1
                         Charging_animation = 1;
                     else
                         Charging_animation = 0;	                                            //0 - not plugged in, 1 -plugged in
