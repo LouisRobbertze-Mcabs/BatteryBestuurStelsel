@@ -216,10 +216,10 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
                         SOC = 100;						                                    //Hierdie is toets fase om SOC by 100 te kry!
                     }
 
-                    if(flagCharged == 1)
-                        Charging_animation = 0;
+                    if(ChargerCurrent >= 0.1)                                               //flagCharged == 1
+                        Charging_animation = 1;
                     else
-                        Charging_animation = 1;	                                            //0 - not plugged in, 1 -plugged in
+                        Charging_animation = 0;	                                            //0 - not plugged in, 1 -plugged in
 
                     CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8);             //charging started
                 }

@@ -508,38 +508,8 @@ void Read_Temperatures(void)
 
         if(Temperature_high> Tmax || Temperature_low<Tmin)
         {
-            //flag = 1;
+            flag = 1;
         }
-
-
-        /*	if((Temperature_avg - Temperatures[15])> 4 && Temperatures[15]<50 && Temperature_avg>10&& Voltage_low > Vmin && balance == 0 && temptimer ==0)				//4.5 en 25sit net aan bo 25 grade celsius
-		{
-			Fan_Control = 1;
-			temptimer = 1;
-		}
-
-		if(temptimer > 0)
-			temptimer++;
-		if (temptimer > 180)
-		{
-			temptimer = 0;
-			Fan_Control = 0;
-		}*/
-
-
-
-
-        /*	if((Temperature_avg - Temperatures[15])> 4.5 && Temperatures[15]<50 && Temperature_avg>10&& Voltage_low > Vmin && balance == 0)				//4.5 en 25sit net aan bo 25 grade celsius
-		{
-			Fan_Control = 1;
-			temptimer
-		}
-		else if(GpioDataRegs.GPADAT.bit.GPIO19 == 1 && (Temperature_avg - Temperatures[15])> 3 && Temperature_avg>8 && Voltage_low > Vmin && balance == 0)//bly aan solank 3.5 en 23
-		{
-			Fan_Control = 1;
-		}
-		else
-			Fan_Control = 0;*/			//0
     }
 
     if(flag == 1)
