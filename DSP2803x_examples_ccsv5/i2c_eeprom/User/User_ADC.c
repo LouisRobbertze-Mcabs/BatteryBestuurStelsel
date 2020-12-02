@@ -111,11 +111,20 @@ void Reset_MCU(int flag)
 {
     static int delay = 0;
 
-    if(ECanaRegs.CANES.bit.EP == 1)
-        delay++;
-    else
-        delay=0;
+    Uint32 CANES = 0;
 
-    if(flag == 1 && delay > 300 && ECanaRegs.CANES.bit.EP == 1 && Key_switch_2 == 0)   //5 min intervals
+    //Active flags available
+    //0000 0001 1111 1111 0000 0000 0011 1011
+    //Used error flags to reset - taken out SMA, CCE, receive and transmit flags
+    //0000 0001 1111 1111 0000 0000 0000 1000 = 0x1FF0008
+
+    CANES = (ECanaRegs.CANES.all & 0x1FF0008);
+
+    if(CANES == 0)              //Check if some flags are set
+        delay=0;
+    else
+        delay++;                //maybe add all the other flags (as long as they persist) other flags as well
+
+    if(flag == 1 && delay > 300 && Key_switch_2 == 0)   //If error is not reset after 5 minutes
         for(;;){}
 }
