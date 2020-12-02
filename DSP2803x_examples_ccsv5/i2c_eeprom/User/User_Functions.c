@@ -112,6 +112,10 @@ void Init_Gpio(void)
     GpioCtrlRegs.GPAMUX1.bit.GPIO7 = 0;     //Extra Mfet output
     GpioCtrlRegs.GPADIR.bit.GPIO7 = 1;      //Extra Mfet output
 
+    GpioCtrlRegs.GPAPUD.bit.GPIO9  = 1;     //Disable pull-up for GPIO9
+    GpioCtrlRegs.GPAMUX1.bit.GPIO9 = 0;     //BQ Alert pin
+    GpioCtrlRegs.GPADIR.bit.GPIO9 = 0;      //MCU input
+
     GpioCtrlRegs.GPAPUD.bit.GPIO12  = 1;    //Disable pull-up for GPIO12
     GpioCtrlRegs.GPAMUX1.bit.GPIO12 = 0;    //Temperature_Control
     GpioCtrlRegs.GPADIR.bit.GPIO12 = 1;     //Temperature_Control
@@ -413,11 +417,34 @@ void Read_System_Status(void)
     system_status = I2CA_ReadData(&I2cMsgIn1,0x00, 1);
 }
 
-void Process_System_Status(void)
+void Process_BQ_System_Status(void)
 {
-    if(system_status != 00)
+    if(BQ_Alert == 1)                             //Error on flags
     {
-        I2CA_WriteData(0x00, 0x3F);
+        system_status = 0x2C & (I2CA_ReadData(&I2cMsgIn1,0x00, 1));     //only Xready, UV and OV
+
+        if((system_status&0x20) == 0x20)           //Device_Xready flag
+        {
+            I2CA_WriteData(0x00, 0xBF);            //reset all possible flags
+            //add to BQ_Error_counter
+            I2CA_WriteData(0x05,0x03);             //Turn on outputs
+        }
+        else if((system_status&0x8) == 0x8)        //under voltage error
+        {
+            if(flagDischarged < 2)                 //Voltage is within bounds - maybe add something for the cahger as well?
+            {
+                I2CA_WriteData(0x00, 0xBF);        //reset all possible flags
+                I2CA_WriteData(0x05,0x03);         //Turn on outputs
+            }
+        }
+        else if((system_status&0x4) == 0x4)        //Over Voltage error
+        {
+            if(flagCharged == 0)                   //Voltage is within bounds again
+            {
+                I2CA_WriteData(0x00, 0xBF);        //reset all possible flags
+                I2CA_WriteData(0x05,0x03);         //Turn on outputs
+            }
+        }
     }
 }
 

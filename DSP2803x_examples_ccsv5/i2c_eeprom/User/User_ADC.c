@@ -100,14 +100,11 @@ void configADC(void)
 	EDIS;
 }
 
-void Reset_ADC(void)
+void Reset_BQ_ADC(void)
 {
-    //Ek dink ek moet nog so bietjie werk hier in sit - wat moet die funksionaliteit wees?
-    //Reset in watter opsigte? Kan nie net dit terug aansit sonder enige rede nie
+    //turn ADC off and on again
 	I2CA_WriteData(0x04,0x8);
 	I2CA_WriteData(0x04,0x18);
-
-	I2CA_WriteData(0x05,0x03);			//testing
 }
 
 void Reset_MCU(int flag)

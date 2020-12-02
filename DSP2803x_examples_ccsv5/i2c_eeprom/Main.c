@@ -49,14 +49,16 @@ void main(void)
 
 			Calibrate_Current();
 
-			Read_System_Status();
-			Process_System_Status();
+			//BQ check status
+			Process_BQ_System_Status();
+			Reset_BQ_ADC();
+
 
 			Calculate_SOC();
 			Calculate_SOH();
 
 			counter_2Hz = 0;
-			Reset_ADC();
+
 
 			//add in issue function check
 			Reset_MCU(1);

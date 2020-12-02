@@ -23,7 +23,9 @@
 #define LPwr_Out_Ctrl_1 GpioDataRegs.GPADAT.bit.GPIO6            //BMS N-type MfET output 1
 #define LPwr_Out_Ctrl_2 GpioDataRegs.GPADAT.bit.GPIO7            //BMS N-type MfET output 2
 
-//alert BQ pin GPIO9
+#define BQ_Alert GpioDataRegs.GPADAT.bit.GPIO9                   //BQ pin GPIO9
+
+//Do HRCAP for GPIO11
 
 #define Temperature_Control GpioDataRegs.GPADAT.bit.GPIO12
 #define Ctrl_HPwr_48V_O_1 GpioDataRegs.GPADAT.bit.GPIO13         //Ctrl_HPwr_48V_O_1

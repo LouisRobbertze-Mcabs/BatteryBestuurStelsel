@@ -36,7 +36,7 @@ void Process_Temperatures(void);
 Uint32 ChgCalculator(float Voltage, float Current);
 void Calculate_Current(void);
 void Read_System_Status(void);
-void Process_System_Status(void);
+void Process_BQ_System_Status(void);
 
 void Calculate_SOH(void);
 
