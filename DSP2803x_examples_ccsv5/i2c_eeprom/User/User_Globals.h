@@ -75,8 +75,8 @@ extern volatile float Temperature_avg;
 extern volatile float Temperatures_resistance[5];
 extern volatile float Temperature_high;
 extern volatile float Temperature_low;
-extern volatile float Temperature_high_cell;
-extern volatile float Temperature_low_cell;
+extern volatile int Temperature_high_cell;
+extern volatile int Temperature_low_cell;
 
 extern volatile float ADCgain;
 extern volatile float ADCoffset;
@@ -195,7 +195,7 @@ extern int temptimer;
 extern volatile Uint32 CAN_Charger_dataL;
 extern volatile Uint32 CAN_Charger_dataH;
 
-extern volatile Uint32 System_State;
+//extern volatile Uint32 System_State;
 
 extern volatile Uint16 BMS_Status;
 extern volatile Uint16 BMS_Error;

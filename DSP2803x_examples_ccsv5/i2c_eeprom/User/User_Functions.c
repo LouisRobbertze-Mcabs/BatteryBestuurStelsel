@@ -11,7 +11,7 @@ void Initialise_BMS(void)
 {
     Initial_Capacity = 150;
     flagCurrent = 0;
-    System_State = 0;
+    //    System_State = 0;
 
     Temperatures[5] = 0;
     Temperatures_resistance[4] = 0;
@@ -211,7 +211,7 @@ void Toggle_LED(void)
     //Ctrl_HPwr_48V_O_1
     //GpioDataRegs.GPATOGGLE.bit.GPIO13 = 1;                working
 
-    System_State = 1; 							//State is good, not state in while loop
+    //    System_State = 1; 							//State is good, not state in while loop
 
     //GpioDataRegs.GPATOGGLE.bit.GPIO6 = 1;
     //GpioDataRegs.GPATOGGLE.bit.GPIO19 = 1;
@@ -313,40 +313,18 @@ void Process_Voltages(void)
 
     Auxilliary_counter++;
 
-    /////////////////////////////////////////////////////////////////////////////////////////
-    if(Current < 80)                                                                //check current to reduce false trips
-    {
 
-        if(Voltage_low < Vmin && Voltage_low > Vcritical && Charger_status == 0)
-        {
-            //Aux_Control = 0;
-            flagDischarged = 1;
-            //		led3 = 1;               //turn on red led
-            //ContactorOut = 0;       //turn off contactor
-            PreCharge = 1;
-        }
-        else if(Voltage_low < Vcritical && Charger_status == 0)						//Maybe make this a bit smaller --> 2.7 or even 2.6??
-        {
-            Aux_Control = 0;
-            flagDischarged = 2;
-            //		led3 = 1;               //turn on red led
-            PreCharge = 0;
-            ContactorOut = 0;       //turn off contactor
-            LPwr_Out_Ctrl_1 = 0;
-        }
-    }
-    else
+    if(Voltage_low < Vmin && Voltage_low > Vcritical && Charger_status == 0)
     {
-        if(Voltage_low < 2.5 && Voltage_low > Vcritical && Charger_status == 0)
-        {
-            //Aux_Control = 0;
-            flagDischarged = 1;
-            //      led3 = 1;               //turn on red led
-            ContactorOut = 0;       //turn off contactor
-            PreCharge = 1;
-        }
+        flagDischarged = 1;
     }
-    /////////////////////////////////////////////////////////////////////////////////////
+    else if(Voltage_low < Vcritical && Charger_status == 0)
+    {
+        Aux_Control = 0;
+        flagDischarged = 2;
+        ContactorOut = 0;       //turn off contactor
+        LPwr_Out_Ctrl_1 = 0;
+    }
 
     if(Voltage_high<Vchargedflagreset )
         flagCharged = 0;
@@ -354,7 +332,6 @@ void Process_Voltages(void)
     if(Voltage_low>Vdischargedflagreset )
     {
         flagDischarged = 0;
-        //		led3 = 0;               //turn off red led
         PreCharge = 1;
         LPwr_Out_Ctrl_1 = 1;
     }
@@ -474,14 +451,13 @@ void Read_Temperatures(void)
 
 
     int i,j;
-    int flag = 0;
     float Vts;
     float Rts;
     float temperature_avg=0;
     float temp_Temperature_high = 0;
     float temp_Temperature_low = 71;
-    float temp_high_cell = 0;
-    float temp_low_cell = 0;
+    int temp_high_cell = 0;
+    int temp_low_cell = 0;
 
     float temp_T = 0;
 
@@ -533,22 +509,20 @@ void Read_Temperatures(void)
         {
             temperature_avg = temperature_avg + Temperatures_Module[i][j];
         }
+
+        if(temp_Temperature_high < ((Temperatures_Module[i][0]+Temperatures_Module[i][1])/2))							//calculate highest temperature
+        {
+            temp_Temperature_high = ((Temperatures_Module[i][0]+Temperatures_Module[i][1])/2);
+            temp_high_cell = i ;
+        }
+
+        if(temp_Temperature_low > ((Temperatures_Module[i][0]+Temperatures_Module[i][1])/2))							//calculate lowest temperature
+        {
+            temp_Temperature_low = ((Temperatures_Module[i][0]+Temperatures_Module[i][1])/2);
+            temp_low_cell = i;
+        }
     }
     temperature_avg = temperature_avg/6;
-
-    if(temp_Temperature_high<Temperatures[i])							//calculate highest temperature
-    {
-        temp_Temperature_high = Temperatures[i];
-        temp_high_cell = i ;
-
-    }
-
-    if(temp_Temperature_low>Temperatures[i])							//calculate lowest temperature
-    {
-        temp_Temperature_low = Temperatures[i];
-        temp_low_cell = i;
-    }
-
 
     Temperature_avg = temperature_avg;
     Temperature_high = temp_Temperature_high;
@@ -872,7 +846,7 @@ void Calibrate_Current()
         if(Calibrate_delay > 10)                                                    //10 s delay for the vehicle/battery to do shut-off process
         {
             error = Current;
-            Current_CAL = Current_CAL + (0.001* error * Current_CAL);					//maybe add slow filter to dampen the fault?
+            Current_CAL = Current_CAL + (0.0001* error * Current_CAL);					//maybe add slow filter to dampen the fault?
 
             if(Current_CAL>2200)													//set maximum limit
                 Current_CAL = 2200;

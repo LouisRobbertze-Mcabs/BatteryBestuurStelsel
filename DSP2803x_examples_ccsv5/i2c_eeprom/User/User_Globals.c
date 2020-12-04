@@ -82,8 +82,8 @@ volatile float Temperature_avg;
 volatile float Temperatures_resistance[5];
 volatile float Temperature_high=0;
 volatile float Temperature_low=50;
-volatile float Temperature_high_cell;
-volatile float Temperature_low_cell;
+volatile int Temperature_high_cell;
+volatile int Temperature_low_cell;
 
 volatile float ADCgain;
 volatile float ADCoffset;
@@ -209,7 +209,7 @@ volatile Uint32 CAN_Charger_dataL = 0;
 volatile Uint32 CAN_Charger_dataH = 0;
 
 
-volatile Uint32 System_State = 0;
+//volatile Uint32 System_State = 0;
 
 volatile Uint16 BMS_Status = 0;
 volatile Uint16 BMS_Error = 0;

@@ -33,7 +33,7 @@ void main(void)
 			Process_Voltages();
 
 			Read_Temperatures();
-			Process_Voltages();
+			Process_Temperatures();
 
 			ServiceDog();
 
@@ -58,7 +58,6 @@ void main(void)
 			Calculate_SOH();
 
 			counter_2Hz = 0;
-
 
 			//add in issue function check
 			Reset_MCU(1);
