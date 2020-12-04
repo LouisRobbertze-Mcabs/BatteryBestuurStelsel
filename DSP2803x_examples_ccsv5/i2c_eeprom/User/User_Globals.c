@@ -108,7 +108,7 @@ Uint16 NodeID = 1;
 volatile Uint16 counter_50Hz = 0;
 
 volatile float Auxilliary_Voltage = 13;
-volatile Uint16 Auxilliary_counter = 0;
+//volatile Uint16 Auxilliary_counter = 0;
 
 
 //defines:

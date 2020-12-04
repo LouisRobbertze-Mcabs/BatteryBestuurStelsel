@@ -396,7 +396,7 @@ void CAN_Output_All(void)
     int i;
 
     //Battery data
-    if((Aux_Control == 1) && (Auxilliary_counter > 1))
+    if((Aux_Control == 1) /*&& (Auxilliary_counter > 1)*/)
     {
         /*   TxData.asFloat=Voltage_total; CANTransmit(0x700, 4, TxData.asUint,5);
 

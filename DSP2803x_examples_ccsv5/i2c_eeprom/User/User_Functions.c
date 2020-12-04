@@ -221,13 +221,10 @@ void  Read_Cell_Voltages(void)
 {
     // Read data from EEPROM section //
     int i;
-    //Voltage_total = 0;                                  //foutief! mag nie nal verwys nie............
-    //reset values
+
     //Voltage_low = 10;
     float Voltages_backup5 = Voltages[5];
     float Voltages_backup10 = Voltages[10];
-    static float Voltage_low_filter_temp = 0;
-    static float Another_temp = 0;
 
     float temp_V = 0;
     float temp_Voltage_total = 0;
@@ -281,39 +278,20 @@ void  Read_Cell_Voltages(void)
     Voltage_low_cell = temp_Voltage_low_nr;
 
     Voltage_high_cell = temp_Voltage_high_nr;
-    //Voltage_low = temp_Voltage_low;
-
-    // add voltage low filter. 3 second cut off period
-    Another_temp = Voltage_low_filter_temp + (0.878*((temp_Voltage_low)-Voltage_low_filter_temp));
-    Voltage_low = Another_temp;
-    Voltage_low_filter_temp = Voltage_low;
-
-    //ServiceDog();
+    Voltage_low = temp_Voltage_low;
 }
 
 void Process_Voltages(void)
 {
-    //	static int delay = 0;
-    if(Voltage_high > Vmax)     //3.65
+    //High Voltage Error
+    if(Voltage_high > Vmax)
     {
         balance = 1;            //start balancing
         flagCharged = 1;        //charged flag to to stop charging
-        ContactorOut = 0;																						//kan hierdie wees wat die contactor oopmaak
+        ContactorOut = 0;										//kan hierdie wees wat die contactor oopmaak
     }
 
-    if(Voltage_low > Vmin && Auxilliary_Voltage < Vauxmin && Auxilliary_Voltage > 7 && Aux_Control == 0)
-    {
-        Auxilliary_counter = 0;															//turn on aux supply
-        Aux_Control = 1;
-    }
-    else if(Auxilliary_counter > AuxChargeTime || Auxilliary_Voltage < 7)
-    {
-        Aux_Control = 0;																//turn off aux supply
-    }
-
-    Auxilliary_counter++;
-
-
+    //Low Voltage Error
     if(Voltage_low < Vmin && Voltage_low > Vcritical && Charger_status == 0)
     {
         flagDischarged = 1;
@@ -324,6 +302,16 @@ void Process_Voltages(void)
         flagDischarged = 2;
         ContactorOut = 0;       //turn off contactor
         LPwr_Out_Ctrl_1 = 0;
+    }
+
+    //Auxiliary control
+    if(Key_switch_1 == 1 && Voltage_low > Vmin && Aux_Control == 0)
+    {
+        Aux_Control = 1;
+    }
+    else
+    {
+        Aux_Control = 0;																//turn off aux supply
     }
 
     if(Voltage_high<Vchargedflagreset )

@@ -25,12 +25,12 @@ void main(void)
 		}
 		if(counter_2Hz == 2)
 		{
-
 			Toggle_LED();
 
 			Read_Cell_Voltages();
-			Calculate_Current();
 			Process_Voltages();
+
+			Calculate_Current();
 
 			Read_Temperatures();
 			Process_Temperatures();
