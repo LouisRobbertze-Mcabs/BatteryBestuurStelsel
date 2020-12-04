@@ -199,8 +199,6 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
     float ChgVoltage = 0;
 
     Uint16 ChgStatus = 0;
-    Uint16 temp = 0;
-    Uint16 temp2 = 0;
 
     static volatile float Current_max = 5;
     static volatile int timeout = 0;
@@ -211,95 +209,83 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
     if(RxDataL != 0 || RxDataH != 0)
     {
         timeout = 0;
-        //Read Charger Voltage
-        temp = RxDataL;
-        temp2 = (temp & 0xFF) << 8;
-        temp2 = ((temp &0xFF00)>>8) | temp2;
-        ChgVoltage = (float)temp2*0.1;
+        ChgVoltage = Charger_inputData_parse(RxDataL);                                      //calculate charger voltage
+        ChgCurrent = Charger_inputData_parse((RxDataL& 0xFFFF0000)>>16);                    //calculate charger current
+        ChgStatus = RxDataH & 0xFF;                                                         //Read Charger Status
 
-        //Read Charger Current
-        temp = (RxDataL& 0xFFFF0000)>>16;
-        temp2 = (temp & 0xFF) << 8;
-        temp2 = ((temp &0xFF00)>>8) | temp2;
-        ChgCurrent = (float)temp2*0.1;
-
-        //Read Charger Status
-        ChgStatus = RxDataH & 0xFF;
-
-        if(ChgStatus == 0 || ChgStatus == 0x08)                        //Charger ready to charge || battery voltage low flag || Comms issue
+        if(ChgStatus == 0 || ChgStatus == 0x08)                                             //Charger ready to charge || Charger Starting State
         {
-            Charger_status = 1;																//0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????											//charger connected
-            if(flagCurrent == 0 && flagTemp_Charge == 0 && flagCharged == 0 && Key_switch_2 == 0 /*&& flagDischarged != 2*/)     //flagTemp_Charge check flags to ensure charging is allowed
+            Charger_status = 1;                                                             //0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????                                          //charger connected
+            if(flagCurrent == 0 && flagTemp_Charge == 0 && flagCharged == 0 && Key_switch_2 == 0 )    //check flags to ensure charging is allowed
             {
-                if(delay == 0)                                                              //sit miskien check in om met die charger Vbat te meet
+                if(ChgVoltage < 45)
                 {
-                    ContactorOut = 1;                                                       //turn on contactor
+                    CANTransmit(0x618, 0, ChgCalculator(48, 0.2), 8, 0);                      //charging started
                     delay++;
                 }
-                else if(delay == 1)
+                else
                 {
-                    Current_max =  Current_max + kp_multiplier*(kp_constant - Voltage_high);								//kp controller constant & kp multiplier
+                    ContactorOut = 1;                                                           //turn on contactor
+
+                    Current_max =  Current_max + kp_multiplier*(kp_constant - Voltage_high);    //kp controller constant & kp multiplier - enlarge multiplier
 
                     if(Current_max <0)
                         Current_max = 0;
                     else if(Current_max > 25)
                         Current_max = 25;
 
-                    if(Voltage_high> balancing_upper_level && Voltage_low < balancing_bottom_level)	//determine if balancing should start									//balancing upper level & balancing lower level
+                    if(Voltage_high> balancing_upper_level && Voltage_low < balancing_bottom_level) //determine if balancing should start                                   //balancing upper level & balancing lower level
                     {
                         balance = 1;
                     }
                     else if(Voltage_high> balancing_upper_level && Voltage_low > balancing_bottom_level && Current > -2) //if cell high > 3.48 balance
                     {
                         flagCharged = 1;
-                        SOC = 100;						//Hierdie is toets fase om SOC by 100 te kry!
+                        SOC = 100;                                                          //Hierdie is toets fase om SOC by 100 te kry!
                     }
 
-                    if(flagCharged == 1)
-                        Charging_animation = 0;
+                    if(ChargerCurrent > 0.1)                                               //flagCharged == 1
+                        Charging_animation = 1;
                     else
-                        Charging_animation = 1;	                                            //0 - not plugged in, 1 -plugged in
+                        Charging_animation = 0;                                             //0 - not plugged in, 1 -plugged in
 
                     CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8, 0);             //charging started
-                    PreCharge = 1;                          								//turn on precharge resistor
-                    Charging = 1;
                 }
             }
-            else																			//BMS flag high. Stop charging and disconnect blah blah
+            else                                                                            //BMS flag high. Stop charging and disconnect blah blah
             {
-                if(delay == 1)                                                              //sit miskien check in om met die charger Vbat te meet
+                if(delay > 0)                                                              //sit miskien check in om met die charger Vbat te meet
                 {
                     CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                            //disconnect charger
                     delay--;
                 }
                 else if(delay == 0)
-                {                                                   //turn off contactor
+                {                                                                             //turn off contactor
                     CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                            //disconnect charger
-                    Charging = 0;
-                    if(flagCharged == 1)
-                        ContactorOut = 0;
+                    //if(flagCharged == 1)                                                    //maybe always disconnects the battery?
+
+                    ContactorOut = 0;
                     Charging_animation = 0;
                 }
             }
         }
-        else                                                                                 //Charger flag set. typically power disconnected
+        else if((ChgStatus & 0x4) == 0x4)                                                   //Charger input voltage error - Shutting down
         {
-            //  if(delay == 1)
-            //  {
-            //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                                //disconnect charger
-            //     delay--;
-            //     Charger_status = 0;
-            //  }
-            //   else if(delay == 0)
-            //   {
-
-            //CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                              //disconnect charger
             ContactorOut = 0;                                                           //turn off contactor
             delay = 0;
-            Charger_status = 0;															//add counter to monitor if charger is unplugged?
+            Charger_status = 0;                                                         //add counter to monitor if charger is unplugged?
             Charging_animation = 0;
-            Current_max = 5;															//speel rond om charge stabiel te kry
-            //   }
+            Current_max = 5;                                                            //speel rond om charge stabiel te kry
+        }
+        else if((ChgStatus & 0x13) != 0)                                                //Charger error
+        {
+            //Temperature error (ChgStatus = 0x2), Hardware failure (ChgStatus = 0x1) or Comms error (ChgStatus = 0x10)
+            ContactorOut = 0;                                                           //turn off contactor
+            delay = 0;
+            Charger_status = 1;                                                         //add counter to monitor if charger is unplugged?
+            //add error flag - set to active - flash charging LED
+            Charging_animation = 0;
+            Current_max = 5;                                                            //speel rond om charge stabiel te kry
         }
 
         ChargerVoltage = ChgVoltage;
@@ -392,271 +378,14 @@ void CAN_Output_All(void)
 {
     Uint16 Acewell_Data = 0;
     //Uint32 RxData = 0;
-    union bits32 TxData;
+    //union bits32 TxData;
     int i;
 
     //Battery data
     if((Aux_Control == 1) /*&& (Auxilliary_counter > 1)*/)
     {
-        /*   TxData.asFloat=Voltage_total; CANTransmit(0x700, 4, TxData.asUint,5);
 
-        //	queue_insert(0x700, 4, TxData.asUint, 5, &CAN_queue); //insert into queue
-        for(i=0;i<1500;i++){};
 
-
-        TxData.asFloat=Current /*(float)test_current; CANTransmit(0x700, 5, TxData.asUint,5);
-
-        //	queue_insert(0x700, 5, TxData.asUint, 5, &CAN_queue); //insert into queue
-        for(i=0;i<1500;i++){};
-
-
-        TxData.asFloat=Voltage_low/* (float)testcounter; CANTransmit(0x700, 6, TxData.asUint,5);								///////////xcbxcb
-
-        //	queue_insert(0x700, 6, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltage_low_cell; CANTransmit(0x700, 7, TxData.asUint,5);
-
-        //	queue_insert(0x700, 7, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-
-        TxData.asFloat=Voltage_high/*(float)testvariable*/; /*CANTransmit(0x700, 8, TxData.asUint,5);									///////////ljdfvbhsd
-
-        //	queue_insert(0x700, 8, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltage_high_cell; CANTransmit(0x700, 9, TxData.asUint,5);
-
-        //queue_insert(0x700, 9, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-
-        TxData.asFloat=Voltage_avg(float)testvariable2; CANTransmit(0x700, 10, TxData.asUint,5);
-
-        //	queue_insert(0x700, 10, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-
-        TxData.asFloat=Temperature_high (float)trip_counter; CANTransmit(0x700, 11, TxData.asUint,5);
-
-        //	queue_insert(0x700, 11, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperature_high_cell; CANTransmit(0x700, 12, TxData.asUint, 5);
-
-        //	queue_insert(0x700, 12, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-
-        TxData.asFloat=Temperature_low; CANTransmit(0x700, 13, TxData.asUint,5);
-
-        //	queue_insert(0x700, 13, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperature_low_cell; CANTransmit(0x700, 14, TxData.asUint, 5);
-
-        //	queue_insert(0x700, 14, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-
-        TxData.asFloat=Temperature_avg; CANTransmit(0x700, 15, TxData.asUint,5);
-
-        //	queue_insert(0x700, 15, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-
-        TxData.asFloat=Auxilliary_Voltage; CANTransmit(0x700, 16, TxData.asUint, 5);
-
-        //	queue_insert(0x700, 16, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=SOC; CANTransmit(0x700, 17, TxData.asUint, 5);
-
-        //	queue_insert(0x700, 17, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-
-        TxData.asFloat= SOH_avg ; CANTransmit(0x700, 18, TxData.asUint,5);				//r_avg
-
-        //	queue_insert(0x700, 18, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=SOH_max; CANTransmit(0x700, 19, TxData.asUint,5);						//rmaks
-
-        //	queue_insert(0x700, 19, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=SOH_max_cell; CANTransmit(0x700, 20, TxData.asUint, 5);			//rcell
-
-        //	queue_insert(0x700, 20, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        //cell voltage values
-
-        TxData.asFloat=Voltages[0]; CANTransmit(0x700, 21, TxData.asUint,5);
-
-        //	queue_insert(0x700, 21, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[1]; CANTransmit(0x700, 22, TxData.asUint,5);
-
-        //	queue_insert(0x700, 22, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[2]; CANTransmit(0x700, 23, TxData.asUint,5);
-
-        //	queue_insert(0x700, 23, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[3]; CANTransmit(0x700, 24, TxData.asUint,5);
-
-        //	queue_insert(0x700, 24, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[4]; CANTransmit(0x700, 25, TxData.asUint,5);
-
-        //	queue_insert(0x700, 25, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[5]; CANTransmit(0x700, 26, TxData.asUint,5);
-
-        //	queue_insert(0x700, 26, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[6]; CANTransmit(0x700, 27, TxData.asUint,5);
-
-        //	queue_insert(0x700, 27, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[7]; CANTransmit(0x700, 28, TxData.asUint,5);
-
-        //	queue_insert(0x700, 28, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[8]; CANTransmit(0x700, 29, TxData.asUint,5);
-
-        //	queue_insert(0x700, 29, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[9]; CANTransmit(0x700, 30, TxData.asUint,5);
-
-        //	queue_insert(0x700, 30, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[10]; CANTransmit(0x700, 31, TxData.asUint,5);
-
-        //	queue_insert(0x700, 31, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[11]; CANTransmit(0x700, 32, TxData.asUint,5);
-
-        //	queue_insert(0x700, 32, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[12]; CANTransmit(0x700, 33, TxData.asUint,5);
-
-        //	queue_insert(0x700, 33, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[13]; CANTransmit(0x700, 34, TxData.asUint,5);
-
-        //	queue_insert(0x700, 34, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Voltages[14]; CANTransmit(0x700, 35, TxData.asUint,5);
-
-        //	queue_insert(0x700, 35, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        //cell Temperature values
-
-        TxData.asFloat=Temperatures[0]; CANTransmit(0x700, 36, TxData.asUint,5);
-
-        //	queue_insert(0x700, 36, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[1]; CANTransmit(0x700, 37, TxData.asUint,5);
-
-        //	queue_insert(0x700, 37, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[2]; CANTransmit(0x700, 38, TxData.asUint,5);
-
-        //	queue_insert(0x700, 38, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[3]; CANTransmit(0x700, 39, TxData.asUint,5);
-
-        //	queue_insert(0x700, 39, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[4]; CANTransmit(0x700, 40, TxData.asUint,5);
-
-        //	queue_insert(0x700, 40, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[5]; CANTransmit(0x700, 41, TxData.asUint,5);
-
-        //	queue_insert(0x700, 41, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[6]; CANTransmit(0x700, 42, TxData.asUint,5);
-
-        //	queue_insert(0x700, 42, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[7]; CANTransmit(0x700, 43, TxData.asUint,5);
-
-        //	queue_insert(0x700, 43, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[8]; CANTransmit(0x700, 44, TxData.asUint,5);
-
-        //	queue_insert(0x700, 44, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[9]; CANTransmit(0x700, 45, TxData.asUint,5);
-
-        //	queue_insert(0x700, 45, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[10]; CANTransmit(0x700, 46, TxData.asUint,5);
-
-        //	queue_insert(0x700, 46, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[11]; CANTransmit(0x700, 47, TxData.asUint,5);
-
-        //	queue_insert(0x700, 47, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[12]; CANTransmit(0x700, 48, TxData.asUint,5);
-
-        //	queue_insert(0x700, 48, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[13]; CANTransmit(0x700, 49, TxData.asUint,5);
-
-        //	queue_insert(0x700, 49, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[14]; CANTransmit(0x700, 50, TxData.asUint,5);
-
-        //	queue_insert(0x700, 50, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        TxData.asFloat=Temperatures[15]; CANTransmit(0x700, 51, TxData.asUint,5);
-
-        //	queue_insert(0x700, 51, TxData.asUint, 5, &CAN_queue);
-        for(i=0;i<1500;i++){};
-
-        CANTransmit(0x700, 52, BMS_Status,5);
-
-        for(i=0;i<1500;i++){};
-        //toets2 = ((int)(SOC*100)) & 0xFF;
-
-         */
         CANTransmit(0x718, 0x4, ((int)(Voltage_total*10)), 5, 0); //Voltage
 
         for(i=0;i<1500;i++){};
@@ -685,7 +414,6 @@ void CAN_Output_All(void)
 
 
         CANTransmit(0x718, 0x88, Acewell_Data & 0xF, 5, 0); //LEDS*/
-
 
     }
     //queue_insert(0x718, 0x88, Acewell_Data & 0xF, 5, &CAN_queue);
@@ -795,4 +523,15 @@ void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Byte
     {
         ECanaRegs.CANES.all = 0xFFF0000;						    //reset flags	//reset fault on CAN bus	0x1BB0000
     }
+}
+
+float Charger_inputData_parse(Uint32 data)
+{
+    Uint16 temp = 0;
+    Uint16 temp2 = 0;
+
+    temp = data;
+    temp2 = (temp & 0xFF) << 8;
+    temp2 = ((temp & 0xFF00)>>8) | temp2;
+    return ((float)temp2*0.1);
 }

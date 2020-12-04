@@ -53,7 +53,6 @@ void main(void)
 			Process_BQ_System_Status();
 			Reset_BQ_ADC();
 
-
 			Calculate_SOC();
 			Calculate_SOH();
 
