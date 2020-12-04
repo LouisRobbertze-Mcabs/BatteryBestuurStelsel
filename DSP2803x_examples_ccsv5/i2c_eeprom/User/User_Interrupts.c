@@ -99,45 +99,38 @@ __interrupt void cpu_timer0_isr(void)
 __interrupt void cpu_timer1_isr(void)
 {
     //check status of all flags as well as the key switch
-    static long Pre_Charge_Measure_temp = 0;
     static long Pre_Charge_Measure_filter = 0;
     static long Pre_Charge_Measure_filter_temp = 0;
-    static int Proximty_Measure_temp = 0;
-    static int Pilot_Measure_temp = 0;
+    static long Proximty_Measure_filter_temp = 0;
+    static long Proximty_Measure_filter = 0;
 
     //Deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^-WcTs
     //a = 0.015 ~ 0.1Hz, a = 0.12 ~ 1Hz, a = 0.47 ~ 5Hz
 
-    //adc: (1.051*3.3)/(0.051*4096) =  0.0166 ~ 167/10000
-    Pre_Charge_Measure_filter = Pre_Charge_Measure_filter_temp + ((((AdcResult.ADCRESULT13*166)/10000)-Pre_Charge_Measure_filter_temp)/2);      //50hz sny af op 0.1hz - 2.3V ADC = 48V
+    Pre_Charge_Measure_filter = Pre_Charge_Measure_filter_temp + ((AdcResult.ADCRESULT13 - Pre_Charge_Measure_filter_temp)/2);      //50hz sny af op 0.1hz - 2.3V ADC = 48V
     Pre_Charge_Measure_filter_temp = Pre_Charge_Measure_filter;
+    //adc: (1.051*3.3)/(0.051*4096) =  0.0166 ~ 167/10000
+    Pre_Charge_Measure_filter = (Pre_Charge_Measure_filter * 167)/10000;
+    Pre_Charge_Measure = (int)Pre_Charge_Measure_filter;
 
+    Proximty_Measure_filter = Proximty_Measure_filter_temp + ((AdcResult.ADCRESULT11 - Proximty_Measure_filter_temp)/2);      //50hz sny af op 0.1hz - 2.3V ADC = 48V
+    Proximty_Measure_filter_temp = Proximty_Measure_filter;
 
-//    Pre_Charge_Measure_temp = AdcResult.ADCRESULT13;
-    Pre_Charge_Measure_temp = Pre_Charge_Measure_filter;
-    Pre_Charge_Measure_temp = (Pre_Charge_Measure_temp * 17)/1000;
-    Pre_Charge_Measure = (int)Pre_Charge_Measure_temp;
+    Proximty_Measure_filter = (3300*Proximty_Measure_filter)/4096;               //50hz calculate f_cut-off - mV measurement
+    Proximity_Measure = (int)Proximty_Measure_filter;
 
     //adc: (2.7k*3.3)/(2.7k+330) =  2.94V (Not connected) OR (407*3.3)/(737) =  1.82V (Connected)
-    Proximity_Measure = 3300*(Proximty_Measure_temp + (AdcResult.ADCRESULT11-Proximty_Measure_temp))/4096;               //50hz calculate f_cut-off - mV measurement
-    //Proximity_Measure = AdcResult.ADCRESULT11 ;
-    Proximty_Measure_temp = Proximity_Measure;
-
-    //test software for charger
-   // if(Proximity_Measure<2850)     //2300                 //connected
-    //    CHG_J1772_Ctrl = 1;                         //switch on
-    //else
-    CHG_J1772_Ctrl = 0;                         //switch off
-
-
-    //if proximity active, activate charger pin if battery is not charged
+    //Actual: 2.8V -> Not Connected OR 2V -> Connected
+    if(Proximity_Measure<2400 && flagCharged == 0)     //2300                 //connected
+        CHG_J1772_Ctrl = 1;                            //switch on
+    else
+        CHG_J1772_Ctrl = 0;                            //switch off
 
     //Pilot_Measure not currently in used. Needs to be implemented to monitor higher current charging applications
     //Will require to measure 1kHz pwm duty cycle
     //Pilot_Measure = 3300*(Pilot_Measure_temp + (AdcResult.ADCRESULT12-Pilot_Measure_temp))/4096;                        //50hz calculate f_cut-off - mV measurement
-    Pilot_Measure = AdcResult.ADCRESULT12;
-    Pilot_Measure_temp = Pilot_Measure;
-
+    //Pilot_Measure = AdcResult.ADCRESULT12;
+    //Pilot_Measure_temp = Pilot_Measure;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// testing
     if(Key_switch_2 == 1)

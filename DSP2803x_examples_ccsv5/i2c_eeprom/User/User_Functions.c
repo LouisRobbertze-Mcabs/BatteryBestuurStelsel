@@ -396,7 +396,7 @@ void Process_BQ_System_Status(void)
         }
         else if((system_status&0x8) == 0x8)        //under voltage error
         {
-            if(flagDischarged < 2)                 //Voltage is within bounds - maybe add something for the cahger as well?
+            if(flagDischarged < 2)                 //Voltage is within bounds - maybe add something for the charger as well?
             {
                 I2CA_WriteData(0x00, 0xBF);        //reset all possible flags
                 I2CA_WriteData(0x05,0x03);         //Turn on outputs
@@ -415,7 +415,7 @@ void Process_BQ_System_Status(void)
 
 void Read_Temperatures(void)
 {
-    static float Temperatures_resistance_temp[5] = { 1000, 1000, 1000, 1000, 1000};
+    static float Temperatures_resistance_temp[5] = {1000, 1000, 1000, 1000, 1000};
 
     //SOC0 -- New modules: Module 3 Temp 2
     Temperatures_resistance[0] = Temperatures_resistance_temp[0] + (0.2*(((AdcResult.ADCRESULT0))-Temperatures_resistance_temp[0]));
@@ -522,16 +522,12 @@ void Read_Temperatures(void)
 void Process_Temperatures(void)
 {
     if(Temperature_high > 55 || Temperature_low < -10)
-    {
         flagTemp_Discharge = 1;
-    }
     else
         flagTemp_Discharge = 0;
 
     if(Temperature_high > 50 || Temperature_low < 0)
-    {
         flagTemp_Charge = 1;
-    }
     else
         flagTemp_Charge = 0;
 }
