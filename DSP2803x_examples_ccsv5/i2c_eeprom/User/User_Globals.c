@@ -110,7 +110,7 @@ volatile float Ifilter = 0.27;
 volatile float Tmax = 50;
 volatile float Tmin = 0;
 
-volatile float SOC  ;//
+volatile float SOC ;//
 
 volatile float Vauxmin = 13;
 volatile float AuxChargeTime = 1800;
@@ -120,7 +120,7 @@ volatile float Vdischargedflagreset = 2.8;
 volatile float kp_constant = 3.5;								//charger
 volatile float kp_multiplier = 50;								//charger - increased from 30
 volatile float balancing_upper_level = 3.49;
-volatile float balancing_bottom_level = 3.48; //4.475
+volatile float balancing_bottom_level = 3.475; //4.475
 
 /* Declare variable using above structure and the function datapoints */
 /* These coordinates correspond to the points illustrated in the above graph */
