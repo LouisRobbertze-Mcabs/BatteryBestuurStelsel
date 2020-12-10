@@ -214,6 +214,7 @@ volatile Uint32 CAN_Charger_dataH = 0;
 volatile Uint16 BMS_Status = 0;
 volatile Uint16 BMS_Error = 0;
 volatile long trip_counter = 0;
+volatile long Filter_SC;
 volatile Uint32 testcounter = 0;
 
 volatile long testvariable = 0;
@@ -244,3 +245,6 @@ volatile Uint16 Cycles = 0;
 volatile int Pre_Charge_Measure = 0;
 volatile int Proximity_Measure = 0;
 volatile int Pilot_Measure = 0;
+
+
+volatile long Current_test_DSS = 0;

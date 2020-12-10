@@ -11,16 +11,11 @@ __interrupt void  adc_isr(void)
 {
     //Sit dit dalk deur 'n laag deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^(-WcTs)
 
-    static long int Filter_SC;
-    static long int Filter_SC_past = 0;
+    //static long int Filter_SC;
+    static long Filter_SC_past = 0;
     static float current_p;
 
     static long trip_timer;
-
-
-
-    //sample time variable?
-
 
     test_current = current_p + (0.00314*(AdcResult.ADCRESULT1-current_p));     		//   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
     current_p=test_current;
@@ -39,12 +34,11 @@ __interrupt void  adc_isr(void)
     Filter_SC = (100*Filter_SC_past + (27*(AdcResult.ADCRESULT1-Filter_SC_past)))/100;	   //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
     Filter_SC_past=Filter_SC;
 
+    asm(" .global Current_Label\nCurrent_Label: ");                                     //Breakpoint trigger for testing
+
     //Short circuit fault - 100 Hz cut-off
     if(Filter_SC > Imax || Filter_SC < Imin)
-    {
-        ContactorOut = 0;       														//turn off contactor
-        flagCurrent = 1;
-    }
+        OverCurrentFault();
     else if(Filter_SC <= 3031 && Filter_SC > 2048)										//current between 0A and 120 A
     {
         trip_timer = interpolate_table_1d(&trip2_table, Filter_SC);						//linear cooling -- straight line
@@ -67,10 +61,7 @@ __interrupt void  adc_isr(void)
     }
 
     if(trip_counter  > 1200000)
-    {
-        ContactorOut = 0;       														//turn off contactor
-        flagCurrent = 1;
-    }
+        OverCurrentFault();
     else if(trip_counter < 0)															//counter out of bounds
         trip_counter = 0;
 
@@ -155,8 +146,9 @@ __interrupt void cpu_timer1_isr(void)
     }
     else if((Key_switch_2 == 0) && (Charger_status == 0)) //keyswitch == 0
     {
-        flagCurrent = 0;
-        ContactorOut = 0;       //turn off contactor
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//        flagCurrent = 0;
+//        ContactorOut = 0;       //turn off contactor
     }
 
     if(flagCurrent == 1)

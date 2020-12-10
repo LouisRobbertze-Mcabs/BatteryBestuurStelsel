@@ -57,6 +57,8 @@ void Battery_Error(void);
 
 float Charging_Animation(float real_SOC);
 
+void OverCurrentFault(void);
+
 //#pragma CODE_SECTION(DELAY_US, "ramfuncs");
 
 

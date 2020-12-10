@@ -152,6 +152,12 @@ Example_2803xI2C_eeprom.out \
 EXE_OUTPUTS__QUOTED += \
 "Example_2803xI2C_eeprom.out" \
 
+BIN_OUTPUTS += \
+Example_2803xI2C_eeprom.hex \
+
+BIN_OUTPUTS__QUOTED += \
+"Example_2803xI2C_eeprom.hex" \
+
 
 # All Target
 all: Example_2803xI2C_eeprom.out
@@ -164,9 +170,16 @@ Example_2803xI2C_eeprom.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
+Example_2803xI2C_eeprom.hex: $(EXE_OUTPUTS)
+	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
+	@echo 'Invoking: C2000 Hex Utility'
+	"C:/Program Files (x86)/Texas Instruments/C2000 Code Generation Tools 6.0.3/bin/hex2000"  -o "Example_2803xI2C_eeprom.hex" $(EXE_OUTPUTS__QUOTED)
+	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
+	@echo ' '
+
 # Other Targets
 clean:
-	-$(RM) $(EXE_OUTPUTS__QUOTED)
+	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
 	-$(RM) "DSP2803x_CodeStartBranch.obj" "DSP2803x_usDelay.obj" "Main.obj" "Source\DSP2803x_Adc.obj" "Source\DSP2803x_CpuTimers.obj" "Source\DSP2803x_DefaultIsr.obj" "Source\DSP2803x_ECan.obj" "Source\DSP2803x_GlobalVariableDefs.obj" "Source\DSP2803x_I2C.obj" "Source\DSP2803x_PieCtrl.obj" "Source\DSP2803x_PieVect.obj" "Source\DSP2803x_Spi.obj" "Source\DSP2803x_SysCtrl.obj" "User\User_ADC.obj" "User\User_BQ.obj" "User\User_CAN.obj" "User\User_Functions.obj" "User\User_Globals.obj" "User\User_I2C.obj" "User\User_Interrupts.obj" "User\User_Queue.obj" 
 	-$(RM) "Main.d" "Source\DSP2803x_Adc.d" "Source\DSP2803x_CpuTimers.d" "Source\DSP2803x_DefaultIsr.d" "Source\DSP2803x_ECan.d" "Source\DSP2803x_GlobalVariableDefs.d" "Source\DSP2803x_I2C.d" "Source\DSP2803x_PieCtrl.d" "Source\DSP2803x_PieVect.d" "Source\DSP2803x_Spi.d" "Source\DSP2803x_SysCtrl.d" "User\User_ADC.d" "User\User_BQ.d" "User\User_CAN.d" "User\User_Functions.d" "User\User_Globals.d" "User\User_I2C.d" "User\User_Interrupts.d" "User\User_Queue.d" 
 	-$(RM) "DSP2803x_CodeStartBranch.d" "DSP2803x_usDelay.d" 

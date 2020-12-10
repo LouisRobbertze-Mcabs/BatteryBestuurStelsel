@@ -920,3 +920,9 @@ float Charging_Animation(float real_SOC)
 
     return previous_SOC;
 }
+
+void OverCurrentFault(void)
+{
+    ContactorOut = 0;                           //Open contactor
+    flagCurrent = 1;                            //Set Over Current flag
+}

@@ -200,6 +200,7 @@ extern volatile Uint32 CAN_Charger_dataH;
 extern volatile Uint16 BMS_Status;
 extern volatile Uint16 BMS_Error;
 extern volatile long trip_counter;
+extern volatile long Filter_SC;
 extern volatile Uint32 testcounter;
 
 extern volatile long testvariable;
@@ -230,5 +231,8 @@ extern volatile Uint16 Cycles;
 extern volatile int Pre_Charge_Measure;
 extern volatile int Proximity_Measure;
 extern volatile int Pilot_Measure;
+
+
+extern volatile long Current_test_DSS;
 
 #endif /* USER_GLOBALS_H_ */

@@ -43,7 +43,7 @@ void main(void)
 
 			Battery_Status();
 			Battery_Error();
-			CAN_Output_All();
+			//CAN_Output_All();
 
 			ServiceDog();
 
