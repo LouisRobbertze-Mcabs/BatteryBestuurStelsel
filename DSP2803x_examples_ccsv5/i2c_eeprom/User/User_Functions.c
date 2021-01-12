@@ -909,14 +909,17 @@ void Battery_Error(void)
 
 float Charging_Animation(float real_SOC)
 {
-    static float previous_SOC = 0;
+    static int previous_SOC = 0;
 
-    previous_SOC = previous_SOC + 12;
+    previous_SOC = previous_SOC + 13;
 
-    if(previous_SOC <= real_SOC - 12)			//bottom animation
-        previous_SOC = real_SOC - 12;
-    else if(previous_SOC > 101 )				//top animation
-        previous_SOC = real_SOC - 12;
+    if(previous_SOC < real_SOC - 13)            //bottom animation
+        previous_SOC = real_SOC - 13;
+    else if(previous_SOC > 102 )                //top animation
+        previous_SOC = real_SOC - 13;
+
+    if(previous_SOC<0)
+        previous_SOC = previous_SOC + 12;
 
     return previous_SOC;
 }
