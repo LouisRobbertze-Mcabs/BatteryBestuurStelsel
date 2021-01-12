@@ -142,13 +142,14 @@ __interrupt void cpu_timer1_isr(void)
         else
         {
             ContactorOut = 0;                                   //turn off contactor
+            PreCharge = 0;                                      //turn off precharge
         }
     }
     else if((Key_switch_2 == 0) && (Charger_status == 0)) //keyswitch == 0
     {
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//        flagCurrent = 0;
-//        ContactorOut = 0;       //turn off contactor
+        flagCurrent = 0;
+        ContactorOut = 0;       //Test reset
     }
 
     if(flagCurrent == 1)
