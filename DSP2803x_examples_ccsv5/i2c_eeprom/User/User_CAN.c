@@ -416,8 +416,6 @@ void CAN_Output_All(void)
         CANTransmit(0x718, 0x88, Acewell_Data & 0xF, 5, 0); //LEDS*/
 
     }
-    //queue_insert(0x718, 0x88, Acewell_Data & 0xF, 5, &CAN_queue);
-
 }
 
 void CANSlaveConfig(void)
