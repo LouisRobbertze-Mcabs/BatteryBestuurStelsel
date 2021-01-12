@@ -123,7 +123,6 @@ __interrupt void cpu_timer1_isr(void)
     //Pilot_Measure = AdcResult.ADCRESULT12;
     //Pilot_Measure_temp = Pilot_Measure;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// testing
     if(Key_switch_2 == 1)
     {
         //binne die keydrive if
@@ -147,7 +146,6 @@ __interrupt void cpu_timer1_isr(void)
     }
     else if((Key_switch_2 == 0) && (Charger_status == 0)) //keyswitch == 0
     {
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         flagCurrent = 0;
         ContactorOut = 0;       //Test reset
     }
