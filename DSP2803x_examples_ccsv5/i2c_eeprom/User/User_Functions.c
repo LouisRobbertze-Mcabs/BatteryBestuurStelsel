@@ -493,24 +493,21 @@ void Read_Temperatures(void)
     //Calculate avg cell temperature
     for(i=0; i<3; i++)
     {
-        for(j=0;j<2;j++)
+        temperature_avg = temperature_avg + Temperatures_Module[i][0];
+
+        if(temp_Temperature_high < Temperatures_Module[i][0])							//calculate highest temperature
         {
-            temperature_avg = temperature_avg + Temperatures_Module[i][j];
+            temp_Temperature_high = (Temperatures_Module[i][0]);
+            temp_high_cell = i;
         }
 
-        if(temp_Temperature_high < ((Temperatures_Module[i][0]+Temperatures_Module[i][1])/2))							//calculate highest temperature
+        if(temp_Temperature_low > Temperatures_Module[i][0])							//calculate lowest temperature
         {
-            temp_Temperature_high = ((Temperatures_Module[i][0]+Temperatures_Module[i][1])/2);
-            temp_high_cell = i ;
-        }
-
-        if(temp_Temperature_low > ((Temperatures_Module[i][0]+Temperatures_Module[i][1])/2))							//calculate lowest temperature
-        {
-            temp_Temperature_low = ((Temperatures_Module[i][0]+Temperatures_Module[i][1])/2);
+            temp_Temperature_low = ((Temperatures_Module[i][0]));
             temp_low_cell = i;
         }
     }
-    temperature_avg = temperature_avg/6;
+    temperature_avg = temperature_avg/3;
 
     Temperature_avg = temperature_avg;
     Temperature_high = temp_Temperature_high;
@@ -800,7 +797,7 @@ void Calculate_SOC()
 
     SOC_t++;
 
-    if(Current>3 || Current<-3 || Charger_status == 1)
+    if(Current>3 || Current<-3 || Charger_status == 1)                          //probably needs to go to whether the keyswitch is active or not
     {
         SOC_t = 0;
     }
@@ -830,7 +827,7 @@ void Calibrate_Current()
         if(Calibrate_delay > 10)                                                    //10 s delay for the vehicle/battery to do shut-off process
         {
             error = Current;
-            Current_CAL = Current_CAL + (0.0001* error * Current_CAL);					//maybe add slow filter to dampen the fault?
+            Current_CAL = Current_CAL + (0.0001* error * Current_CAL);			    //maybe add slow filter to dampen the fault?
 
             if(Current_CAL>2200)													//set maximum limit
                 Current_CAL = 2200;
