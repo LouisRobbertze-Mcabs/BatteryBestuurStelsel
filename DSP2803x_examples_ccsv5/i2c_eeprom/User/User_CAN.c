@@ -218,9 +218,9 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
             Charger_status = 1;                                                             //0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????                                          //charger connected
             if(flagCurrent == 0 && flagTemp_Charge == 0 && flagCharged == 0 && Key_switch_2 == 0 )    //check flags to ensure charging is allowed
             {
-                if(ChgVoltage < 45)
+                if(ChgVoltage < 40)
                 {
-                    CANTransmit(0x618, 0, ChgCalculator(48, 0.2), 8, 0);                      //charging started
+                    CANTransmit(0x618, 0, ChgCalculator(48, 0.5), 8, 0);                      //charging started
                     delay++;
                 }
                 else
