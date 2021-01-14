@@ -377,12 +377,13 @@ void CANSlaveReception(void)
 void CAN_Output_All(void)
 {
     Uint16 Acewell_Data = 0;
+    static Uint16  Auxilliary_counter = 0;
     //Uint32 RxData = 0;
     //union bits32 TxData;
     int i;
 
-    //Battery data
-    if((Aux_Control == 1) /*&& (Auxilliary_counter > 1)*/)
+    //Need to test this counter move..
+    if((Aux_Control == 1) && (Auxilliary_counter > 1))
     {
 
 
@@ -415,6 +416,14 @@ void CAN_Output_All(void)
 
         CANTransmit(0x718, 0x88, Acewell_Data & 0xF, 5, 0); //LEDS*/
 
+    }
+    else if(Aux_Control == 1)
+    {
+        Auxilliary_counter++;
+    }
+    else
+    {
+        Auxilliary_counter = 0;
     }
 }
 
