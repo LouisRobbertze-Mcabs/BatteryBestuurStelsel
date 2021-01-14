@@ -144,11 +144,13 @@ __interrupt void cpu_timer1_isr(void)
             PreCharge = 0;                                      //turn off precharge
         }
     }
-    else if((Key_switch_2 == 0) && (Charger_status == 0)) //keyswitch == 0
+    else if((Key_switch_2 == 0) && (Charger_status == 0))       //haal miskien keyswitch2 uit?
     {
         flagCurrent = 0;
-        ContactorOut = 0;       //Test reset
+        ContactorOut = 0;
     }
+    else
+        ContactorOut = 0;
 
     if(flagCurrent == 1)
         led3 = 1;

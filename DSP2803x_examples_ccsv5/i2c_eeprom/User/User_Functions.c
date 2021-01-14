@@ -286,8 +286,8 @@ void Process_Voltages(void)
     //High Voltage Error
     if(Voltage_high > Vmax)
     {
-        balance = 1;            //start balancing
-        flagCharged = 1;        //charged flag to to stop charging
+        balance = 1;                                            //start balancing
+        flagCharged = 1;    //verander na overVoltage?                                    //charged flag to to stop charging
         ContactorOut = 0;										//kan hierdie wees wat die contactor oopmaak
     }
 
