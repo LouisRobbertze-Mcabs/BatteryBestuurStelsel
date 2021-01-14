@@ -474,21 +474,21 @@ void Read_Temperatures(void)
     Rts = (10000*Vts)/(3.3-Vts);
     Temperatures_BMS = (1/((log(Rts/10000))/4000+0.003356))-273;
 
-    //BQ_temp1,BQ_temp2 and BQ_temp3
+    //BQ_temp1,BQ_temp2 and BQ_temp3                                    //3435 (new thermistors)   //Thermistor: 1/T = 1/To + 1/B*ln(R/Ro)
     temp_T = I2CA_ReadData(&I2cMsgIn1, 0x2C, 2);    //TS1
     Vts = temp_T*ADCgain;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module[0][0] = (1/((log(Rts/10000))/4000+0.003356))-273;
+    Temperatures_Module[0][0] = (1/((log(Rts/10000))/3435+0.003356))-273;
 
     temp_T = I2CA_ReadData(&I2cMsgIn1, 0x2E, 2);    //TS2
     Vts = temp_T*ADCgain;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module[1][0] = (1/((log(Rts/10000))/4000+0.003356))-273;
+    Temperatures_Module[1][0] = (1/((log(Rts/10000))/3435+0.003356))-273;
 
     temp_T = I2CA_ReadData(&I2cMsgIn1, 0x30, 2);    //TS3
     Vts = temp_T*ADCgain;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module[2][0] = (1/((log(Rts/10000))/4000+0.003356))-273;
+    Temperatures_Module[2][0] = (1/((log(Rts/10000))/3435+0.003356))-273;
 
     //Calculate avg cell temperature
     for(i=0; i<3; i++)
