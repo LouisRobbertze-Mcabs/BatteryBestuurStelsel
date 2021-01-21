@@ -29,6 +29,7 @@ void Initialise_BMS(void);
 void Init_Gpio(void);
 
 void Toggle_LED(void);
+void Status_LED(void);
 void Read_Cell_Voltages(void);
 void Process_Voltages(void);
 void Read_Temperatures(void);

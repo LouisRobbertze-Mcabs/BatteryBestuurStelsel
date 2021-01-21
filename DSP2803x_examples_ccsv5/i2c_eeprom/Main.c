@@ -3,12 +3,9 @@
 // $Release Date: March 30, 2013 $
 
 //To Do List:
-//Check if CRC is correct, and BQ is responding
-//
-
 //Add Temperature influence on SOC
 
-//set pre-charge active - close contactor when 0.8 * V_total
+//set pre-charge active - close contactor when 0.7 * V_total
 //###########################################################################
 
 #include "User\User_Defines.h"
@@ -26,6 +23,7 @@ void main(void)
 		if(counter_2Hz == 2)
 		{
 			Toggle_LED();
+			Status_LED();
 
 			Read_Cell_Voltages();
 			Process_Voltages();

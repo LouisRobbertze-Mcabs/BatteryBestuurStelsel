@@ -34,7 +34,7 @@ __interrupt void  adc_isr(void)
     Filter_SC = (100*Filter_SC_past + (27*(AdcResult.ADCRESULT1-Filter_SC_past)))/100;	   //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
     Filter_SC_past=Filter_SC;
 
-    asm(" .global Current_Label\nCurrent_Label: ");                                     //Breakpoint trigger for testing
+//    asm(" .global Current_Label\nCurrent_Label: ");                                     //Breakpoint trigger for testing
 
     //Short circuit fault - 100 Hz cut-off
     if(Filter_SC > Imax || Filter_SC < Imin)
@@ -66,14 +66,14 @@ __interrupt void  adc_isr(void)
         trip_counter = 0;
 
     //do some series testing here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    if(trip_counter > 2000)
+ /*   if(trip_counter > 2000)
     {
         SOP_discharge = (((interpolate_table_1d(&trip3_table, trip_counter) - 2048) * 122)/1000 * (Uint16)Voltage_total)/100;
     }
     else if(trip_counter < 2000)
     {
         SOP_discharge = (((interpolate_table_1d(&trip3_table, 2000) - 2048) * 122)/1000 * (Uint16)Voltage_total)/100 ;
-    }
+    }*/
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
@@ -92,8 +92,8 @@ __interrupt void cpu_timer1_isr(void)
     //check status of all flags as well as the key switch
     static long Pre_Charge_Measure_filter = 0;
     static long Pre_Charge_Measure_filter_temp = 0;
-    static long Proximty_Measure_filter_temp = 0;
-    static long Proximty_Measure_filter = 0;
+   /* static long Proximty_Measure_filter_temp = 0;
+    static long Proximty_Measure_filter = 0;*/
 
     //Deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^-WcTs
     //a = 0.015 ~ 0.1Hz, a = 0.12 ~ 1Hz, a = 0.47 ~ 5Hz
@@ -102,35 +102,36 @@ __interrupt void cpu_timer1_isr(void)
     Pre_Charge_Measure_filter_temp = Pre_Charge_Measure_filter;
     //adc: (1.051*3.3)/(0.051*4096) =  0.0166 ~ 167/10000
     Pre_Charge_Measure_filter = (Pre_Charge_Measure_filter * 167)/10000;
-    Pre_Charge_Measure = (int)Pre_Charge_Measure_filter;
+    Pre_Charge_Measure = (int16)Pre_Charge_Measure_filter;
 
-    Proximty_Measure_filter = Proximty_Measure_filter_temp + ((AdcResult.ADCRESULT11 - Proximty_Measure_filter_temp)/2);      //50hz sny af op 0.1hz - 2.3V ADC = 48V
+/*    Proximty_Measure_filter = Proximty_Measure_filter_temp + ((AdcResult.ADCRESULT11 - Proximty_Measure_filter_temp)/2);      //50hz sny af op 0.1hz - 2.3V ADC = 48V
     Proximty_Measure_filter_temp = Proximty_Measure_filter;
 
     Proximty_Measure_filter = (3300*Proximty_Measure_filter)/4096;               //50hz calculate f_cut-off - mV measurement
     Proximity_Measure = (int)Proximty_Measure_filter;
-
+*/
     //adc: (2.7k*3.3)/(2.7k+330) =  2.94V (Not connected) OR (407*3.3)/(737) =  1.82V (Connected)
     //Actual: 2.8V -> Not Connected OR 2V -> Connected
-    if(Proximity_Measure<2400 && flagCharged == 0)     //2300                 //connected
+/*    if(Proximity_Measure<2400 && flagCharged == 0)     //2300                 //connected
         CHG_J1772_Ctrl = 1;                            //switch on
     else
         CHG_J1772_Ctrl = 0;                            //switch off
-
+*/
     //Pilot_Measure not currently in used. Needs to be implemented to monitor higher current charging applications
     //Will require to measure 1kHz pwm duty cycle
     //Pilot_Measure = 3300*(Pilot_Measure_temp + (AdcResult.ADCRESULT12-Pilot_Measure_temp))/4096;                        //50hz calculate f_cut-off - mV measurement
     //Pilot_Measure = AdcResult.ADCRESULT12;
     //Pilot_Measure_temp = Pilot_Measure;
 
-    if(Key_switch_2 == 1)
+    if(Key_switch_2 == 1 && (Charger_status == 0))
     {
         //binne die keydrive if
-        if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp_Discharge == 0) && (Charger_status == 0)) //flagTemp_Discharge
+        if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp_Discharge == 0)) //flagTemp_Discharge
         {
-            if(Pre_Charge_Measure > (0.7*Voltage_total))
+            ContactorOut = 1;                               //turn on contactor
+            if(Pre_Charge_Measure > 30)
             {
-                ContactorOut = 1;                               //turn on contactor
+
                 PreCharge = 0;
             }
             else
@@ -139,35 +140,13 @@ __interrupt void cpu_timer1_isr(void)
             }
         }
         else
-        {
-            ContactorOut = 0;                                   //turn off contactor
             PreCharge = 0;                                      //turn off precharge
-        }
     }
-    else if((Key_switch_2 == 0) && (Charger_status == 0))       //haal miskien keyswitch2 uit?
+    else if((Key_switch_2 == 0) && (Charger_status == 0))       //Keyswitch = to zero
     {
         flagCurrent = 0;
         ContactorOut = 0;
     }
-    else
-        ContactorOut = 0;
-
-    if(flagCurrent == 1)
-        led3 = 1;
-    else
-        led3 = 0;
-
-    if(flagDischarged == 1 || flagDischarged == 2)
-        led2 = 1;
-    else
-        led2 = 0;
-
-    if(flagTemp_Discharge == 1)
-    {
-        led3 = 1;
-        led2 = 1;
-    }
-
 
     EALLOW;
     CpuTimer1.InterruptCount++;

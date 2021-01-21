@@ -124,7 +124,7 @@ void Init_Gpio(void)
     GpioCtrlRegs.GPAPUD.bit.GPIO13  = 1;    //Disable pull-up for GPIO13
     GpioCtrlRegs.GPAMUX1.bit.GPIO13 = 0;    //High power 48V ctrl 1
     GpioCtrlRegs.GPADIR.bit.GPIO13 = 1;     //High power 48V ctrl 1
-    Ctrl_HPwr_48V_O_1 = 0;                  //High power 48V ctrl 1 - dink hierdie moet 1 wees
+    Ctrl_HPwr_48V_O_1 = 1;                  //High power 48V ctrl 1 - dink hierdie moet 1 wees
 
     GpioCtrlRegs.GPAPUD.bit.GPIO15  = 1;    //Disable pull-up for GPIO15
     GpioCtrlRegs.GPAMUX1.bit.GPIO15 = 0;    //12 Aux drive
@@ -192,15 +192,15 @@ void Init_Gpio(void)
 
 void Toggle_LED(void)
 {
-    GpioDataRegs.GPATOGGLE.bit.GPIO5 = 1;
-    GpioDataRegs.GPATOGGLE.bit.GPIO4 = 1;
+    GpioDataRegs.GPATOGGLE.bit.GPIO5 = 1;                   //led1
+    GpioDataRegs.GPATOGGLE.bit.GPIO4 = 1;                   //led2
 
     //Ctrl_LPwr_48V_O_3 = 1;          //GPIO39
     //GpioDataRegs.GPBTOGGLE.bit.GPIO39 = 1;                working
 
     //Ctrl_LPwr_48V_O_2          //GPIO19
     //GpioDataRegs.GPATOGGLE.bit.GPIO19 = 1;                //working
-    Ctrl_LPwr_48V_O_2 = 1;
+    //Ctrl_LPwr_48V_O_2 = 1;
 
     //Ctrl_LPwr_48V_O_1 -  Dink dis die geval
     //GpioDataRegs.GPATOGGLE.bit.GPIO20 = 1;                working
@@ -215,6 +215,25 @@ void Toggle_LED(void)
 
     //GpioDataRegs.GPATOGGLE.bit.GPIO6 = 1;
     //GpioDataRegs.GPATOGGLE.bit.GPIO19 = 1;
+}
+
+void Status_LED(void)
+{
+      if(flagCurrent == 1)
+          led3 = 1;
+      else
+          led3 = 0;
+
+      if(flagDischarged != 0)
+          led2 = 1;
+      else
+          led2 = 0;
+
+      if(flagTemp_Discharge == 1)
+      {
+          led3 = 1;
+          led2 = 1;
+      }
 }
 
 void  Read_Cell_Voltages(void)
@@ -295,6 +314,7 @@ void Process_Voltages(void)
     if(Voltage_low < Vmin && Voltage_low > Vcritical && Charger_status == 0)
     {
         flagDischarged = 1;
+
     }
     else if(Voltage_low < Vcritical && Charger_status == 0)
     {
@@ -302,6 +322,8 @@ void Process_Voltages(void)
         flagDischarged = 2;
         ContactorOut = 0;       //turn off contactor
         LPwr_Out_Ctrl_1 = 0;
+
+        //Ctrl_HPwr_48V_O_1 = 0                                         //switch off 48V supply when in critical mode
     }
 
     //Auxiliary control

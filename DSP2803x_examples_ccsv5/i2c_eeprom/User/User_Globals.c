@@ -242,7 +242,7 @@ volatile float Voltage_minimum = 0;
 volatile float SOH = 100;
 volatile Uint16 Cycles = 0;
 
-volatile int Pre_Charge_Measure = 0;
+volatile int16 Pre_Charge_Measure = 0;
 volatile int Proximity_Measure = 0;
 volatile int Pilot_Measure = 0;
 
