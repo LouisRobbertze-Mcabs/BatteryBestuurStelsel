@@ -218,14 +218,16 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
             Charger_status = 1;                                                             //0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????                                          //charger connected
             if(flagCurrent == 0 && flagTemp_Charge == 0 && flagCharged == 0 && Key_switch_2 == 0 )    //check flags to ensure charging is allowed
             {
-                if(ChgVoltage < 40)
+                if(ChgVoltage < 37)
                 {
-                    CANTransmit(0x618, 0, ChgCalculator(48, 0.5), 8, 0);                      //charging started
+                    CANTransmit(0x618, 0, ChgCalculator(48, 2), 8, 0);             //werk vir een of ander rede nie??????
+                    Pre_Charge_On();
                     delay++;
                 }
                 else
                 {
                     Contactor_On();                                                             //turn on contactor
+                    Pre_Charge_Off();
 
                     Current_max =  Current_max + kp_multiplier*(kp_constant - Voltage_high);    //kp controller constant & kp multiplier - enlarge multiplier
 
@@ -264,7 +266,6 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
                     CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                            //disconnect charger
                     //if(flagCharged == 1)                                                    //maybe always disconnects the battery?
 
-
                     Contactor_Off();                                                        //turn off contactor
                     Charging_animation = 0;
                 }
@@ -273,6 +274,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
         else if((ChgStatus & 0x4) == 0x4)                                                   //Charger input voltage error - Shutting down
         {
             Contactor_Off();                                                            //turn off contactor
+            Pre_Charge_Off();
             delay = 0;
             Charger_status = 0;                                                         //add counter to monitor if charger is unplugged?
             Charging_animation = 0;
@@ -282,6 +284,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
         {
             //Temperature error (ChgStatus = 0x2), Hardware failure (ChgStatus = 0x1) or Comms error (ChgStatus = 0x10)
             Contactor_Off();                                                            //turn off contactor
+            Pre_Charge_Off();
             delay = 0;
             Charger_status = 1;                                                         //add counter to monitor if charger is unplugged?
             //add error flag - set to active - flash charging LED
@@ -519,10 +522,10 @@ void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Byte
         break;
     }
 
-    if (ECanaRegs.CANES.all != 0 || ECanaRegs.CANES.all != 0x30000 || ECanaRegs.CANES.all != 0x30001)
+  /*  if (ECanaRegs.CANES.all != 0 || ECanaRegs.CANES.all != 0x30000 || ECanaRegs.CANES.all != 0x30001)
     {
         ECanaRegs.CANES.all = 0xFFF0000;						    //reset flags	//reset fault on CAN bus	0x1BB0000
-    }
+    }*/
 }
 
 float Charger_inputData_parse(Uint32 data)

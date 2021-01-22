@@ -316,7 +316,7 @@ void Process_Voltages(void)
         Aux_Supply_12V_Off();
         flagDischarged = 2;
         Contactor_Off();                                                                //turn off contactor
-        LPwr_Out_Ctrl_1 = 0;                                                            //Control Fusebox secondary regulator
+//        LPwr_Out_Ctrl_1 = 0;                                                            //Control Fusebox secondary regulator
 
         //Ctrl_HPwr_48V_O_1 = 0                                                         //switch off 48V supply when in critical mode
     }
@@ -337,7 +337,7 @@ void Process_Voltages(void)
     if(Voltage_low>Vdischargedflagreset )
     {
         flagDischarged = 0;
-        LPwr_Out_Ctrl_1 = 1;
+        //LPwr_Out_Ctrl_1 = 1;
     }
 
     if(Voltage_high<3.4)

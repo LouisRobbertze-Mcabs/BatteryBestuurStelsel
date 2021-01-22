@@ -113,13 +113,13 @@ volatile float Ifilter = 0.27;
 volatile float Tmax = 50;
 volatile float Tmin = 0;
 
-volatile float SOC =100 ;//
+volatile float SOC = 100 ;//
 
 volatile float Vauxmin = 13;
 volatile float AuxChargeTime = 1800;
 
 volatile float Vchargedflagreset = 3.35;
-volatile float Vdischargedflagreset = 2.8;
+volatile float Vdischargedflagreset = 2.85;
 volatile float kp_constant = 3.5;								//charger
 volatile float kp_multiplier = 30;								//charger
 volatile float balancing_upper_level = 3.49;

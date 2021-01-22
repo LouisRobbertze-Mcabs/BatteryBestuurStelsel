@@ -131,7 +131,7 @@ __interrupt void cpu_timer1_isr(void)
         //binne die keydrive if
         if(flagDischarged == 0 && flagCurrent == 0  && flagTemp_Discharge == 0)
         {
-            if(Pre_Charge_Measure > 2200)
+            if(Pre_Charge_Measure > 2200)                                       //set to an appropriate value
             {
                 Contactor_On();
                 Pre_Charge_Off();
@@ -141,6 +141,10 @@ __interrupt void cpu_timer1_isr(void)
             {
                 Pre_Charge_On();
             }
+        }
+        else
+        {
+            Contactor_Off();
         }
     }
     else if(Key_switch_2 == 0 && Charger_status == 0)       //Keyswitch = to zero
