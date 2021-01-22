@@ -358,7 +358,7 @@ void CANSlaveReception(void)
     case 35: {TxData.asFloat=Voltages[14]; CANTransmit(0, 35, TxData.asUint,5, 0); break;}
 
     //cell Temperature values
-    case 36: {TxData.asFloat=Temperatures[0]; CANTransmit(0, 36, TxData.asUint,5, 0); break;}
+  /*  case 36: {TxData.asFloat=Temperatures[0]; CANTransmit(0, 36, TxData.asUint,5, 0); break;}
     case 37: {TxData.asFloat=Temperatures[1]; CANTransmit(0, 37, TxData.asUint,5, 0); break;}
     case 38: {TxData.asFloat=Temperatures[2]; CANTransmit(0, 38, TxData.asUint,5, 0); break;}
     case 39: {TxData.asFloat=Temperatures[3]; CANTransmit(0, 39, TxData.asUint,5, 0); break;}
@@ -373,7 +373,7 @@ void CANSlaveReception(void)
     case 48: {TxData.asFloat=Temperatures[12]; CANTransmit(0, 48, TxData.asUint,5, 0); break;}
     case 49: {TxData.asFloat=Temperatures[13]; CANTransmit(0, 49, TxData.asUint,5, 0); break;}
     case 50: {TxData.asFloat=Temperatures[14]; CANTransmit(0, 50, TxData.asUint,5, 0); break;}
-    case 51: {TxData.asFloat=Temperatures[15]; CANTransmit(0, 51, TxData.asUint,5, 0); break;}
+    case 51: {TxData.asFloat=Temperatures[15]; CANTransmit(0, 51, TxData.asUint,5, 0); break;}*/
     //case 52: {if(RxData2==0x8){Fan_Control = 1;}else if(RxData2==0x4){Fan_Control = 0;}; break;}
     }
 }

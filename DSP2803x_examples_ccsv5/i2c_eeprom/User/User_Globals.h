@@ -58,9 +58,9 @@ extern volatile float Voltage_high;
 extern volatile float Voltage_high_cell;
 extern volatile float Voltage_low;
 extern volatile float Voltage_low_cell;
-extern volatile float Temperatures[16];
+//extern volatile float Temperatures[16];
 
-extern volatile float Temperatures_Module[3][2];
+extern volatile float Temperatures_Module[3];
 
 extern volatile float Temperatures_CS;
 extern volatile float Temperatures_BMS;
@@ -78,12 +78,9 @@ extern volatile float I;
 extern volatile float Voltage_total;
 extern volatile float Ah;
 
-
 extern volatile int CANcounter;
 
 extern volatile float test_current;
-
-//extern volatile float test_blah[3];
 
 extern int Cell_B1;
 extern int Cell_B2;

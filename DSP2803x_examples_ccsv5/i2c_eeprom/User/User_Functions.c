@@ -468,17 +468,17 @@ void Read_Temperatures(void)
     //Module3 Temperature sense2
     Vts = (Temperatures_resistance[0]) * 0.00080566;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module[2][1] = (1/((log(Rts/10000))/4000+0.003356))-273;
+    //Temperatures_Module[2][1] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
     //Module2 Temperature sense2
     Vts = (Temperatures_resistance[1]) * 0.00080566;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module[1][1] = (1/((log(Rts/10000))/4000+0.003356))-273;
+    //Temperatures_Module[1][1] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
     //Module1 Temperature sense2
     Vts = (Temperatures_resistance[2]) * 0.00080566;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module[0][1] = (1/((log(Rts/10000))/4000+0.003356))-273;
+    //Temperatures_Module[0][1] = (1/((log(Rts/10000))/4000+0.003356))-273;
 
     //Current Sensor Temperature
     Vts = (Temperatures_resistance[3]) * 0.00080566;
@@ -488,38 +488,38 @@ void Read_Temperatures(void)
     //BMS Temperature
     Vts = (Temperatures_resistance[4]) * 0.00080566;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_BMS = (1/((log(Rts/10000))/4000+0.003356))-273;
+    Temperatures_BMS = (1/((log(Rts/10000))/3980+0.003356))-273;                        //maybe 3980 instead of 4000
 
     //BQ_temp1,BQ_temp2 and BQ_temp3
     temp_T = I2CA_ReadData(&I2cMsgIn1, 0x2C, 2);    //TS1
     Vts = temp_T*ADCgain;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module[0][0] = (1/((log(Rts/10000))/3435+0.003356))-273;
+    Temperatures_Module[0] = (1/((log(Rts/10000))/3435+0.003356))-273;
 
     temp_T = I2CA_ReadData(&I2cMsgIn1, 0x2E, 2);    //TS2
     Vts = temp_T*ADCgain;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module[1][0] = (1/((log(Rts/10000))/3435+0.003356))-273;
+    Temperatures_Module[1] = (1/((log(Rts/10000))/3435+0.003356))-273;
 
     temp_T = I2CA_ReadData(&I2cMsgIn1, 0x30, 2);    //TS3
     Vts = temp_T*ADCgain;
     Rts = (10000*Vts)/(3.3-Vts);
-    Temperatures_Module[2][0] = (1/((log(Rts/10000))/3435+0.003356))-273;               //3435 (new thermistors)   //Thermistor: 1/T = 1/To + 1/B*ln(R/Ro)
+    Temperatures_Module[2] = (1/((log(Rts/10000))/3435+0.003356))-273;               //3435 (new thermistors)   //Thermistor: 1/T = 1/To + 1/B*ln(R/Ro)
 
     //Calculate avg cell temperature
     for(i=0; i<3; i++)
     {
-        temperature_avg = temperature_avg + Temperatures_Module[i][0];
+        temperature_avg = temperature_avg + Temperatures_Module[i];
 
-        if(temp_Temperature_high < Temperatures_Module[i][0])							//calculate highest temperature
+        if(temp_Temperature_high < Temperatures_Module[i])							//calculate highest temperature
         {
-            temp_Temperature_high = (Temperatures_Module[i][0]);
+            temp_Temperature_high = (Temperatures_Module[i]);
             temp_high_cell = i;
         }
 
-        if(temp_Temperature_low > Temperatures_Module[i][0])							//calculate lowest temperature
+        if(temp_Temperature_low > Temperatures_Module[i])							//calculate lowest temperature
         {
-            temp_Temperature_low = ((Temperatures_Module[i][0]));
+            temp_Temperature_low = ((Temperatures_Module[i]));
             temp_low_cell = i;
         }
     }
@@ -817,7 +817,7 @@ void Calculate_SOC()
     {
         SOC_t = 0;
     }
-    SOCc = SOC - (Current*(1/(Initial_Capacity*3600)));		//coulomb counter      Ampere sec -> Ampere huur  	0.000185	1/150A*3600s
+    SOCc = SOC - (Current*(0.000185));		                //coulomb counter      Ampere sec -> Ampere huur  	0.000185	1/150A*3600s
                                                             //                                                  0.000164    1/170*2*3600s
     if(SOC_t > 5400)								        //delay of 90 min maybe do 60 min?
         Wsoc = 0;

@@ -90,22 +90,22 @@ __interrupt void cpu_timer0_isr(void)
 __interrupt void cpu_timer1_isr(void)
 {
     //check status of all flags as well as the key switch
-    // static int Pre_Charge_Measure_filter = 0;
-    //static int Pre_Charge_Measure_filter_temp = 0;
+    static long Pre_Charge_Measure_filter = 0;
+    static long Pre_Charge_Measure_filter_temp = 0;
     /* static long Proximty_Measure_filter_temp = 0;
     static long Proximty_Measure_filter = 0;*/
 
     //Deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^-WcTs
     //a = 0.015 ~ 0.1Hz, a = 0.12 ~ 1Hz, a = 0.47 ~ 5Hz
 
-    /*  Pre_Charge_Measure_filter = Pre_Charge_Measure_filter_temp + ((AdcResult.ADCRESULT13 - Pre_Charge_Measure_filter_temp)/2);      //50hz sny af op 0.1hz - 2.3V ADC = 48V
-    Pre_Charge_Measure_filter_temp = Pre_Charge_Measure_filter;*/
+    Pre_Charge_Measure_filter = Pre_Charge_Measure_filter_temp + ((AdcResult.ADCRESULT13 - Pre_Charge_Measure_filter_temp)/2);      //50hz sny af op 0.1hz - 2.3V ADC = 48V
+    Pre_Charge_Measure_filter_temp = Pre_Charge_Measure_filter;
 
-    Pre_Charge_Measure = AdcResult.ADCRESULT13;
+    //Pre_Charge_Measure = AdcResult.ADCRESULT13;
 
     //adc: (1.051*3.3)/(0.051*4096) =  0.0166 ~ 167/10000
-    //    Pre_Charge_Measure_filter = (Pre_Charge_Measure_filter * 167)/10000;
-    //    Pre_Charge_Measure = (int16)Pre_Charge_Measure_filter;
+    Pre_Charge_Measure_filter = (Pre_Charge_Measure_filter * 167)/10000;
+    Pre_Charge_Measure = (Uint16)Pre_Charge_Measure_filter;
 
     /*    Proximty_Measure_filter = Proximty_Measure_filter_temp + ((AdcResult.ADCRESULT11 - Proximty_Measure_filter_temp)/2);      //50hz sny af op 0.1hz - 2.3V ADC = 48V
     Proximty_Measure_filter_temp = Proximty_Measure_filter;
@@ -131,7 +131,7 @@ __interrupt void cpu_timer1_isr(void)
         //binne die keydrive if
         if(flagDischarged == 0 && flagCurrent == 0  && flagTemp_Discharge == 0)
         {
-            if(Pre_Charge_Measure > 2200)                                       //set to an appropriate value
+            if(Pre_Charge_Measure > (0.7*Voltage_total))                                       //set to an appropriate value
             {
                 Contactor_On();
                 Pre_Charge_Off();
