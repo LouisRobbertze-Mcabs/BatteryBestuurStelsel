@@ -32,8 +32,9 @@
 #define Aux_Control GpioDataRegs.GPADAT.bit.GPIO15               //Ctrl_HPwr_48V_O_2
 
 #define Ctrl_LPwr_48V_O_2 GpioDataRegs.GPADAT.bit.GPIO19         //Ctrl_LPwr_48V_O_2
-#define ContactorOut GpioDataRegs.GPADAT.bit.GPIO20              //Ctrl_LPwr_48V_O_1 -  Dink dis die geval
-#define PreCharge GpioDataRegs.GPADAT.bit.GPIO21
+#define ContactorOut GpioDataRegs.GPADAT.bit.GPIO20              //Ctrl_LPwr_48V_O_1
+
+#define Ctrl_Pre_Charge GpioDataRegs.GPADAT.bit.GPIO21                //Ctrl_Pre_Charge
 
 #define Key_switch_1 GpioDataRegs.GPADAT.bit.GPIO22              //Key_switch_Position_1
 #define Key_switch_2 GpioDataRegs.GPADAT.bit.GPIO24              //Key_switch_Position_2

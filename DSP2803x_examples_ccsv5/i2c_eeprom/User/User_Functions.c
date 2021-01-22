@@ -13,13 +13,10 @@ void Initialise_BMS(void)
     flagCurrent = 0;
     //    System_State = 0;
 
-    Temperatures[5] = 0;
-    Temperatures_resistance[4] = 0;
-
     InitSysCtrl();
     InitI2CGpio();
-    Init_Gpio();
     InitAdc();
+    Init_Gpio();
 
     DINT;
 
@@ -129,7 +126,7 @@ void Init_Gpio(void)
     GpioCtrlRegs.GPAPUD.bit.GPIO15  = 1;    //Disable pull-up for GPIO15
     GpioCtrlRegs.GPAMUX1.bit.GPIO15 = 0;    //12 Aux drive
     GpioCtrlRegs.GPADIR.bit.GPIO15 = 1;     // 12 Aux drive (verander miskien)
-    Aux_Control = 0;
+
 
     GpioCtrlRegs.GPAPUD.bit.GPIO19 = 1;     //Disable pull-up for GPIO19
     GpioCtrlRegs.GPAMUX2.bit.GPIO19 = 0;    //Ctrl_LPwr_48V_O_2
@@ -139,12 +136,10 @@ void Init_Gpio(void)
     GpioCtrlRegs.GPAPUD.bit.GPIO20  = 1;    //Disable pull-up for GPIO20
     GpioCtrlRegs.GPAMUX2.bit.GPIO20 = 0;    //contactor output
     GpioCtrlRegs.GPADIR.bit.GPIO20 = 1;     // contactor output
-    ContactorOut = 0;                       //turn off contactor
 
     GpioCtrlRegs.GPAPUD.bit.GPIO21  = 1;    //Disable pull-up for GPIO21
     GpioCtrlRegs.GPAMUX2.bit.GPIO21 = 0;    //precharge resistor
-    GpioCtrlRegs.GPADIR.bit.GPIO21 = 1;     // precharge resistor
-    PreCharge = 1;                          //turn on precharge resistor
+    GpioCtrlRegs.GPADIR.bit.GPIO21 = 1;     //precharge resistor
 
     GpioCtrlRegs.GPAPUD.bit.GPIO22  = 1;    //Disable pull-up for GPIO22
     GpioCtrlRegs.GPAMUX2.bit.GPIO22 = 0;    //key 1 switch
@@ -182,12 +177,12 @@ void Init_Gpio(void)
 
     EDIS;
 
-    CSControl = 1;  //turn CScontrol on for current measurement
+    Contactor_Off();                        //turn off contactor
+    Pre_Charge_On();                        //turn on precharge resistor
 
-    //turn off contactor
-    //ContactorOut = 0;
-    //turn off PreCharge
-    //PreCharge = 0;
+    CSControl = 1;                          //turn CScontrol on for current measurement
+    Aux_Supply_12V_Off();
+
 }
 
 void Toggle_LED(void)
@@ -307,7 +302,7 @@ void Process_Voltages(void)
     {
         balance = 1;                                            //start balancing
         flagCharged = 1;    //verander na overVoltage?                                    //charged flag to to stop charging
-        ContactorOut = 0;										//kan hierdie wees wat die contactor oopmaak
+        Contactor_Off();										//kan hierdie wees wat die contactor oopmaak
     }
 
     //Low Voltage Error
@@ -318,22 +313,22 @@ void Process_Voltages(void)
     }
     else if(Voltage_low < Vcritical && Charger_status == 0)
     {
-        Aux_Control = 0;
+        Aux_Supply_12V_Off();
         flagDischarged = 2;
-        ContactorOut = 0;       //turn off contactor
-        LPwr_Out_Ctrl_1 = 0;
+        Contactor_Off();                                                                //turn off contactor
+        LPwr_Out_Ctrl_1 = 0;                                                            //Control Fusebox secondary regulator
 
-        //Ctrl_HPwr_48V_O_1 = 0                                         //switch off 48V supply when in critical mode
+        //Ctrl_HPwr_48V_O_1 = 0                                                         //switch off 48V supply when in critical mode
     }
 
     //Auxiliary control
     if(Key_switch_1 == 1 && Voltage_low > Vmin && Aux_Control == 0)
     {
-        Aux_Control = 1;
+        Aux_Supply_12V_On();
     }
     else
     {
-        Aux_Control = 0;																//turn off aux supply
+        Aux_Supply_12V_Off();															//turn off aux supply
     }
 
     if(Voltage_high<Vchargedflagreset )
@@ -342,7 +337,6 @@ void Process_Voltages(void)
     if(Voltage_low>Vdischargedflagreset )
     {
         flagDischarged = 0;
-        PreCharge = 1;
         LPwr_Out_Ctrl_1 = 1;
     }
 
@@ -460,7 +454,7 @@ void Read_Temperatures(void)
     Temperatures_resistance_temp[4] = Temperatures_resistance[4];
 
 
-    int i,j;
+    int i;
     float Vts;
     float Rts;
     float temperature_avg=0;
@@ -945,6 +939,36 @@ float Charging_Animation(float real_SOC)
 
 void OverCurrentFault(void)
 {
-    ContactorOut = 0;                           //Open contactor
+    Contactor_Off();                            //Open contactor
     flagCurrent = 1;                            //Set Over Current flag
+}
+
+void Pre_Charge_On(void)
+{
+    GpioDataRegs.GPASET.bit.GPIO21 = 1;         //Turn on pre_charge
+}
+
+void Pre_Charge_Off(void)
+{
+    GpioDataRegs.GPACLEAR.bit.GPIO21 = 1;         //Turn off pre_charge
+}
+
+void Contactor_On(void)
+{
+    GpioDataRegs.GPASET.bit.GPIO20 = 1;         //Turn on Contactor
+}
+
+void Contactor_Off(void)
+{
+    GpioDataRegs.GPACLEAR.bit.GPIO20 = 1;         //Turn off Contactor
+}
+
+void Aux_Supply_12V_On(void)
+{
+    GpioDataRegs.GPASET.bit.GPIO15 = 1;         //Turn on 12V_Aux_Supply
+}
+
+void Aux_Supply_12V_Off(void)
+{
+    GpioDataRegs.GPACLEAR.bit.GPIO15 = 1;         //Turn on 12V_Aux_Supply
 }

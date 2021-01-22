@@ -68,7 +68,7 @@ void InitAdc(void)
     for(i=0;i<10000;i++);			//sit my eie delay hier in want anders crash die debugger
 
 
-   // DELAY_US(ADC_usDELAY);         // Delay before converting ADC channels
+    //DELAY_US(ADC_usDELAY);         // Delay before converting ADC channels
 }
 
 void InitAdcAio()

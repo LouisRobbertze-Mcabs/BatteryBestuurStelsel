@@ -21,7 +21,7 @@ extern struct I2CMSG I2cMsgIn1;
 
 extern struct I2CMSG *CurrentMsgPtr;               // Used in interrupts
 
-extern struct BMS_STATUS_FLAGS;
+//extern struct BMS_STATUS_FLAGS;
 
 extern volatile Uint16 DataOut;
 extern volatile Uint16 DataOut2;
@@ -41,8 +41,6 @@ extern volatile Uint16 flag_Pre_Charge;
 
 extern volatile Uint16 counter_2Hz;
 
-extern float Ireference;
-
 extern volatile Uint16 Charger_status;
 extern volatile Uint16 Charging;
 extern volatile Uint16 Heating;
@@ -51,9 +49,8 @@ extern volatile int system_status;
 
 extern volatile float ChargerVoltage;
 extern volatile float ChargerCurrent;
- extern volatile  Uint16 ChargerDebug;
+extern volatile  Uint16 ChargerDebug;
 extern volatile float Current;
-extern volatile int current_int;
 
 extern volatile float Voltages[15];
 extern volatile float Voltage_avg;
@@ -65,9 +62,6 @@ extern volatile float Temperatures[16];
 
 extern volatile float Temperatures_Module[3][2];
 
-extern volatile float Temperatures_Module_1[2];
-extern volatile float Temperatures_Module_2[2];
-extern volatile float Temperatures_Module_3[2];
 extern volatile float Temperatures_CS;
 extern volatile float Temperatures_BMS;
 
@@ -83,15 +77,13 @@ extern volatile float ADCoffset;
 extern volatile float I;
 extern volatile float Voltage_total;
 extern volatile float Ah;
-extern volatile int rus;
 
-extern Uint32 ref;
 
 extern volatile int CANcounter;
 
 extern volatile float test_current;
 
-extern volatile float test_blah[3];
+//extern volatile float test_blah[3];
 
 extern int Cell_B1;
 extern int Cell_B2;
@@ -133,7 +125,6 @@ extern volatile float balancing_upper_level;
 extern volatile float balancing_bottom_level;
 
 
-
 /* Declare variable using above structure and the function datapoints */
 /* These coordinates correspond to the points illustrated in the above graph */
 extern  long sine_x[5];
@@ -159,12 +150,6 @@ extern struct table_1d trip3_table;
 
 extern volatile float Current_CAL;
 
-//extern volatile Uint16 Current_Sum;
-//extern volatile Uint16 Current_Counter;
-
-
-//extern volatile Uint16 Toets_current_sum[10];
-
 
 extern volatile float SOC_t;
 extern volatile float Wsoc;
@@ -178,7 +163,6 @@ extern volatile float SOH_avg;
 extern volatile float SOH_max;
 extern volatile float SOH_max_cell;
 
-
 extern volatile float Voltages_old[15];
 extern volatile float Current_old;
 extern volatile	float resistance;
@@ -186,9 +170,6 @@ extern volatile	float resistance_temp;
 extern volatile float dI;
 
 extern union bits32 TxData;
-
-extern int toets;
-extern int toets2;
 
 extern int temptimer;
 
@@ -203,8 +184,6 @@ extern volatile long trip_counter;
 extern volatile long Filter_SC;
 extern volatile Uint32 testcounter;
 
-extern volatile long testvariable;
-extern volatile long testvariable2;
 
 extern volatile long testtrip;
 
@@ -228,11 +207,11 @@ extern volatile float Voltage_minimum;
 extern volatile float SOH;
 extern volatile Uint16 Cycles;
 
-extern volatile int16 Pre_Charge_Measure;
+extern volatile Uint16 Pre_Charge_Measure;
 extern volatile int Proximity_Measure;
 extern volatile int Pilot_Measure;
 
 
-extern volatile long Current_test_DSS;
+//extern volatile long Current_test_DSS;
 
 #endif /* USER_GLOBALS_H_ */

@@ -34,7 +34,7 @@ __interrupt void  adc_isr(void)
     Filter_SC = (100*Filter_SC_past + (27*(AdcResult.ADCRESULT1-Filter_SC_past)))/100;	   //   0.00314-1Hz     //  0.01249 - 4 Hz      //0.27-100Hz
     Filter_SC_past=Filter_SC;
 
-//    asm(" .global Current_Label\nCurrent_Label: ");                                     //Breakpoint trigger for testing
+    //    asm(" .global Current_Label\nCurrent_Label: ");                                     //Breakpoint trigger for testing
 
     //Short circuit fault - 100 Hz cut-off
     if(Filter_SC > Imax || Filter_SC < Imin)
@@ -66,7 +66,7 @@ __interrupt void  adc_isr(void)
         trip_counter = 0;
 
     //do some series testing here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- /*   if(trip_counter > 2000)
+    /*   if(trip_counter > 2000)
     {
         SOP_discharge = (((interpolate_table_1d(&trip3_table, trip_counter) - 2048) * 122)/1000 * (Uint16)Voltage_total)/100;
     }
@@ -90,62 +90,63 @@ __interrupt void cpu_timer0_isr(void)
 __interrupt void cpu_timer1_isr(void)
 {
     //check status of all flags as well as the key switch
-    static long Pre_Charge_Measure_filter = 0;
-    static long Pre_Charge_Measure_filter_temp = 0;
-   /* static long Proximty_Measure_filter_temp = 0;
+    // static int Pre_Charge_Measure_filter = 0;
+    //static int Pre_Charge_Measure_filter_temp = 0;
+    /* static long Proximty_Measure_filter_temp = 0;
     static long Proximty_Measure_filter = 0;*/
 
     //Deurlaat filter y(k) = y(k - 1) + a[x(k) - y(k - 1)] met a = 1 - e^-WcTs
     //a = 0.015 ~ 0.1Hz, a = 0.12 ~ 1Hz, a = 0.47 ~ 5Hz
 
-    Pre_Charge_Measure_filter = Pre_Charge_Measure_filter_temp + ((AdcResult.ADCRESULT13 - Pre_Charge_Measure_filter_temp)/2);      //50hz sny af op 0.1hz - 2.3V ADC = 48V
-    Pre_Charge_Measure_filter_temp = Pre_Charge_Measure_filter;
-    //adc: (1.051*3.3)/(0.051*4096) =  0.0166 ~ 167/10000
-    Pre_Charge_Measure_filter = (Pre_Charge_Measure_filter * 167)/10000;
-    Pre_Charge_Measure = (int16)Pre_Charge_Measure_filter;
+    /*  Pre_Charge_Measure_filter = Pre_Charge_Measure_filter_temp + ((AdcResult.ADCRESULT13 - Pre_Charge_Measure_filter_temp)/2);      //50hz sny af op 0.1hz - 2.3V ADC = 48V
+    Pre_Charge_Measure_filter_temp = Pre_Charge_Measure_filter;*/
 
-/*    Proximty_Measure_filter = Proximty_Measure_filter_temp + ((AdcResult.ADCRESULT11 - Proximty_Measure_filter_temp)/2);      //50hz sny af op 0.1hz - 2.3V ADC = 48V
+    Pre_Charge_Measure = AdcResult.ADCRESULT13;
+
+    //adc: (1.051*3.3)/(0.051*4096) =  0.0166 ~ 167/10000
+    //    Pre_Charge_Measure_filter = (Pre_Charge_Measure_filter * 167)/10000;
+    //    Pre_Charge_Measure = (int16)Pre_Charge_Measure_filter;
+
+    /*    Proximty_Measure_filter = Proximty_Measure_filter_temp + ((AdcResult.ADCRESULT11 - Proximty_Measure_filter_temp)/2);      //50hz sny af op 0.1hz - 2.3V ADC = 48V
     Proximty_Measure_filter_temp = Proximty_Measure_filter;
 
     Proximty_Measure_filter = (3300*Proximty_Measure_filter)/4096;               //50hz calculate f_cut-off - mV measurement
     Proximity_Measure = (int)Proximty_Measure_filter;
-*/
+     */
     //adc: (2.7k*3.3)/(2.7k+330) =  2.94V (Not connected) OR (407*3.3)/(737) =  1.82V (Connected)
     //Actual: 2.8V -> Not Connected OR 2V -> Connected
-/*    if(Proximity_Measure<2400 && flagCharged == 0)     //2300                 //connected
+    /*    if(Proximity_Measure<2400 && flagCharged == 0)     //2300                 //connected
         CHG_J1772_Ctrl = 1;                            //switch on
     else
         CHG_J1772_Ctrl = 0;                            //switch off
-*/
+     */
     //Pilot_Measure not currently in used. Needs to be implemented to monitor higher current charging applications
     //Will require to measure 1kHz pwm duty cycle
     //Pilot_Measure = 3300*(Pilot_Measure_temp + (AdcResult.ADCRESULT12-Pilot_Measure_temp))/4096;                        //50hz calculate f_cut-off - mV measurement
     //Pilot_Measure = AdcResult.ADCRESULT12;
     //Pilot_Measure_temp = Pilot_Measure;
 
-    if(Key_switch_2 == 1 && (Charger_status == 0))
+    if(Key_switch_2 == 1 && Charger_status == 0)
     {
         //binne die keydrive if
-        if((flagDischarged == 0) && (flagCurrent == 0)  && (flagTemp_Discharge == 0)) //flagTemp_Discharge
+        if(flagDischarged == 0 && flagCurrent == 0  && flagTemp_Discharge == 0)
         {
-            ContactorOut = 1;                               //turn on contactor
-            if(Pre_Charge_Measure > 30)
+            if(Pre_Charge_Measure > 2200)
             {
-
-                PreCharge = 0;
+                Contactor_On();
+                Pre_Charge_Off();
+                led2 = ~led2;
             }
             else
             {
-                PreCharge = 1;                                  //turn on precharge
+                Pre_Charge_On();
             }
         }
-        else
-            PreCharge = 0;                                      //turn off precharge
     }
-    else if((Key_switch_2 == 0) && (Charger_status == 0))       //Keyswitch = to zero
+    else if(Key_switch_2 == 0 && Charger_status == 0)       //Keyswitch = to zero
     {
+        Contactor_Off();
         flagCurrent = 0;
-        ContactorOut = 0;
     }
 
     EALLOW;
@@ -287,16 +288,19 @@ __interrupt void can_rx_isr(void)
         {
             //bit 0 -> high PWR 48V output - initiate pre-charge
             if((PDO_Command & 0x1) == 1)
-                PreCharge = 1;                                 //follow Pre-charge pin - add contactor closing later
-            //Make use of timer to ensure Contactor closes after 2 seconds?
+            {
+                Pre_Charge_On();                                //follow Pre-charge pin - add contactor closing later
+            }                                                   //Make use of timer to ensure Contactor closes after 2 seconds?
             else
             {
-                PreCharge = 0;                                 //follow Pre-charge pin
-                ContactorOut = 0;                              //turn off contactor
+                Pre_Charge_Off();                               //follow Pre-charge pin
+                Contactor_Off();                                //turn off contactor
             }
 
             //bit 1 -> high PWR 12V output - turn on 12V
-            Aux_Control = ((PDO_Command>>1 ) & 0x1);
+            //Aux_Control = ((PDO_Command>>1 ) & 0x1);            //replace with Uax_Supply_12V_On();
+
+
 
             //bit 2 -> Low PWR 12V output - turn on 12V - usually ON but should maybe be inverse
             LPwr_Out_Ctrl_1 = ((PDO_Command>>2 ) & 0x1);
@@ -335,7 +339,7 @@ __interrupt void can_rx_isr(void)
                 SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
                 SDO_MISO_Data = SDO_MISO_Data | (int16)(Current*100);
                 break;
-            case 0x0904 :                                             //Power
+                /* case 0x0904 :                                             //Power
                 SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8  | 0x40;
                 SDO_MISO_Data = SDO_MISO_Data | (int16)(Current*Voltage_total);
                 break;
@@ -531,7 +535,7 @@ __interrupt void can_rx_isr(void)
             case 0x0964 :                                                                   //State of power charge
                 SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
                 SDO_MISO_Data = SOP_charge;
-                break;
+                break;*/
             default:
                 //return error status
                 SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;

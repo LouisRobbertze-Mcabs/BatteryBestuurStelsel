@@ -225,7 +225,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
                 }
                 else
                 {
-                    ContactorOut = 1;                                                           //turn on contactor
+                    Contactor_On();                                                             //turn on contactor
 
                     Current_max =  Current_max + kp_multiplier*(kp_constant - Voltage_high);    //kp controller constant & kp multiplier - enlarge multiplier
 
@@ -264,14 +264,15 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
                     CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                            //disconnect charger
                     //if(flagCharged == 1)                                                    //maybe always disconnects the battery?
 
-                    ContactorOut = 0;
+
+                    Contactor_Off();                                                        //turn off contactor
                     Charging_animation = 0;
                 }
             }
         }
         else if((ChgStatus & 0x4) == 0x4)                                                   //Charger input voltage error - Shutting down
         {
-            ContactorOut = 0;                                                           //turn off contactor
+            Contactor_Off();                                                            //turn off contactor
             delay = 0;
             Charger_status = 0;                                                         //add counter to monitor if charger is unplugged?
             Charging_animation = 0;
@@ -280,7 +281,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
         else if((ChgStatus & 0x13) != 0)                                                //Charger error
         {
             //Temperature error (ChgStatus = 0x2), Hardware failure (ChgStatus = 0x1) or Comms error (ChgStatus = 0x10)
-            ContactorOut = 0;                                                           //turn off contactor
+            Contactor_Off();                                                            //turn off contactor
             delay = 0;
             Charger_status = 1;                                                         //add counter to monitor if charger is unplugged?
             //add error flag - set to active - flash charging LED

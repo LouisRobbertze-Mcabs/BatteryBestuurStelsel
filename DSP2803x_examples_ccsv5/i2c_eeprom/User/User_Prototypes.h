@@ -59,6 +59,12 @@ void Battery_Error(void);
 float Charging_Animation(float real_SOC);
 
 void OverCurrentFault(void);
+void Pre_Charge_On(void);
+void Pre_Charge_Off(void);
+void Contactor_On(void);
+void Contactor_Off(void);
+void Aux_Supply_12V_On(void);
+void Aux_Supply_12V_Off(void);
 
 //#pragma CODE_SECTION(DELAY_US, "ramfuncs");
 

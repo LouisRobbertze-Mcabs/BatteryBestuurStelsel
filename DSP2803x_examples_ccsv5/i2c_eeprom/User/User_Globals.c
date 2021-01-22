@@ -47,8 +47,6 @@ volatile Uint16 flag_Pre_Charge = 0;
 
 volatile Uint16 counter_2Hz = 0;
 
-float current_reference;
-
 volatile Uint16 Charger_status = 0;
 volatile Uint16 Charging = 0;
 volatile Uint16 Heating = 0;
@@ -60,7 +58,6 @@ volatile float ChargerVoltage=0;
 volatile float ChargerCurrent=0;
 volatile Uint16 ChargerDebug=0;
 volatile float Current;
-volatile int current_int;
 
 volatile float Voltages[15];
 volatile float Voltage_avg;
@@ -72,9 +69,6 @@ volatile float Temperatures[16];
 
 volatile float Temperatures_Module[3][2];
 
-volatile float Temperatures_Module_1[2];
-volatile float Temperatures_Module_2[2];
-volatile float Temperatures_Module_3[2];
 volatile float Temperatures_CS;
 volatile float Temperatures_BMS;
 
@@ -90,15 +84,10 @@ volatile float ADCoffset;
 volatile float I;
 volatile float Voltage_total;
 volatile float Ah= 0;
-volatile int rus = 0;
-
-Uint32 ref = 0;
 
 volatile int CANcounter = 0;
 
 volatile float test_current= 0;
-
-volatile float test_blah[3];
 
 int Cell_B1 = 0;
 int Cell_B2 = 0;
@@ -108,7 +97,6 @@ Uint16 NodeID = 1;
 volatile Uint16 counter_50Hz = 0;
 
 volatile float Auxilliary_Voltage = 13;
-//volatile Uint16 Auxilliary_counter = 0;
 
 
 //defines:
@@ -200,8 +188,8 @@ volatile float dI;
 
 union bits32 TxData;
 
-int toets;
-int toets2;
+//int toets;
+//int toets2;
 
 int temptimer = 0;
 
@@ -216,9 +204,6 @@ volatile Uint16 BMS_Error = 0;
 volatile long trip_counter = 0;
 volatile long Filter_SC;
 volatile Uint32 testcounter = 0;
-
-volatile long testvariable = 0;
-volatile long testvariable2 = 0;
 
 volatile long testtrip = 0;
 
@@ -242,9 +227,6 @@ volatile float Voltage_minimum = 0;
 volatile float SOH = 100;
 volatile Uint16 Cycles = 0;
 
-volatile int16 Pre_Charge_Measure = 0;
+volatile Uint16 Pre_Charge_Measure = 0;
 volatile int Proximity_Measure = 0;
 volatile int Pilot_Measure = 0;
-
-
-volatile long Current_test_DSS = 0;
