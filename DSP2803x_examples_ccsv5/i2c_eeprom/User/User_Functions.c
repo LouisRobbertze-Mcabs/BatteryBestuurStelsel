@@ -6,12 +6,16 @@
  */
 
 #include "User_Defines.h"
+#include <stdio.h>
+#include <string.h>
 
 void Initialise_BMS(void)
 {
     Initial_Capacity = 150;
     flagCurrent = 0;
     //    System_State = 0;
+
+    //memcpy(&RamfuncsRunStart, &RamfuncsLoadStart,(Uint32)(&RamfuncsLoadEnd-RamfuncsLoadStart));
 
     InitSysCtrl();
     InitI2CGpio();

@@ -11,6 +11,7 @@
 #include "User_Prototypes.h"
 
 
+
 // Local definitions
 #define I2C_SLAVE_ADDR        0x08
 #define I2C_NUMBYTES          3                 //ekstra 1 vir crc byte

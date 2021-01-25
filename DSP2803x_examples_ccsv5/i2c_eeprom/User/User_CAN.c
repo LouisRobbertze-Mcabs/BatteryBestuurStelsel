@@ -391,7 +391,9 @@ void CAN_Output_All(void)
     {
         CANTransmit(0x718, 0x4, ((int)(Voltage_total*10)), 5, 0); //Voltage
 
-        for(i=0;i<1500;i++){};
+        DELAY_US(1000);                                           // waiting 1ms   - Needs testing
+
+        //for(i=0;i<1500;i++){};
 
         //	queue_insert(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5, &CAN_queue);
 
