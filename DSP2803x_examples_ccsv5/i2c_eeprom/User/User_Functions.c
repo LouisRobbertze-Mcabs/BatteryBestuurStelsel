@@ -842,7 +842,7 @@ void Calibrate_Current()
     float error;
     static Uint16 Calibrate_delay = 0;
 
-    if(Aux_Control == 0 && ContactorOut == 0)					                    //Vehicle is off (Key-switch position 0)
+    if(Key_switch_1==0 && Key_switch_2==0)		 /*Aux_Control == 0 && ContactorOut == 0*/  //Vehicle is off (Key-switch position 0)
     {
         if(Calibrate_delay > 10)                                                    //10 s delay for the vehicle/battery to do shut-off process
         {
