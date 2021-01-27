@@ -538,7 +538,7 @@ void Read_Temperatures(void)
 
 void Process_Temperatures(void)
 {
-    if(Temperature_high > 55 || Temperature_low < -10)
+    if(Temperature_high > 55 || Temperature_low < -10 || Temperatures_CS > 80)
         flagTemp_Discharge = 1;
     else
         flagTemp_Discharge = 0;
@@ -839,15 +839,13 @@ void Calculate_SOC()
 void Calibrate_Current()
 {
     //Calibrate when key-switch(position 2,3) is deactivated, result in 48V and 12V supply delivers 0 Watts.
-    float error;
     static Uint16 Calibrate_delay = 0;
 
     if(Key_switch_1==0 && Key_switch_2==0 && Charger_status == 0)		            //Vehicle is off (Key-switch position 0)
     {
         if(Calibrate_delay > 10)                                                    //10 s delay for the vehicle/battery to do shut-off process
         {
-            error = Current;
-            Current_CAL = Current_CAL + (0.0001* error * Current_CAL);			    //maybe add slow filter to dampen the fault?
+            Current_CAL = Current_CAL + (0.0001* Current * Current_CAL);			    //maybe add slow filter to dampen the fault?
 
             if(Current_CAL>2200)													//set maximum limit
                 Current_CAL = 2200;
