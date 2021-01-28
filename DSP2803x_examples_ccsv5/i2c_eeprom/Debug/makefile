@@ -12,6 +12,7 @@ GEN_CMDS__FLAG :=
 ORDERED_OBJS += \
 "./DSP2803x_CodeStartBranch.obj" \
 "./DSP2803x_usDelay.obj" \
+"./DSP280x_MemCopy.obj" \
 "./Main.obj" \
 "./Source/DSP2803x_Adc.obj" \
 "./Source/DSP2803x_CpuTimers.obj" \
@@ -180,8 +181,8 @@ Example_2803xI2C_eeprom.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "DSP2803x_CodeStartBranch.obj" "DSP2803x_usDelay.obj" "Main.obj" "Source\DSP2803x_Adc.obj" "Source\DSP2803x_CpuTimers.obj" "Source\DSP2803x_DefaultIsr.obj" "Source\DSP2803x_ECan.obj" "Source\DSP2803x_GlobalVariableDefs.obj" "Source\DSP2803x_I2C.obj" "Source\DSP2803x_PieCtrl.obj" "Source\DSP2803x_PieVect.obj" "Source\DSP2803x_Spi.obj" "Source\DSP2803x_SysCtrl.obj" "User\User_ADC.obj" "User\User_BQ.obj" "User\User_CAN.obj" "User\User_Functions.obj" "User\User_Globals.obj" "User\User_I2C.obj" "User\User_Interrupts.obj" "User\User_Queue.obj" 
-	-$(RM) "Main.d" "Source\DSP2803x_Adc.d" "Source\DSP2803x_CpuTimers.d" "Source\DSP2803x_DefaultIsr.d" "Source\DSP2803x_ECan.d" "Source\DSP2803x_GlobalVariableDefs.d" "Source\DSP2803x_I2C.d" "Source\DSP2803x_PieCtrl.d" "Source\DSP2803x_PieVect.d" "Source\DSP2803x_Spi.d" "Source\DSP2803x_SysCtrl.d" "User\User_ADC.d" "User\User_BQ.d" "User\User_CAN.d" "User\User_Functions.d" "User\User_Globals.d" "User\User_I2C.d" "User\User_Interrupts.d" "User\User_Queue.d" 
+	-$(RM) "DSP2803x_CodeStartBranch.obj" "DSP2803x_usDelay.obj" "DSP280x_MemCopy.obj" "Main.obj" "Source\DSP2803x_Adc.obj" "Source\DSP2803x_CpuTimers.obj" "Source\DSP2803x_DefaultIsr.obj" "Source\DSP2803x_ECan.obj" "Source\DSP2803x_GlobalVariableDefs.obj" "Source\DSP2803x_I2C.obj" "Source\DSP2803x_PieCtrl.obj" "Source\DSP2803x_PieVect.obj" "Source\DSP2803x_Spi.obj" "Source\DSP2803x_SysCtrl.obj" "User\User_ADC.obj" "User\User_BQ.obj" "User\User_CAN.obj" "User\User_Functions.obj" "User\User_Globals.obj" "User\User_I2C.obj" "User\User_Interrupts.obj" "User\User_Queue.obj" 
+	-$(RM) "DSP280x_MemCopy.d" "Main.d" "Source\DSP2803x_Adc.d" "Source\DSP2803x_CpuTimers.d" "Source\DSP2803x_DefaultIsr.d" "Source\DSP2803x_ECan.d" "Source\DSP2803x_GlobalVariableDefs.d" "Source\DSP2803x_I2C.d" "Source\DSP2803x_PieCtrl.d" "Source\DSP2803x_PieVect.d" "Source\DSP2803x_Spi.d" "Source\DSP2803x_SysCtrl.d" "User\User_ADC.d" "User\User_BQ.d" "User\User_CAN.d" "User\User_Functions.d" "User\User_Globals.d" "User\User_I2C.d" "User\User_Interrupts.d" "User\User_Queue.d" 
 	-$(RM) "DSP2803x_CodeStartBranch.d" "DSP2803x_usDelay.d" 
 	-@echo 'Finished clean'
 	-@echo ' '

@@ -17,14 +17,17 @@ C:/Users/barth/OneDrive/Documents/Github/BatteryBestuurStelsel/DSP2803x_common/s
 C:/Users/barth/OneDrive/Documents/Github/BatteryBestuurStelsel/DSP2803x_common/source/DSP2803x_usDelay.asm 
 
 C_SRCS += \
+../DSP280x_MemCopy.c \
 ../Main.c 
 
 C_DEPS += \
+./DSP280x_MemCopy.d \
 ./Main.d 
 
 OBJS += \
 ./DSP2803x_CodeStartBranch.obj \
 ./DSP2803x_usDelay.obj \
+./DSP280x_MemCopy.obj \
 ./Main.obj 
 
 ASM_DEPS += \
@@ -34,9 +37,11 @@ ASM_DEPS += \
 OBJS__QUOTED += \
 "DSP2803x_CodeStartBranch.obj" \
 "DSP2803x_usDelay.obj" \
+"DSP280x_MemCopy.obj" \
 "Main.obj" 
 
 C_DEPS__QUOTED += \
+"DSP280x_MemCopy.d" \
 "Main.d" 
 
 ASM_DEPS__QUOTED += \
@@ -48,6 +53,7 @@ ASM_SRCS__QUOTED += \
 "C:/Users/barth/OneDrive/Documents/Github/BatteryBestuurStelsel/DSP2803x_common/source/DSP2803x_usDelay.asm" 
 
 C_SRCS__QUOTED += \
+"../DSP280x_MemCopy.c" \
 "../Main.c" 
 
 

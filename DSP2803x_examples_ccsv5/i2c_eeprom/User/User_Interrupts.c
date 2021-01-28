@@ -137,7 +137,7 @@ __interrupt void cpu_timer1_isr(void)
         //binne die keydrive if
         if(flagDischarged == 0 && flagCurrent == 0  && flagTemp_Discharge == 0)
         {
-            if(Pre_Charge_Measure > (0.8*Voltage_total))                                       //set to an appropriate value - maybe 0.8 is better
+            if(Pre_Charge_Measure > (0.7*Voltage_total))                                       //set to an appropriate value - maybe 0.8 is better
             {
                 Contactor_On();
                 Pre_Charge_Off();

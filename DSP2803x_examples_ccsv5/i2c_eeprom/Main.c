@@ -4,60 +4,58 @@
 
 //To Do List:
 //Add Temperature influence on SOC
-
-//set pre-charge active - close contactor when 0.7 * V_total
 //###########################################################################
 
 #include "User\User_Defines.h"
 
 void main(void)
 {
-	Initialise_BMS();
+    Initialise_BMS();
 
-	for(;;)
-	{
-		if(counter_2Hz == 1)
-		{
-			ServiceDog();
-		}
-		if(counter_2Hz == 2)
-		{
-			Toggle_LED();
-			Status_LED();
+    for(;;)
+    {
+        if(counter_2Hz == 1)
+        {
+            ServiceDog();
+        }
+        if(counter_2Hz == 2)
+        {
+            Toggle_LED();
+            Status_LED();
 
-			Read_Cell_Voltages();
-			Process_Voltages();
+            Read_Cell_Voltages();
+            Process_Voltages();
 
-			Calculate_Current();
+            Calculate_Current();
 
-			Read_Temperatures();
-			Process_Temperatures();
+            Read_Temperatures();
+            Process_Temperatures();
 
-			ServiceDog();
+            ServiceDog();
 
-			CANChargerReception(CAN_Charger_dataL, CAN_Charger_dataH);
+            CANChargerReception(CAN_Charger_dataL, CAN_Charger_dataH);
 
-			Balance(5,Vbalance);
+            Balance(5,Vbalance);
 
-			Battery_Status();
-			Battery_Error();
-			CAN_Output_All();
+            Battery_Status();
+            Battery_Error();
+            CAN_Output_All();
 
-			ServiceDog();
+            ServiceDog();
 
-			Calibrate_Current();
+            Calibrate_Current();
 
-			//BQ check status
-			Process_BQ_System_Status();
-			Reset_BQ_ADC();
+            //BQ check status
+            Process_BQ_System_Status();
+            Reset_BQ_ADC();
 
-			Calculate_SOC();
-			Calculate_SOH();
+            Calculate_SOC();
+            Calculate_SOH();
 
-			counter_2Hz = 0;
+            counter_2Hz = 0;
 
-			//add in issue function check
-			Reset_MCU(1);
-		}
-	}
+            //add in issue function check
+            Reset_MCU(1);
+        }
+    }
 }

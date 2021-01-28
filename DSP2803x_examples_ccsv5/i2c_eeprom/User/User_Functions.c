@@ -13,9 +13,8 @@ void Initialise_BMS(void)
 {
     Initial_Capacity = 150;
     flagCurrent = 0;
-    //    System_State = 0;
 
-    //memcpy(&RamfuncsRunStart, &RamfuncsLoadStart,(Uint32)(&RamfuncsLoadEnd-RamfuncsLoadStart));
+    MemCopy(&RamfuncsLoadStart, &RamfuncsLoadEnd, &RamfuncsRunStart);
 
     InitSysCtrl();
     InitI2CGpio();
@@ -305,7 +304,7 @@ void Process_Voltages(void)
     if(Voltage_high > Vmax)
     {
         balance = 1;                                            //start balancing
-        flagCharged = 1;    //verander na overVoltage?                                    //charged flag to to stop charging
+        flagCharged = 1;                                        //verander na overVoltage?      //charged flag to to stop charging
         Contactor_Off();										//kan hierdie wees wat die contactor oopmaak
     }
 
@@ -320,7 +319,7 @@ void Process_Voltages(void)
         Aux_Supply_12V_Off();
         flagDischarged = 2;
         Contactor_Off();                                                                //turn off contactor
-//        LPwr_Out_Ctrl_1 = 0;                                                            //Control Fusebox secondary regulator
+        //LPwr_Out_Ctrl_1 = 0;                                                            //Control Fusebox secondary regulator
 
         //Ctrl_HPwr_48V_O_1 = 0                                                         //switch off 48V supply when in critical mode
     }

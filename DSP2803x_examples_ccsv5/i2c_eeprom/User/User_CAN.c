@@ -218,7 +218,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
             Charger_status = 1;                                                             //0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????                                          //charger connected
             if(flagCurrent == 0 && flagTemp_Charge == 0 && flagCharged == 0 && Key_switch_2 == 0 )    //check flags to ensure charging is allowed
             {
-                if(ChgVoltage < (0.8*Voltage_total))
+                if(ChgVoltage < (0.7*Voltage_total))
                 {
                     CANTransmit(0x618, 0, ChgCalculator(48, 2), 8, 0);             //werk vir een of ander rede nie??????
                     Pre_Charge_On();
@@ -391,7 +391,8 @@ void CAN_Output_All(void)
     {
         CANTransmit(0x718, 0x4, ((int)(Voltage_total*10)), 5, 0); //Voltage
 
-        for(i=0;i<1500;i++){};
+        DELAY_US(1000);                                         //1 mS
+        //for(i=0;i<1500;i++){};
 
         //	queue_insert(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5, &CAN_queue);
 
@@ -401,7 +402,9 @@ void CAN_Output_All(void)
             CANTransmit(0x718, 0x11, ((int)(SOC)), 5, 0); //SOC
         //	queue_insert(0x718, 0x11, ((int)(SOC*100)) & 0xFF, 5, &CAN_queue);
 
-        for(i=0;i<1500;i++){};
+        //for(i=0;i<1500;i++){};
+        DELAY_US(1000);                                         //1 mS
+
 
         //sit system error, system charging, charge required
         //check flags for error messages
