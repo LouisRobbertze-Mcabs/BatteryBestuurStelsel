@@ -391,8 +391,7 @@ void CAN_Output_All(void)
     {
         CANTransmit(0x718, 0x4, ((int)(Voltage_total*10)), 5, 0); //Voltage
 
-        DELAY_US(1000);                                         //1 mS
-        //for(i=0;i<1500;i++){};
+        DELAY_US(1000L);                                         //1 mS
 
         //	queue_insert(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5, &CAN_queue);
 
@@ -402,9 +401,7 @@ void CAN_Output_All(void)
             CANTransmit(0x718, 0x11, ((int)(SOC)), 5, 0); //SOC
         //	queue_insert(0x718, 0x11, ((int)(SOC*100)) & 0xFF, 5, &CAN_queue);
 
-        //for(i=0;i<1500;i++){};
-        DELAY_US(1000);                                         //1 mS
-
+        DELAY_US(1000L);                                         //1 mS
 
         //sit system error, system charging, charge required
         //check flags for error messages
@@ -416,7 +413,6 @@ void CAN_Output_All(void)
 
         if((flagDischarged >= 1) || (flagCurrent == 1)  || (flagTemp_Discharge == 1))
             Acewell_Data = Acewell_Data + 4;
-
 
         CANTransmit(0x718, 0x88, Acewell_Data & 0xF, 5, 0); //LEDS*/
     }
