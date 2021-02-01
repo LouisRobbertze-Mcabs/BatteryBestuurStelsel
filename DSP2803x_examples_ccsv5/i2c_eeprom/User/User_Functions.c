@@ -240,7 +240,9 @@ void  Read_Cell_Voltages(void)
     int i;
 
     //Voltage_low = 10;
+    float Voltages_backup4 = Voltages[4];
     float Voltages_backup5 = Voltages[5];
+    float Voltages_backup9 = Voltages[9];
     float Voltages_backup10 = Voltages[10];
 
     float temp_V = 0;
@@ -260,9 +262,21 @@ void  Read_Cell_Voltages(void)
         temp_V = I2CA_ReadData(&I2cMsgIn1,0x0C+(i*0x02), 2);
         temp_V = (ADCgain * temp_V) + ADCoffset;
 
+
+        if((i == 4) && ((Cell_B2 & 0x1) == 1))
+            Voltages[i] = Voltages_backup4;
+        else if(i == 4)
+            Voltages[i] = temp_V;
+
+
         if((i == 5) && ((Cell_B1 & 0x10)>>4 == 1))
             Voltages[i] = Voltages_backup5;
         else if(i == 5)
+            Voltages[i] = temp_V;
+
+        if((i == 9) && ((Cell_B3 & 0x1) == 1))
+            Voltages[i] = Voltages_backup9;
+        else if(i == 9)
             Voltages[i] = temp_V;
 
         if((i == 10) && ((Cell_B2&0x10)>>4 == 1))
@@ -270,7 +284,7 @@ void  Read_Cell_Voltages(void)
         else if (i==10)
             Voltages[i] = temp_V;
 
-        if(i != 5 && i != 10)
+        if(i != 5 && i != 10 && i != 4 && i != 9)
             Voltages[i] = temp_V;
 
         temp_Voltage_total = temp_Voltage_total +  Voltages[i];
