@@ -191,7 +191,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
             {
                 if(ChgVoltage < 45)
                 {
-                    CANTransmit(0x618, 0, ChgCalculator(48, 0.2), 8);                       //charging started
+                    CANTransmit(0x618, 1, ChgCalculator(48, 0), 8);                           //charging on standby
                     //PreCharge = 1;                                                          //turn on pre-charge resistor
                     delay++;
                 }
