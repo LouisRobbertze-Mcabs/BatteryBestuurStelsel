@@ -189,7 +189,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
             Charger_status = 1;																//0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????											//charger connected
             if(flagCurrent == 0 && flagTemp == 0 && flagCharged == 0 && KeySwitch == 0 )    //check flags to ensure charging is allowed
             {
-                if(ChgVoltage < 45)
+                if(ChgVoltage < 40)
                 {
                     CANTransmit(0x618, 1, ChgCalculator(48, 0), 8);                           //charging on standby
                     //PreCharge = 1;                                                          //turn on pre-charge resistor
