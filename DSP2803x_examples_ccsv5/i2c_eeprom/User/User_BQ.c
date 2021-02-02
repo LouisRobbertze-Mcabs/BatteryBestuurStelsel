@@ -73,7 +73,7 @@ void  Bq76940_Init(void)
 //   ADCoffset = ((I2CA_ReadData(&I2cMsgIn1,0x51, 1))) * 0.001;
 
     //Over voltage = 3.7 V
-    OV = (3.65-ADCoffset)/ADCgain;
+    OV = (3.7-ADCoffset)/ADCgain;
     OV = (OV>>4) & 0xFF;
 
     I2CA_WriteData(0x09, (char)OV);                             //Stel OV_trip op
