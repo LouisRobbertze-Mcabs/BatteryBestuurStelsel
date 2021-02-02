@@ -198,7 +198,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
 { //maybe setup CAN status structure to capture all the info required. -Charger active, battery charging,
     float ChgVoltage = 0;
 
-    Uint16 ChgStatus = 0;
+    ChgStatus = 0;
 
     static volatile float Current_max = 2;
     static volatile int timeout = 0;
@@ -220,7 +220,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
             {
                 if(ChgVoltage < (0.7*Voltage_total))
                 {
-                    CANTransmit(0x618, 0, ChgCalculator(48, 2), 8, 0);             //werk vir een of ander rede nie??????
+                    CANTransmit(0x618, 1, ChgCalculator(48, 0), 8, 0);             //do standby
                     Pre_Charge_On();
                     delay++;
                 }

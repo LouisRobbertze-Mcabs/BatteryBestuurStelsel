@@ -174,7 +174,9 @@ float volatile Wsoc = 1;
 float volatile SOCv = 0.5;
 float volatile SOCc = 0;
 
-float ChgCurrent = 0;
+volatile float ChgCurrent = 0;
+
+volatile Uint16 ChgStatus;
 
 volatile float SOH_avg;
 volatile float SOH_max;
