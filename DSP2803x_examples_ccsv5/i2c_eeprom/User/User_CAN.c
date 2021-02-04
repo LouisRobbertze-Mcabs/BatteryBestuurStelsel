@@ -264,7 +264,6 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
                 else if(delay == 0)
                 {                                                                             //turn off contactor
                     CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                            //disconnect charger
-                    //if(flagCharged == 1)                                                    //maybe always disconnects the battery?
 
                     Contactor_Off();                                                        //turn off contactor
                     Charging_animation = 0;
@@ -499,10 +498,12 @@ void CANTransmit(Uint16 Destination, Uint32 TxDataH, Uint32 TxDataL, Uint16 Byte
         break;
     }
 
-  /*  if (ECanaRegs.CANES.all != 0 || ECanaRegs.CANES.all != 0x30000 || ECanaRegs.CANES.all != 0x30001)
+    //0000 0001 1111 1111 0000 0000 0000 1000 = 0x1FF0008
+
+    if ((ECanaRegs.CANES.all & 0x1FF0008) != 0 )    /*ECanaRegs.CANES.all != 0 || ECanaRegs.CANES.all != 0x30000 || ECanaRegs.CANES.all != 0x30001*/
     {
-        ECanaRegs.CANES.all = 0xFFF0000;						    //reset flags	//reset fault on CAN bus	0x1BB0000
-    }*/
+        ECanaRegs.CANES.all = 0x1FF0000;			//reset flags	//reset fault on CAN bus	0x1BB0000
+    }
 }
 
 float Charger_inputData_parse(Uint32 data)

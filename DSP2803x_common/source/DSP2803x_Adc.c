@@ -29,7 +29,7 @@
 void InitAdc(void)
 {
     extern void DSP28x_usDelay(Uint32 Count);
-    int i;
+    //int i;
 
     // *IMPORTANT*
     // The Device_cal function, which copies the ADC calibration values from TI reserved
