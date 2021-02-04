@@ -357,24 +357,6 @@ void CANSlaveReception(void)
     case 34: {TxData.asFloat=Voltages[13]; CANTransmit(0, 34, TxData.asUint,5, 0); break;}
     case 35: {TxData.asFloat=Voltages[14]; CANTransmit(0, 35, TxData.asUint,5, 0); break;}
 
-    //cell Temperature values
-  /*  case 36: {TxData.asFloat=Temperatures[0]; CANTransmit(0, 36, TxData.asUint,5, 0); break;}
-    case 37: {TxData.asFloat=Temperatures[1]; CANTransmit(0, 37, TxData.asUint,5, 0); break;}
-    case 38: {TxData.asFloat=Temperatures[2]; CANTransmit(0, 38, TxData.asUint,5, 0); break;}
-    case 39: {TxData.asFloat=Temperatures[3]; CANTransmit(0, 39, TxData.asUint,5, 0); break;}
-    case 40: {TxData.asFloat=Temperatures[4]; CANTransmit(0, 40, TxData.asUint,5, 0); break;}
-    case 41: {TxData.asFloat=Temperatures[5]; CANTransmit(0, 41, TxData.asUint,5, 0); break;}
-    case 42: {TxData.asFloat=Temperatures[6]; CANTransmit(0, 42, TxData.asUint,5, 0); break;}
-    case 43: {TxData.asFloat=Temperatures[7]; CANTransmit(0, 43, TxData.asUint,5, 0); break;}
-    case 44: {TxData.asFloat=Temperatures[8]; CANTransmit(0, 44, TxData.asUint,5, 0); break;}
-    case 45: {TxData.asFloat=Temperatures[9]; CANTransmit(0, 45, TxData.asUint,5, 0); break;}
-    case 46: {TxData.asFloat=Temperatures[10]; CANTransmit(0, 46, TxData.asUint,5, 0); break;}
-    case 47: {TxData.asFloat=Temperatures[11]; CANTransmit(0, 47, TxData.asUint,5, 0); break;}
-    case 48: {TxData.asFloat=Temperatures[12]; CANTransmit(0, 48, TxData.asUint,5, 0); break;}
-    case 49: {TxData.asFloat=Temperatures[13]; CANTransmit(0, 49, TxData.asUint,5, 0); break;}
-    case 50: {TxData.asFloat=Temperatures[14]; CANTransmit(0, 50, TxData.asUint,5, 0); break;}
-    case 51: {TxData.asFloat=Temperatures[15]; CANTransmit(0, 51, TxData.asUint,5, 0); break;}*/
-    //case 52: {if(RxData2==0x8){Fan_Control = 1;}else if(RxData2==0x4){Fan_Control = 0;}; break;}
     }
 }
 
@@ -384,7 +366,6 @@ void CAN_Output_All(void)
     static Uint16  Auxilliary_counter = 0;
     //Uint32 RxData = 0;
     //union bits32 TxData;
-    int i;
 
     //Need to test this counter move..
     if((Aux_Control == 1) && (Auxilliary_counter > 1))
@@ -393,13 +374,10 @@ void CAN_Output_All(void)
 
         DELAY_US(1000L);                                         //1 mS
 
-        //	queue_insert(0x718, 0x4, ((int)(Voltage_total*10))& 0xFFFF, 5, &CAN_queue);
-
         if(Charging_animation == 1)
             CANTransmit(0x718, 0x11, ((int)(Charging_Animation(SOC))), 5, 0);
         else
             CANTransmit(0x718, 0x11, ((int)(SOC)), 5, 0); //SOC
-        //	queue_insert(0x718, 0x11, ((int)(SOC*100)) & 0xFF, 5, &CAN_queue);
 
         DELAY_US(1000L);                                         //1 mS
 

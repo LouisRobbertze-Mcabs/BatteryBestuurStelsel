@@ -209,6 +209,7 @@ extern volatile Uint16 Pre_Charge_Measure;
 extern volatile int Proximity_Measure;
 extern volatile int Pilot_Measure;
 
+extern volatile Uint32 CAN_Error_Debug;
 
 //extern volatile long Current_test_DSS;
 

@@ -126,5 +126,9 @@ void Reset_MCU(int flag)
         delay++;                //maybe add all the other flags (as long as they persist) other flags as well
 
     if(flag == 1 && delay > 300 && Key_switch_2 == 0)   //If error is not reset after 5 minutes
+    {
+        CAN_Error_Debug = CANES;
         for(;;){}
+    }
+
 }
