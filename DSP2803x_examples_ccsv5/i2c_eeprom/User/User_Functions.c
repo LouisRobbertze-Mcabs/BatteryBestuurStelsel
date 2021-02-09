@@ -191,17 +191,17 @@ void Init_Gpio(void)
 void Toggle_LED(void)
 {
     GpioDataRegs.GPATOGGLE.bit.GPIO5 = 1;                   //led1
-    GpioDataRegs.GPATOGGLE.bit.GPIO4 = 1;                   //led2
+    //GpioDataRegs.GPATOGGLE.bit.GPIO4 = 1;                   //led2
 
-    //Ctrl_LPwr_48V_O_3 = 1;          //GPIO39
+    //Ctrl_LPwr_48V_O_3 = 1;          //heater
     //GpioDataRegs.GPBTOGGLE.bit.GPIO39 = 1;                working
 
-    //Ctrl_LPwr_48V_O_2          //GPIO19
+    //Ctrl_LPwr_48V_O_2          //charger
     //GpioDataRegs.GPATOGGLE.bit.GPIO19 = 1;                //working
     //Ctrl_LPwr_48V_O_2 = 1;
 
-    //Ctrl_LPwr_48V_O_1 -  Dink dis die geval
-    //GpioDataRegs.GPATOGGLE.bit.GPIO20 = 1;                working
+    //Ctrl_LPwr_48V_O_1 -  contactor main
+    //GpioDataRegs.GPATOGGLE.bit.GPIO20 = 1;                //working
 
     //Ctrl_HPwr_48V_O_2 - Aux_Control
     //GpioDataRegs.GPATOGGLE.bit.GPIO15 = 1;                working
@@ -551,7 +551,7 @@ void Read_Temperatures(void)
 
 void Process_Temperatures(void)
 {
-    if(Temperature_high > 55 || Temperature_low < -10 || Temperatures_CS > 80)
+    if(Temperature_high > 55 || Temperature_low < -10 || Temperatures_CS > 70)
         flagTemp_Discharge = 1;
     else
         flagTemp_Discharge = 0;
@@ -986,4 +986,14 @@ void Aux_Supply_12V_On(void)
 void Aux_Supply_12V_Off(void)
 {
     GpioDataRegs.GPACLEAR.bit.GPIO15 = 1;         //Turn on 12V_Aux_Supply
+}
+
+void CHG_Contactor_On(void)
+{
+    GpioDataRegs.GPASET.bit.GPIO19 = 1;           //Turn on Contactor
+}
+
+void CHG_Contactor_Off(void)
+{
+    GpioDataRegs.GPACLEAR.bit.GPIO19 = 1;         //Turn off Contactor
 }

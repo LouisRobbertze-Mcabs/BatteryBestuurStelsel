@@ -65,8 +65,7 @@ void Contactor_On(void);
 void Contactor_Off(void);
 void Aux_Supply_12V_On(void);
 void Aux_Supply_12V_Off(void);
-
-//#pragma CODE_SECTION(DELAY_US, "ramfuncs");
-
+void CHG_Contactor_On(void);
+void CHG_Contactor_Off(void);
 
 #endif /* USER_PROTOTYPES_H_ */

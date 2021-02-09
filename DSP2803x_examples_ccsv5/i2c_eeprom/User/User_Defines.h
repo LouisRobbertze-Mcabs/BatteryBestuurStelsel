@@ -30,13 +30,13 @@
 //Do HRCAP for GPIO11
 
 #define Temperature_Control GpioDataRegs.GPADAT.bit.GPIO12
-#define Ctrl_HPwr_48V_O_1 GpioDataRegs.GPADAT.bit.GPIO13         //Ctrl_HPwr_48V_O_1
+#define Ctrl_HPwr_48V_O_1 GpioDataRegs.GPADAT.bit.GPIO13         //Ctrl_HPwr_48V_O_1    - 48V supply
 #define Aux_Control GpioDataRegs.GPADAT.bit.GPIO15               //Ctrl_HPwr_48V_O_2
 
-#define Ctrl_LPwr_48V_O_2 GpioDataRegs.GPADAT.bit.GPIO19         //Ctrl_LPwr_48V_O_2
+#define Ctrl_LPwr_48V_O_2 GpioDataRegs.GPADAT.bit.GPIO19         //Ctrl_LPwr_48V_O_2    - Charger control
 #define ContactorOut GpioDataRegs.GPADAT.bit.GPIO20              //Ctrl_LPwr_48V_O_1
 
-#define Ctrl_Pre_Charge GpioDataRegs.GPADAT.bit.GPIO21                //Ctrl_Pre_Charge
+#define Ctrl_Pre_Charge GpioDataRegs.GPADAT.bit.GPIO21           //Ctrl_Pre_Charge
 
 #define Key_switch_1 GpioDataRegs.GPADAT.bit.GPIO22              //Key_switch_Position_1
 #define Key_switch_2 GpioDataRegs.GPADAT.bit.GPIO24              //Key_switch_Position_2
@@ -46,7 +46,7 @@
 #define BQOn GpioDataRegs.GPADAT.bit.GPIO26
 #define CANEnable GpioDataRegs.GPADAT.bit.GPIO27
 
-#define Ctrl_LPwr_48V_O_3 GpioDataRegs.GPBDAT.bit.GPIO39         //Ctrl_LPwr_48V_O_3
+#define Ctrl_LPwr_48V_O_3 GpioDataRegs.GPBDAT.bit.GPIO39         //Ctrl_LPwr_48V_O_3    - Heater
 
 #define led3 GpioDataRegs.GPBDAT.bit.GPIO40                      //LED Current Sense PCB
 #define CSControl GpioDataRegs.GPBDAT.bit.GPIO44
