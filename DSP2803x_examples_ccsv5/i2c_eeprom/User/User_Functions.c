@@ -320,6 +320,7 @@ void Process_Voltages(void)
         balance = 1;                                            //start balancing
         flagCharged = 1;                                        //verander na overVoltage?      //charged flag to to stop charging
         Contactor_Off();										//kan hierdie wees wat die contactor oopmaak
+        CHG_Contactor_Off();
     }
 
     //Low Voltage Error
