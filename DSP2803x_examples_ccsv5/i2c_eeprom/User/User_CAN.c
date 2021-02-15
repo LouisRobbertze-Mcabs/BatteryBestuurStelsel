@@ -351,7 +351,7 @@ void CAN_Output_All(void)
     Uint16 Acewell_Data = 0;
     static Uint16 temp_CHG_status = 0;
     //Uint32 RxData = 0;
-    union bits32 TxData;
+//    union bits32 TxData;
     int i;
 
     //Battery data
