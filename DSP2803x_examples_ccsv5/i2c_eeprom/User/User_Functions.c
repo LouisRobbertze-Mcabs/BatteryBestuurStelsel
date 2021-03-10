@@ -74,13 +74,12 @@ void Initialise_BMS(void)
     Bq76940_Init();
     //Shut_D_BQ();
 
-
-    NMT_State = 0x7F;                                       //Enter NMT pre-operational state from initialisation state
-
     // Enable the watchdog
     EALLOW;
     SysCtrlRegs.WDCR = 0x002F;
     EDIS;
+
+    NMT_State = 0x7F;                                       //Enter NMT pre-operational state from initialisation state
 
     //watchdog timer>>>>>>>>
     //DisableDog();
@@ -331,7 +330,7 @@ void Process_Voltages(void)
     }
     else if(Voltage_low < Vcritical && Charger_status == 0)
     {
-        Aux_Supply_12V_Off();
+        //Aux_Supply_12V_Off();
         flagDischarged = 2;
         Contactor_Off();                                                                //turn off contactor
         //LPwr_Out_Ctrl_1 = 0;                                                            //Control Fusebox secondary regulator
@@ -339,15 +338,7 @@ void Process_Voltages(void)
         //Ctrl_HPwr_48V_O_1 = 0                                                         //switch off 48V supply when in critical mode
     }
 
-    //Auxiliary control
-    if(Key_switch_1 == 1 && Voltage_low > Vmin)
-    {
-        Aux_Supply_12V_On();
-    }
-    else
-    {
-        Aux_Supply_12V_Off();															//turn off aux supply
-    }
+    //Aux_Supply_12V_On();
 
     if(Voltage_high<Vchargedflagreset )
         flagCharged = 0;
@@ -909,7 +900,7 @@ void Battery_Error(void)
 {
     Uint16 BMS_Error_Temp = 0;
 
-    if(flagVoltage == 1)                                    //voltage flag
+    if(flagDischarged == 1)                                 //voltage flag
         BMS_Error_Temp = BMS_Error_Temp + 1;
     if(flagDischarged == 2)                                 //voltage critical flag
         BMS_Error_Temp = BMS_Error_Temp + 2;
@@ -921,14 +912,9 @@ void Battery_Error(void)
         BMS_Error_Temp = BMS_Error_Temp + 16;
     if(flagTemp_Charge == 1)
         BMS_Error_Temp = BMS_Error_Temp + 32;
-
-
-    //tempBMS
-    //end of life
-
-    if(flagDischarged == 1)
+    if(flagTemp_BMS == 1)
         BMS_Error_Temp = BMS_Error_Temp + 64;
-    if(Charger_status == 1)
+    if(EOL == 1)
         BMS_Error_Temp = BMS_Error_Temp + 128;
 
     //Extra flags are a possibility
@@ -1001,4 +987,14 @@ void CHG_Contactor_On(void)
 void CHG_Contactor_Off(void)
 {
     GpioDataRegs.GPACLEAR.bit.GPIO19 = 1;         //Turn off Contactor
+}
+
+void LPwr_Out_Ctrl_1_On(void)
+{
+    GpioDataRegs.GPASET.bit.GPIO6 = 1;           //Turn on Contactor
+}
+
+void LPwr_Out_Ctrl_1_Off(void)
+{
+    GpioDataRegs.GPACLEAR.bit.GPIO6 = 1;         //Turn off Contactor
 }

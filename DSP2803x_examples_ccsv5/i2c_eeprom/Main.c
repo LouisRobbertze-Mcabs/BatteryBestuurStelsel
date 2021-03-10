@@ -33,13 +33,13 @@ void main(void)
 
             ServiceDog();
 
-            CANChargerReception(CAN_Charger_dataL, CAN_Charger_dataH);
+            CANChargerReception(CAN_Charger_dataL, CAN_Charger_dataH);          //add NMT filter - remove key switch
 
             Balance(5,Vbalance);
 
             Battery_Status();
             Battery_Error();
-            CAN_Output_All();
+            //CAN_Output_All();
 
             ServiceDog();
 

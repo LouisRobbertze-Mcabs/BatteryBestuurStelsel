@@ -35,6 +35,7 @@ struct BMS_STATUS_FLAGS;
 /////////////////////////////////////////////
 volatile Uint16 flagTemp_Discharge=0;
 volatile Uint16 flagTemp_Charge=0;
+volatile Uint16 flagTemp_BMS=0;
 
 volatile Uint16 flagCurrent=0;
 volatile Uint16 flagVoltage=0;
@@ -214,10 +215,10 @@ volatile long timecounterseconds = 0;
 
 volatile float Charging_animation = 0;
 
-volatile Uint32 NMT_State = 0x0;               //Initialization state
+volatile Uint32 NMT_State = 0;               //Initialization state
 
-volatile Uint16 SOP_discharge = 50;
-volatile Uint16 SOP_charge = 25;
+volatile Uint16 SOP_discharge = 45;
+volatile Uint16 SOP_charge = 20;
 
 volatile float I_maximum = 0;
 volatile float I_minimum = 0;
@@ -234,3 +235,5 @@ volatile int Proximity_Measure = 0;
 volatile int Pilot_Measure = 0;
 
 volatile Uint32 CAN_Error_Debug;
+
+volatile Uint16 EOL = 0;

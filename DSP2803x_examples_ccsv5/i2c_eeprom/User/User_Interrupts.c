@@ -132,7 +132,7 @@ __interrupt void cpu_timer1_isr(void)
     //Pilot_Measure = AdcResult.ADCRESULT12;
     //Pilot_Measure_temp = Pilot_Measure;
 
-    if(Key_switch_2 == 1 && Charger_status == 0)
+    if(Ctrl_Pre_Charge == 1 && Charger_status == 0)                                        //exchange with some flag???
     {
         //binne die keydrive if
         if(flagDischarged == 0 && flagCurrent == 0  && flagTemp_Discharge == 0)
@@ -153,11 +153,7 @@ __interrupt void cpu_timer1_isr(void)
             Contactor_Off();
         }
     }
-    else if(Key_switch_2 == 0 && Charger_status == 0)       //Keyswitch = to zero
-    {
-        Contactor_Off();
-        flagCurrent = 0;
-    }
+
 
     EALLOW;
     CpuTimer1.InterruptCount++;
@@ -284,13 +280,15 @@ __interrupt void can_rx_isr(void)
             }
         }
         //transmit heart-beat return or transmit it in the main loop????? Most probably
-        CANTransmit(0x71D, 0x0, NMT_State, 0x1, 7); //Destination: 0x71C, Mailbox_high: 0, Mailbox_low: NMT_State, bytes: 1, Mailbox: 7,
+        CANTransmit(0x71C, 0x0, NMT_State, 0x1, 7); //Destination: 0x71C, Mailbox_high: 0, Mailbox_low: NMT_State, bytes: 1, Mailbox: 7,
 
         ECanaRegs.CANRMP.bit.RMP4 = 1;
     }
     else if (ECanaRegs.CANRMP.bit.RMP5 == 1)                          //PDO1_MOSI
     {
         static Uint16 PDO_Command = 0;
+
+        union bits32 Data;
 
         PDO_Command = ECanaMboxes.MBOX5.MDL.all & 0xFF;
 
@@ -308,12 +306,26 @@ __interrupt void can_rx_isr(void)
             }
 
             //bit 1 -> high PWR 12V output - turn on 12V
-            //Aux_Control = ((PDO_Command>>1 ) & 0x1);            //replace with Uax_Supply_12V_On();
 
+            if((PDO_Command>>1 & 0x1) == 1)
+            {
+                Aux_Supply_12V_On();                            //Aux_Supply_20A = On;
+            }
+            else
+            {
+                Aux_Supply_12V_Off();                            //Aux_Supply_20A = Off;
+            }
 
 
             //bit 2 -> Low PWR 12V output - turn on 12V - usually ON but should maybe be inverse
-            LPwr_Out_Ctrl_1 = ((PDO_Command>>2 ) & 0x1);
+            if((PDO_Command>>2 & 0x1) == 1)
+            {
+                LPwr_Out_Ctrl_1_On();                            //Aux_Supply_20A = On;
+            }
+            else
+            {
+                LPwr_Out_Ctrl_1_Off();                            //Aux_Supply_20A = Off;
+            }
 
             //bit 3 -> Reset Flag - Current_flag = 0;
             if((PDO_Command>>3 & 0x1) == 1)
@@ -321,9 +333,14 @@ __interrupt void can_rx_isr(void)
                 flagCurrent = 0;
             }
 
-            CANTransmit(0x19C, (((Uint32)((SOP_charge<<8)|SOP_discharge))<<16) | (int16)(Voltage_total*Current), (((Uint32)BMS_Error)<<16) | (Uint32)BMS_Status, 0x8, 8); //Destination: 0x71C, Mailbox_high: 0, Mailbox_low: 0, bytes: 8, Mailbox: 8
         }
-        //else return nothing
+        //go to default states
+
+        Data.yourSplitInterger.var3 = SOP_discharge;
+        Data.yourSplitInterger.var4 = SOP_charge;
+        Data.asInt16[0] = (int16)(Voltage_total*Current);
+
+        CANTransmit(0x19C, Data.asUint, (((Uint32)BMS_Error)<<16) | (Uint32)BMS_Status, 0x8, 8); //Destination: 0x71C, Mailbox_high: 0, Mailbox_low: 0, bytes: 8, Mailbox: 8
 
         ECanaRegs.CANRMP.bit.RMP5 = 1;
     }

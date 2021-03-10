@@ -364,20 +364,20 @@ void CAN_Output_All(void)
     //union bits32 TxData;
 
     //Need to test this counter move..
-    if((Aux_Control == 1) && (Auxilliary_counter > 1))
-    {
+  /*  if((Aux_Control == 1) && (Auxilliary_counter > 1))
+    {*/
         DELAY_US(1000L);
 
         CANTransmit(0x718, 0x4, ((int)(Voltage_total*10)), 5, 0); //Voltage
 
-        DELAY_US(1000L);                                         //1 mS
+        DELAY_US(2000L);                                         //1 mS
 
         if(Charging_animation == 1)
             CANTransmit(0x718, 0x11, ((int)(Charging_Animation(SOC))), 5, 0);
         else
             CANTransmit(0x718, 0x11, ((int)(SOC)), 5, 0); //SOC
 
-        DELAY_US(1000L);                                         //1 mS
+        DELAY_US(2000L);                                         //1 mS
 
         //sit system error, system charging, charge required
         //check flags for error messages
@@ -390,8 +390,8 @@ void CAN_Output_All(void)
         if((flagDischarged >= 1) || (flagCurrent == 1)  || (flagTemp_Discharge == 1))
             Acewell_Data = Acewell_Data + 4;
 
-        CANTransmit(0x718, 0x88, Acewell_Data & 0xF, 5, 0); //LEDS*/
-    }
+      /*  CANTransmit(0x718, 0x88, Acewell_Data & 0xF, 5, 0); //LEDS*/
+    //}
     else if(Aux_Control == 1)
         Auxilliary_counter++;
     else

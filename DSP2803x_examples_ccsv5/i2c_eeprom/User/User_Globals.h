@@ -30,6 +30,7 @@ extern volatile Uint16 Received;
 /////////////////////////////////////////////
 extern volatile Uint16 flagTemp_Discharge;
 extern volatile Uint16 flagTemp_Charge;
+extern volatile Uint16 flagTemp_BMS;
 extern volatile Uint16 flagCurrent;
 extern volatile Uint16 flagVoltage;
 
@@ -210,6 +211,8 @@ extern volatile int Proximity_Measure;
 extern volatile int Pilot_Measure;
 
 extern volatile Uint32 CAN_Error_Debug;
+
+extern volatile Uint16 EOL;
 
 //extern volatile long Current_test_DSS;
 

@@ -23,6 +23,15 @@ union bits32
 {
     Uint32 asUint;
     float32 asFloat;
+    Uint8 asUint8[4];
+    int16 asInt16[2];
+
+    struct {
+        int32 var1 : 8;
+        int32 var2 : 8;
+        int32 var3 : 8;
+        int32 var4 : 8;
+    } yourSplitInterger;
 };
 
 void Initialise_BMS(void);
@@ -67,5 +76,7 @@ void Aux_Supply_12V_On(void);
 void Aux_Supply_12V_Off(void);
 void CHG_Contactor_On(void);
 void CHG_Contactor_Off(void);
+void LPwr_Out_Ctrl_1_On(void);
+void LPwr_Out_Ctrl_1_Off(void);
 
 #endif /* USER_PROTOTYPES_H_ */
