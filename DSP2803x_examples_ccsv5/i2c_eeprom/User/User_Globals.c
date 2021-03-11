@@ -217,8 +217,8 @@ volatile float Charging_animation = 0;
 
 volatile Uint32 NMT_State = 0;               //Initialization state
 
-volatile Uint16 SOP_discharge = 45;
-volatile Uint16 SOP_charge = 20;
+volatile Uint16 SOP_discharge = 60;
+volatile Uint16 SOP_charge = 50;
 
 volatile float I_maximum = 0;
 volatile float I_minimum = 0;

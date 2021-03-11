@@ -349,7 +349,7 @@ void Process_Voltages(void)
         //LPwr_Out_Ctrl_1 = 1;
     }
 
-    if(Voltage_high<3.4)
+    if(Voltage_high<3.45)
     {
         SOP_charge = 50;
     }
