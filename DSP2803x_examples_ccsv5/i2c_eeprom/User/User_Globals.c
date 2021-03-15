@@ -38,7 +38,7 @@ volatile Uint16 flagTemp_Charge=0;
 volatile Uint16 flagTemp_BMS=0;
 
 volatile Uint16 flagCurrent=0;
-volatile Uint16 flagVoltage=0;
+volatile Uint16 flagOverVoltage=0;
 
 volatile Uint16 flagCharged=0;											//*****
 volatile Uint16 flagDischarged=0;
@@ -156,13 +156,16 @@ struct table_1d trip2_table = {
     I2_y  /* Array of y-coordinates */
 };
 
-long time3_x[4] = {4050,3686,3359,3031  };         //10ms, 0.5s, 5s, 600s                          {20, 1000, 10000, 1200000}
+//SOP Calc:
+//Current:  190 A (3604), 160 A (3359)
+//Count:    1000,         8000
+//Time:     0.5s,           4s
 
-
-long I3_y[4] =      {20,1000,10000,1200000   };    //  4050 = 245A, 3686=200A, 3359=160A, 3032=120A    {4050, 3686, 3359, 3031}
+long time3_x[4] = {3604,3359};
+long I3_y[4] =      {1000,8000};
 
 struct table_1d trip3_table = {
-    4,      /* Number of data points */
+    2,      /* Number of data points */
     time3_x, /* Array of x-coordinates */
     I3_y  /* Array of y-coordinates */
 };

@@ -32,7 +32,7 @@ extern volatile Uint16 flagTemp_Discharge;
 extern volatile Uint16 flagTemp_Charge;
 extern volatile Uint16 flagTemp_BMS;
 extern volatile Uint16 flagCurrent;
-extern volatile Uint16 flagVoltage;
+extern volatile Uint16 flagOverVoltage;
 
 extern volatile Uint16 flagCharged;
 extern volatile Uint16 flagDischarged;

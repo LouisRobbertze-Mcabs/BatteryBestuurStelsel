@@ -72,14 +72,16 @@ __interrupt void  adc_isr(void)
         trip_counter = 0;
 
     //do some series testing here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    /*   if(trip_counter > 2000)
+    if(trip_counter > 1000)
     {
-        SOP_discharge = (((interpolate_table_1d(&trip3_table, trip_counter) - 2048) * 122)/1000 * (Uint16)Voltage_total)/100;
+        SOP_discharge = (((interpolate_table_1d(&trip3_table, trip_counter) - 2048) * 122)/1000 * (Uint16)Voltage_total);
+        //still divide by 100
     }
-    else if(trip_counter < 2000)
+    else if(trip_counter < 1000)
     {
-        SOP_discharge = (((interpolate_table_1d(&trip3_table, 2000) - 2048) * 122)/1000 * (Uint16)Voltage_total)/100 ;
-    }*/
+        //Set SOP_Discharge max power:                  (Dependant on battery voltage)
+        SOP_discharge = ((Uint16)Voltage_total * 190)/100;                              //190 Amp
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;       //Clear ADCINT1 flag reinitialize for next SOC
@@ -265,16 +267,28 @@ __interrupt void can_rx_isr(void)
                 break;
             case 0x2 :
                 NMT_State = 0x4;                   //Enter stopped state
+                //Shutdown 48 V discharge ??
+                Pre_Charge_Off();                               //follow Pre-charge pin
+                Contactor_Off();                                //turn off contactor
                 break;
             case 0x80 :
                 NMT_State = 0x7F;                  //Enter Pre-operational state
+                //Shutdown 48 V discharge ??
+                Pre_Charge_Off();                               //follow Pre-charge pin
+                Contactor_Off();                                //turn off contactor
                 break;
             case 0x81 :                            //Enter Reset the Device - (initialization sub-state)
                 NMT_State = 0x0;
+                //Shutdown 48 V discharge ??
+                Pre_Charge_Off();                               //follow Pre-charge pin
+                Contactor_Off();                                //turn off contactor
                 while(NMT_State<0x100){;}          //reset using watchdog timer
                 break;
             case 0x82 :                            //Reset the CAN bus - (initialization sub-state)
                 NMT_State = 0x0;
+                //Shutdown 48 V discharge ??
+                Pre_Charge_Off();                               //follow Pre-charge pin
+                Contactor_Off();                                //turn off contactor
                 //add reset function
                 break;
             }
@@ -320,11 +334,11 @@ __interrupt void can_rx_isr(void)
             //bit 2 -> Low PWR 12V output - turn on 12V - usually ON but should maybe be inverse
             if((PDO_Command>>2 & 0x1) == 1)
             {
-                LPwr_Out_Ctrl_1_On();                            //Aux_Supply_20A = On;
+                LPwr_Out_Ctrl_1_On();                            //Aux_Supply_3.5A = On;
             }
             else
             {
-                LPwr_Out_Ctrl_1_Off();                            //Aux_Supply_20A = Off;
+                LPwr_Out_Ctrl_1_Off();                            //Aux_Supply_3.5A = Off;
             }
 
             //bit 3 -> Reset Flag - Current_flag = 0;

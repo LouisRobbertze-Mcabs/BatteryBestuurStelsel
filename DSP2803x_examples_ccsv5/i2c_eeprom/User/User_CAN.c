@@ -217,7 +217,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
         if(ChgStatus == 0 || ChgStatus == 0x08)                                             //Charger ready to charge || Charger Starting State
         {
             Charger_status = 1;                                                             //0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????                                          //charger connected
-            if(flagCurrent == 0 && flagTemp_Charge == 0 && flagCharged == 0 && Key_switch_2 == 0 )    //check flags to ensure charging is allowed
+            if(flagCurrent == 0 && flagTemp_Charge == 0 && flagOverVoltage == 0 && NMT_State != 5)    //check flags to ensure charging is allowed
             {
                 if(ChgVoltage < (0.8*Voltage_total))
                 {
