@@ -101,7 +101,7 @@ volatile float Auxilliary_Voltage = 13;
 
 
 //defines:
-volatile float Vmax = 3.60;
+volatile float Vmax = 3.65;
 volatile float Vmin = 2.75;				//2.8
 volatile float Vcritical = 2.65;		//2.7
 volatile float Vcharge = 3.5;

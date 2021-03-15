@@ -321,10 +321,12 @@ void Process_Voltages(void)
     {
         balance = 1;                                            //start balancing
         //overvoltage
-        flagOverVoltage = 1;                                        //verander na overVoltage?
+        flagOverVoltage = 1;                                    //Over Voltage Error
         Contactor_Off();										//kan hierdie wees wat die contactor oopmaak
         CHG_Contactor_Off();                                    //Stop charging
     }
+    else
+        flagOverVoltage = 0;                                    //No Over Voltage Error
 
     //Low Voltage Error
     if(Voltage_low < Vmin && Voltage_low > Vcritical && Charger_status == 0)
