@@ -23,6 +23,7 @@ void main(void)
             Toggle_LED();
             Status_LED();
 
+
             Read_Cell_Voltages();
             Process_Voltages();
 

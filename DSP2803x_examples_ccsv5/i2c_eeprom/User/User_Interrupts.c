@@ -362,228 +362,185 @@ __interrupt void can_rx_isr(void)
     {
         Uint16 SDO_MOSI_Ctrl = 0;
         Uint16 SDO_MOSI_Index = 0;
-        Uint32 SDO_MISO_Ctrl = 0;
-        Uint32 SDO_MISO_Data = 0;
+        union bits32 SDO_MISO_Ctrl;
+        union bits32 SDO_MISO_Data;
+        SDO_MISO_Data.asUint = 0;
 
         SDO_MOSI_Ctrl = ECanaMboxes.MBOX6.MDL.all & 0xFF;
         SDO_MOSI_Index = (ECanaMboxes.MBOX6.MDL.all>>8) & 0xFFFF;
 
         if(NMT_State != 0x4 && SDO_MOSI_Ctrl == 0x42)                 //ensure system is not in stopped state
         {
+            SDO_MISO_Ctrl.yourSplitInterger.var1 = 0x40;                                      //SDO_Control message
+            SDO_MISO_Ctrl.yourSplitInterger.var2 = SDO_MOSI_Index&0xFF;                       //Object Index Low Byte
+            SDO_MISO_Ctrl.yourSplitInterger.var3 = (SDO_MOSI_Index>>8)&0xFF;                  //Object Index High Byte
+            SDO_MISO_Ctrl.yourSplitInterger.var4 = 0;                                         //Sub index Byte
+
             switch(SDO_MOSI_Index)
             {
             case 0x0900 :                                             //Voltage_total
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | ((int16)((Voltage_total*100)));
-                break;
-            case 0x0902 :                                             //Current
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Current*100);
-                break;
-                /* case 0x0904 :                                             //Power
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8  | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Current*Voltage_total);
-                break;
-            case 0x0906 :                                              //Voltage_low
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8  | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_low*1000);
-                break;
-            case 0x0908 :                                              //Voltage_low_cell
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8  | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_low_cell);
-                break;
-            case 0x090A :                                              //Voltage_high
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_high*1000);
-                break;
-            case 0x090C :                                              //Voltage_high_cell
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_high_cell);
-                break;
-            case 0x090E :                                              //Voltage_avg
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_avg*1000);
-                break;
-            case 0x0910 :                                               //Temperature_high
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_high*10);
-                break;
-            case 0x0912 :                                               //Temperature_high_cell
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_high_cell);
-                break;
-            case 0x0914 :                                              //Temperature_low
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_low*10);
-                break;
-            case 0x0916 :                                              //Temperature_low_cell
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_low_cell);
-                break;
-            case 0x0918 :                                               //Temp_avg
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_avg*10);
-                break;
-            case 0x091A :                                               //Aux_Voltage
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Auxilliary_Voltage*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)((Voltage_total*100)));
                 break;
             case 0x091C :                                               //SOC
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(SOC);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(SOC));
+                break;
+            case 0x0902 :                                             //Current
+                SDO_MISO_Data.asInt16[0] =  ((int16)((Current*100)));
+                break;
+            case 0x0904 :                                             //Power
+                SDO_MISO_Data.asInt16[0] =  ((int16)((Current*Voltage_total)));
+                break;
+            case 0x0906 :                                              //Voltage_low
+                SDO_MISO_Data.asInt16[0] =  ((int16)((Voltage_low*1000)));
+                break;
+            case 0x0908 :                                              //Voltage_low_cell
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltage_low_cell));
+                break;
+            case 0x090A :                                              //Voltage_high
+                SDO_MISO_Data.asInt16[0] =  ((int16)((Voltage_high*1000)));
+                break;
+            case 0x090C :                                              //Voltage_high_cell
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltage_high_cell));
+                break;
+            case 0x090E :                                              //Voltage_avg
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltage_avg*1000));
+                break;
+            case 0x0910 :                                               //Temperature_high
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Temperature_high*10));
+                break;
+            case 0x0912 :                                               //Temperature_high_cell
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Temperature_high_cell));
+                break;
+            case 0x0914 :                                              //Temperature_low
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Temperature_low*10));
+                break;
+            case 0x0916 :                                              //Temperature_low_cell
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Temperature_low_cell));
+                break;
+            case 0x0918 :                                               //Temp_avg
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Temperature_avg*10));
+                break;
+            case 0x091A :                                               //Aux_Voltage
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Auxilliary_Voltage*1000));
                 break;
             case 0x091E :                                               //Impedance     Review calculation
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(resistance*1000000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(resistance*1000000));
                 break;
             case 0x0920 :                                               //Maximum cell impedance      Review calculation
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(SOH_max*1000000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(SOH_max*1000000));
                 break;
             case 0x0922 :                                               //Maximum impedance cell number
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(SOH_max_cell);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(SOH_max_cell));
                 break;
             case 0x0924 :                                               //Cell 0
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[0]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[0]*1000));
                 break;
             case 0x0926 :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[1]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[1]*1000));
                 break;
             case 0x0928 :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[2]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[2]*1000));
                 break;
             case 0x092A :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[3]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[3]*1000));
                 break;
             case 0x092C :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[4]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[4]*1000));
                 break;
             case 0x092E :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[5]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[5]*1000));
                 break;
             case 0x0930 :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[6]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[6]*1000));
                 break;
             case 0x0932 :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[7]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[7]*1000));
                 break;
             case 0x0934 :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[8]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[8]*1000));
                 break;
             case 0x0936 :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[9]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[9]*1000));
                 break;
             case 0x0938 :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[10]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[10]*1000));
                 break;
             case 0x093A :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[11]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[11]*1000));
                 break;
             case 0x093C :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[12]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[12]*1000));
                 break;
             case 0x093E :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[13]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[13]*1000));
                 break;
             case 0x0940 :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltages[14]*1000);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Voltages[14]*1000));
                 break;
             case 0x0942 :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperatures[0]*10);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Temperatures_Module[0]*10));
                 break;
             case 0x0944 :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperatures[1]*10);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Temperatures_Module[1]*10));
                 break;
             case 0x0946 :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperatures[2]*10);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Temperatures_Module[2]*10));
                 break;
             case 0x0948 :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperatures[3]*10);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Temperatures_BMS*10));
                 break;
             case 0x094A :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperatures[4]*10);
+                SDO_MISO_Data.asInt16[0] =  ((int16)(Temperatures_CS*10));
                 break;
 
             case 0x094B :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = (Uint32)(BMS_Status);
+                SDO_MISO_Data.asUint16[0] =  BMS_Status;
                 break;
             case 0x094E :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = (Uint32)(BMS_Error);
+                SDO_MISO_Data.asUint16[0] =  BMS_Error;
                 break;
             case 0x0950 :                                                                   //Battery SOH
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = (Uint32)(SOH);                                              //add SOH calculation....
+                SDO_MISO_Data.asInt16[0] =  (int16)(SOH);
                 break;
             case 0x0952 :                                                                   //Peak current
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(I_maximum*100);
+                SDO_MISO_Data.asInt16[0] =  (int16)(I_maximum*100);
                 break;
             case 0x0954 :                                                                   //Peak Voltage
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_maximum*1000);
+                SDO_MISO_Data.asInt16[0] =  (int16)(Voltage_maximum*1000);
                 break;
             case 0x0956 :                                                                   //Peak Temperature
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_maximum*10);
+                SDO_MISO_Data.asInt16[0] =  (int16)(Temperature_maximum*10);
                 break;
             case 0x0958 :                                                                   //Minimum current
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(I_minimum*100);
+                SDO_MISO_Data.asInt16[0] =  (int16)(I_minimum*100);
                 break;
             case 0x095A :                                                                   //Minimum Voltage
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Voltage_minimum*1000);
+                SDO_MISO_Data.asInt16[0] =  (int16)(Voltage_minimum*1000);
                 break;
             case 0x095C :                                                                   //Minimum Temperature
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Temperature_minimum*10);
+                SDO_MISO_Data.asInt16[0] =  (int16)(Temperature_minimum*10);
                 break;
             case 0x095E :                                                                   //cycle tracker
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SDO_MISO_Data | (int16)(Cycles*10);
+                SDO_MISO_Data.asInt16[0] =  (int16)(Cycles*10);
                 break;
             case 0x0960 :
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = (Uint32)(Initial_Capacity);
+                SDO_MISO_Data.asInt16[0] =  (int16)(Initial_Capacity);
                 break;
             case 0x0962 :                                                                   //State of power discharge
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SOP_discharge;
+                SDO_MISO_Data.yourSplitInterger.var1 = SOP_discharge;
                 break;
             case 0x0964 :                                                                   //State of power charge
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = SOP_charge;
-                break;*/
+                SDO_MISO_Data.yourSplitInterger.var1 = SOP_charge;
+                break;
             default:
                 //return error status
-                SDO_MISO_Ctrl = ((Uint32)SDO_MOSI_Index)<<8 | 0x40;
-                SDO_MISO_Data = 0x06020000;                                                 //Error: Object does not exist
+                SDO_MISO_Ctrl.yourSplitInterger.var1 = 0x80;                                      //SDO_Control message
+                SDO_MISO_Ctrl.yourSplitInterger.var2 = SDO_MOSI_Index&0xFF;                       //Object Index Low Byte
+                SDO_MISO_Ctrl.yourSplitInterger.var3 = (SDO_MOSI_Index>>8)&0xFF;                  //Object Index High Byte
+                SDO_MISO_Ctrl.yourSplitInterger.var4 = 0;                                         //Sub index Byte
+                SDO_MISO_Data.asUint =  0x06020000;                                             //Error: Object does not exist
             }
-            CANTransmit(0x59C, SDO_MISO_Data, SDO_MISO_Ctrl, 0x8, 0x9); //Destination: 0x59C, Mailbox_high: 0, Mailbox_low: NMT_State, bytes: 8, Mailbox: 9,
-
+            CANTransmit(0x59C, SDO_MISO_Data.asUint, SDO_MISO_Ctrl.asUint, 0x8, 0x9); //Destination: 0x59C, Mailbox_high: 0, Mailbox_low: NMT_State, bytes: 8, Mailbox: 9,
         }
 
         ECanaRegs.CANRMP.bit.RMP6 = 1;

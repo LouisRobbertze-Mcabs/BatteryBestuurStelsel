@@ -23,8 +23,8 @@ union bits32
 {
     Uint32 asUint;
     float32 asFloat;
-    Uint8 asUint8[4];
     int16 asInt16[2];
+    Uint16 asUint16[2];
 
     struct {
         int32 var1 : 8;
