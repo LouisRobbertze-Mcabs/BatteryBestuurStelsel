@@ -846,9 +846,9 @@ void Calibrate_Current()
     //Calibrate when key-switch(position 2,3) is deactivated, result in 48V and 12V supply delivers 0 Watts.
     static Uint16 Calibrate_delay = 0;
 
-    if(Key_switch_1==0 && Key_switch_2==0 && Charger_status == 0)		            //Vehicle is off (Key-switch position 0)
+    if(ContactorOut==0 && Aux_Control==0 && Ctrl_Pre_Charge==0 && Charger_status == 0)		            //Vehicle is off (Key-switch position 0)
     {
-        if(Calibrate_delay > 10)                                                    //10 s delay for the vehicle/battery to do shut-off process
+        if(Calibrate_delay > 20)                                                    //10 s delay for the vehicle/battery to do shut-off process
         {
             Current_CAL = Current_CAL + (0.0001* Current * Current_CAL);			    //maybe add slow filter to dampen the fault?
 
