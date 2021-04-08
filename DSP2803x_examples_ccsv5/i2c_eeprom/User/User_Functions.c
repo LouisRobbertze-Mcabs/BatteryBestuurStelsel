@@ -1007,6 +1007,6 @@ void NMT_State_Vld_Check(void)
         NMT_State = 0x7F;                          //Enter pre-operational state
         Pre_Charge_Off();                          //turn off  Pre-charge
         Contactor_Off();                           //turn off contactor
-        //add 12V high power as well?
+        Aux_Supply_12V_Off();                      //turn off 12V supply
     }
 }

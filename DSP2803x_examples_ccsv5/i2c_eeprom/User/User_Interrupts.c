@@ -274,20 +274,23 @@ __interrupt void can_rx_isr(void)
             case 0x2 :
                 NMT_State = 0x4;                   //Enter stopped state
                 //Shutdown 48 V discharge ??
-                Pre_Charge_Off();                               //follow Pre-charge pin
+                Pre_Charge_Off();                               //turn off Pre-charge
                 Contactor_Off();                                //turn off contactor
+                Aux_Supply_12V_Off();
                 break;
             case 0x80 :
                 NMT_State = 0x7F;                  //Enter Pre-operational state
                 //Shutdown 48 V discharge ??
                 Pre_Charge_Off();                               //follow Pre-charge pin
                 Contactor_Off();                                //turn off contactor
+                Aux_Supply_12V_Off();
                 break;
             case 0x81 :                            //Enter Reset the Device - (initialization sub-state)
                 NMT_State = 0x0;
                 //Shutdown 48 V discharge ??
                 Pre_Charge_Off();                               //follow Pre-charge pin
                 Contactor_Off();                                //turn off contactor
+                Aux_Supply_12V_Off();
                 while(NMT_State<0x100){;}          //reset using watchdog timer
                 break;
             case 0x82 :                            //Reset the CAN bus - (initialization sub-state)
@@ -295,6 +298,7 @@ __interrupt void can_rx_isr(void)
                 //Shutdown 48 V discharge ??
                 Pre_Charge_Off();                               //follow Pre-charge pin
                 Contactor_Off();                                //turn off contactor
+                Aux_Supply_12V_Off();
                 //add reset function
                 break;
             }
