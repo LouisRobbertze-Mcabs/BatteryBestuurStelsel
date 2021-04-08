@@ -48,6 +48,8 @@ volatile Uint16 flag_Pre_Charge = 0;
 
 volatile Uint16 counter_2Hz = 0;
 
+volatile Uint16 COMMS_Timeout_Counter = 0;
+
 volatile Uint16 Charger_status = 0;
 volatile Uint16 Charging = 0;
 volatile Uint16 Heating = 0;

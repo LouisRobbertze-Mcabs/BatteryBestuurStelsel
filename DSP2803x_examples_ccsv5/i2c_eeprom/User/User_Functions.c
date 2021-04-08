@@ -1000,3 +1000,13 @@ void LPwr_Out_Ctrl_1_Off(void)                    //inverse of ctrl pin
 {
     GpioDataRegs.GPASET.bit.GPIO6 = 1;            //Turn off Contactor
 }
+
+void NMT_State_Vld_Check(void)
+{
+    if(COMMS_Timeout_Counter > 10){
+        NMT_State = 0x7F;                          //Enter pre-operational state
+        Pre_Charge_Off();                          //turn off  Pre-charge
+        Contactor_Off();                           //turn off contactor
+        //add 12V high power as well?
+    }
+}

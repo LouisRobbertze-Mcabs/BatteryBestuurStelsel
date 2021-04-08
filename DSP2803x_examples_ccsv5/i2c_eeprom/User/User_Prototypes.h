@@ -78,5 +78,6 @@ void CHG_Contactor_On(void);
 void CHG_Contactor_Off(void);
 void LPwr_Out_Ctrl_1_On(void);
 void LPwr_Out_Ctrl_1_Off(void);
+void NMT_State_Vld_Check(void);
 
 #endif /* USER_PROTOTYPES_H_ */

@@ -42,6 +42,8 @@ extern volatile Uint16 flag_Pre_Charge;
 
 extern volatile Uint16 counter_2Hz;
 
+extern volatile Uint16 COMMS_Timeout_Counter;
+
 extern volatile Uint16 Charger_status;
 extern volatile Uint16 Charging;
 extern volatile Uint16 Heating;

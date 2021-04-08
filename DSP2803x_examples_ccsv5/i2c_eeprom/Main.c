@@ -57,6 +57,9 @@ void main(void)
 
             //add in issue function check
             Reset_MCU(1);
+
+            //Check state validity
+            NMT_State_Vld_Check();
         }
     }
 }
