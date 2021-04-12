@@ -262,14 +262,12 @@ __interrupt void can_rx_isr(void)
         NMT_Command = ECanaMboxes.MBOX4.MDL.all & 0xFF;                            //needs testing
         NMT_Command_Address = (ECanaMboxes.MBOX4.MDL.all >>8 ) & 0xFF;             //
 
-        //reset state timeout timer
-
         if(NMT_Command_Address == 0x1D || NMT_Command_Address == 0x00)             //should also listen to 0x0
         {
             switch(NMT_Command) {
             case 0x1 :
                 NMT_State = 0x5;                   //Enter operational state
-                COMMS_Timeout_Counter = 0;
+                COMMS_Timeout_Counter = 0;         //reset state timeout timer
                 break;
             case 0x2 :
                 NMT_State = 0x4;                   //Enter stopped state
