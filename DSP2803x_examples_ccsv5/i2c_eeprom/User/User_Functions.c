@@ -827,7 +827,7 @@ void Calculate_SOC()
 
     SOC_t++;
 
-    if(/*Current>3 || Current<-3*/ Key_switch_1 == 1 || Key_switch_2 == 1 || Charger_status == 1) //probably needs to go to whether the keyswitch is active or not
+    if( ContactorOut == 1 || Ctrl_LPwr_48V_O_2 == 1 || Charger_status == 1) //probably needs to go to whether the keyswitch is active or not
     {
         SOC_t = 0;
     }
