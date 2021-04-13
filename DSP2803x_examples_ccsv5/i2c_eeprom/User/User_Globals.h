@@ -132,6 +132,12 @@ extern  long sine_y[5];
 
 extern  struct table_1d sine_table;
 
+extern long Y_SOC[5];
+extern long Z_Voc[3][5];
+extern long X_Temp[3];
+
+extern struct table_2d Cell_SOC_Lookup_table;
+
 extern long time_x[4];
 extern long I_y[4];
 
@@ -215,6 +221,7 @@ extern volatile int Pilot_Measure;
 extern volatile Uint32 CAN_Error_Debug;
 
 extern volatile Uint16 EOL;
+
 
 //extern volatile long Current_test_DSS;
 

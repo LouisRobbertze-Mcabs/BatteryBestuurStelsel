@@ -140,6 +140,20 @@ struct table_1d sine_table = {
     sine_y  /* Array of y-coordinates */
 };
 
+long Y_SOC[5] =    {0, 10, 30, 60, 100};
+long Z_Voc[3][5] = {{2840, 3200, 3270, 3290, 3367},
+                   {2880, 3202, 3270, 3293, 3375},
+                   {2953, 3203, 3270, 3300, 3380}};
+long X_Temp[3] =   {5 , 20, 35};
+
+struct table_2d Cell_SOC_Lookup_table = {
+    3,      /* Number Temperature coordinates */
+    5,      /* Number Voc and SOC coordinates */
+    X_Temp, /* Array of Temperatures  */
+    Y_SOC,  /* Array of SOC values */
+    Z_Voc   /* Array of Voc values */
+};
+
 long time_x[4] = {1200000, 10000, 1000, 20};        //10ms, 0.5s, 5s, 600s                          {20, 2000, 10000, 1200000}
 long I_y[4] = {3359,3686 ,3850 ,4050};          //  4050 = 245A, 3850=220A, 3686=200A, 3359=160A,   {4050, 3686, 3359, 3031}
 
@@ -242,3 +256,4 @@ volatile int Pilot_Measure = 0;
 volatile Uint32 CAN_Error_Debug;
 
 volatile Uint16 EOL = 0;
+

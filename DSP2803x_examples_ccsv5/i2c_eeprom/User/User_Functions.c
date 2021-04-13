@@ -74,6 +74,9 @@ void Initialise_BMS(void)
     Bq76940_Init();
     //Shut_D_BQ();
 
+    //Initialize SOC to Voc - should be monitored closely for any resets on CAN
+    SOC = (float)(interpolate_table_2d(&Cell_SOC_Lookup_table, (long)Temperature_avg, (long)(Voltage_low*1000)));
+
     // Enable the watchdog
     EALLOW;
     SysCtrlRegs.WDCR = 0x002F;
@@ -754,16 +757,16 @@ Uint32 ChgCalculator(float Voltage, float Current)
 
 /**
  * Returns the interpolated y-value.
- * Saturates to y0 or y1 if x outside interval [x0, x1].
+ * Saturates to x0 or x1 if y outside interval [y0, y1].
  */
-long interpolate_segment(long x0, long y0, long x1, long y1, long x)
+long interpolate_segment(long x0, long y0, long x1, long y1, long y)
 {
     long t;
 
-    if (x <= y0) { return x0; }
-    if (x >= y1) { return x1; }
+    if (y <= y0) { return x0; }
+    if (y >= y1) { return x1; }
 
-    t =  (x-y0);
+    t =  (y-y0);
     //	t /= (y1-y0);
 
     t *= (x1-x0);
@@ -818,7 +821,9 @@ void Calculate_SOC()
     //	static Uint16 t=1000;							//time since current activity
     //	float Wsoc;										//weighting parameter
 
-    SOCv = (float)(interpolate_table_1d(&sine_table, (long)(Voltage_low*1000)));
+    //SOCv = (float)(interpolate_table_1d(&sine_table, (long)(Voltage_low*1000)));
+
+    SOCv = (float)(interpolate_table_2d(&Cell_SOC_Lookup_table, (long)Temperature_avg, (long)(Voltage_low*1000)));
 
     SOC_t++;
 
@@ -1010,3 +1015,68 @@ void NMT_State_Vld_Check(void)
         Aux_Supply_12V_Off();                      //turn off 12V supply
     }
 }
+
+long interpolate_table_2d(struct table_2d *table, long x, long z)       //x = temp; z = Voc; looking for y
+/* 2D Table lookup with interpolation */    //x interpolation value
+{
+    Uint16 segment;
+    Uint16 segment2;
+
+    long Temperary_Data[5];
+    long Temperature = x;
+
+    long (*Try)[5] = table->z_values;
+
+    //Temperature boundary check:
+    /* Check input bounds and saturate if out-of-bounds */
+    if (x > (table->x_values[table->x_length-1])) {
+        /* x-value too large, saturate to max x-value */
+        Temperature = table->x_values[table->x_length-1];
+    }
+    else if (x < (table->x_values[0])) {
+        /* x-value too small, saturate to min x-value */
+        Temperature = table->x_values[0];
+    }
+
+    for (segment = 0; segment<(table->x_length-1); segment++)           /* Find the segment that holds x (Temperature)*/
+    {
+        if ((table->x_values[segment]   <= Temperature) &&
+                (table->x_values[segment+1] >= Temperature))
+        {
+
+            /* Found the correct segment */
+            /* Interpolate new line according to the temperature measurement*/
+            for(segment2 = 0; segment2<(table->zy_length); segment2++)
+            {
+                //flipped the axis to reuse interpolate function
+                Temperary_Data[segment2] = interpolate_segment(*(*(Try+segment)+segment2),  /* x0 */
+                                                               table->x_values[segment],   /* y0 */
+                                                               *(*(Try+segment+1)+segment2),/* x1 */ // table->z_values[segment][segment2+1]
+                                                               table->x_values[segment+1], /* y1 */
+                                                               Temperature);               /* y  */
+            }
+        }
+    }
+
+    for (segment = 0; segment<(table->zy_length-1); segment++)             /* Find the segment that holds z (Voc)*/
+    {
+        if ((Temperary_Data[segment]  <= z) &&
+                        (Temperary_Data[segment+1] >= z))
+        {
+           return interpolate_segment(table->y_values[segment],         /* x0 */
+                                      Temperary_Data[segment],   /* y0 */
+                                      table->y_values[segment+1],       /* x1 */
+                                      Temperary_Data[segment+1], /* y1 */
+                                      z);                               /* y  */
+        }
+        else if(Temperary_Data[0]  >= z)
+            return 0;                                   //value below 0% SOC voltage
+        else if(Temperary_Data[4] <= z)
+            return 100;
+    }
+
+    /* Something with the data was wrong if we get here */
+    /* Saturate to the max value */
+    return 0;
+}
+/******************************************************************************/

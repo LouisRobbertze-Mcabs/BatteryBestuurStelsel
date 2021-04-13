@@ -113,6 +113,15 @@ struct table_1d {
     long int *y_values;
 };
 
+/* Structure definition */
+struct table_2d {
+    Uint16 x_length;            //temp values
+    Uint16 zy_length;           //VOC & SOC values
+    long int *x_values;
+    long int *y_values;
+    long int *z_values;
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 struct BMS_STATUS_FLAGS {       // bits   description

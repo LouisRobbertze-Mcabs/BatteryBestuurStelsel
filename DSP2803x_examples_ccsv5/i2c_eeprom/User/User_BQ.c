@@ -86,6 +86,8 @@ void  Bq76940_Init(void)
 
     BQEnable = 0;                                               //pull low to allow BQ to measure temp
 
+    Read_Cell_Voltages();
+
     EALLOW;
 
     GpioCtrlRegs.GPAMUX1.bit.GPIO3 = 0;     //BQenable

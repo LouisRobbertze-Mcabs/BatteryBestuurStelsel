@@ -51,7 +51,7 @@ void Process_BQ_System_Status(void);
 void Calculate_SOH(void);
 
 void Calculate_SOC();
-long interpolate_segment(long x0, long y0, long x1, long y1, long x);
+long interpolate_segment(long x0, long y0, long x1, long y1, long y);
 long interpolate_table_1d(struct table_1d *table, long x);
 
 
@@ -79,5 +79,7 @@ void CHG_Contactor_Off(void);
 void LPwr_Out_Ctrl_1_On(void);
 void LPwr_Out_Ctrl_1_Off(void);
 void NMT_State_Vld_Check(void);
+
+long interpolate_table_2d(struct table_2d *table, long x, long z);
 
 #endif /* USER_PROTOTYPES_H_ */
