@@ -4,7 +4,7 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := C:/ti/ccs930/ccs/tools/compiler/ti-cgt-c2000_18.12.4.LTS
+CG_TOOL_ROOT := C:/ti/ccs1030/ccs/tools/compiler/ti-cgt-c2000_20.2.4.LTS
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
@@ -31,7 +31,7 @@ ORDERED_OBJS += \
 "./User/User_I2C.obj" \
 "./User/User_Interrupts.obj" \
 "./User/User_Queue.obj" \
-"C:/Users/barth/OneDrive/Documents/Github/BatteryBestuurStelsel/DSP2803x_headers/cmd/DSP2803x_Headers_nonBIOS.cmd" \
+"C:/Users/Louis/Documents/Github/BatteryBestuurStelsel/DSP2803x_headers/cmd/DSP2803x_Headers_nonBIOS.cmd" \
 "../F28035.cmd" \
 "../IQmath.lib" \
 $(GEN_CMDS__FLAG) \
@@ -166,15 +166,15 @@ all: Example_2803xI2C_eeprom.out
 Example_2803xI2C_eeprom.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: C2000 Linker'
-	"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-c2000_18.12.4.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --define="_DEBUG" --define="LARGE_MODEL" -g --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --abi=coffabi --output_all_syms -z -m"Example_2803xI2C_eeprom.map" --stack_size=0x780 --warn_sections -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-c2000_18.12.4.LTS/lib" -i"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-c2000_18.12.4.LTS/include" -i"C:/Users/barth/OneDrive/Documents/Github/BatteryBestuurStelsel/DSP2803x_examples_ccsv5/i2c_eeprom" -i"C:/Users/barth/OneDrive/Documents/Github/BatteryBestuurStelsel/DSP2803x_common/lib" -i"C:/Users/barth/OneDrive/libs/math/IQmath/v160/lib" --reread_libs --issue_remarks --verbose_diagnostics --xml_link_info="Example_2803xI2C_eeprom_linkInfo.xml" --entry_point=code_start --rom_model -o "Example_2803xI2C_eeprom.out" $(ORDERED_OBJS)
+	"C:/ti/ccs1030/ccs/tools/compiler/ti-cgt-c2000_20.2.4.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla0 --define="_DEBUG" --define="LARGE_MODEL" -g --diag_warning=225 --issue_remarks --verbose_diagnostics --quiet --abi=coffabi --output_all_syms -z -m"Example_2803xI2C_eeprom.map" --stack_size=0x780 --warn_sections -i"C:/ti/ccs1030/ccs/tools/compiler/ti-cgt-c2000_20.2.4.LTS/lib" -i"C:/ti/ccs1030/ccs/tools/compiler/ti-cgt-c2000_20.2.4.LTS/include" -i"C:/Users/Louis/Documents/Github/BatteryBestuurStelsel/DSP2803x_examples_ccsv5/i2c_eeprom" -i"C:/Users/Louis/Documents/Github/BatteryBestuurStelsel/DSP2803x_common/lib" -i"C:/Users/Louis/libs/math/IQmath/v160/lib" --reread_libs --issue_remarks --verbose_diagnostics --xml_link_info="Example_2803xI2C_eeprom_linkInfo.xml" --entry_point=code_start --rom_model -o "Example_2803xI2C_eeprom.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
 Example_2803xI2C_eeprom.hex: $(EXE_OUTPUTS)
-	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
+	@echo 'Building secondary target: "$@"'
 	@echo 'Invoking: C2000 Hex Utility'
-	"C:/ti/ccs930/ccs/tools/compiler/ti-cgt-c2000_18.12.4.LTS/bin/hex2000"  -o "Example_2803xI2C_eeprom.hex" $(EXE_OUTPUTS__QUOTED)
-	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
+	"C:/ti/ccs1030/ccs/tools/compiler/ti-cgt-c2000_20.2.4.LTS/bin/hex2000" --diag_wrap=off -o "Example_2803xI2C_eeprom.hex" $(EXE_OUTPUTS__QUOTED)
+	@echo 'Finished building secondary target: "$@"'
 	@echo ' '
 
 # Other Targets

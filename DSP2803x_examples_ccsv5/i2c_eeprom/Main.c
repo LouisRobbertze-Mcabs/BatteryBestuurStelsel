@@ -4,6 +4,7 @@
 //Doen ekstra reset flag so that if new data is not returned contactor can't close / toets..
 //Check CAN reset procedure to ensure always sending data -- Looks positive
 //Add Temperature influence on SOC
+//Louis se veranderinge
 //###########################################################################
 
 #include "User\User_Defines.h"
