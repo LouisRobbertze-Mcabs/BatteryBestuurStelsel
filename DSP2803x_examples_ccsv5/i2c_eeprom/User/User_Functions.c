@@ -189,7 +189,7 @@ void Init_Gpio(void)
     Pre_Charge_Off();                       //turn off precharge resistor
 
     CSControl = 1;                          //turn CScontrol on for current measurement
-    Aux_Supply_12V_Off();                   //High power 48V ctrl 2 - 12 V 20A supply
+    Aux_Supply_12V_Off();             //High power 48V ctrl 2 - 12 V 20A supply
 
 }
 
@@ -1012,7 +1012,7 @@ void NMT_State_Vld_Check(void)
         NMT_State = 0x7F;                          //Enter pre-operational state
         Pre_Charge_Off();                          //turn off  Pre-charge
         Contactor_Off();                           //turn off contactor
-        Aux_Supply_12V_Off();                      //turn off 12V supply
+                            //turn off 12V supply
     }
 }
 

@@ -274,21 +274,21 @@ __interrupt void can_rx_isr(void)
                 //Shutdown 48 V discharge ??
                 Pre_Charge_Off();                               //turn off Pre-charge
                 Contactor_Off();                                //turn off contactor
-                Aux_Supply_12V_Off();
+
                 break;
             case 0x80 :
                 NMT_State = 0x7F;                  //Enter Pre-operational state
                 //Shutdown 48 V discharge ??
                 Pre_Charge_Off();                               //follow Pre-charge pin
                 Contactor_Off();                                //turn off contactor
-                Aux_Supply_12V_Off();
+
                 break;
             case 0x81 :                            //Enter Reset the Device - (initialization sub-state)
                 NMT_State = 0x0;
                 //Shutdown 48 V discharge ??
                 Pre_Charge_Off();                               //follow Pre-charge pin
                 Contactor_Off();                                //turn off contactor
-                Aux_Supply_12V_Off();
+
                 while(NMT_State<0x100){;}          //reset using watchdog timer
                 break;
             case 0x82 :                            //Reset the CAN bus - (initialization sub-state)
@@ -296,7 +296,7 @@ __interrupt void can_rx_isr(void)
                 //Shutdown 48 V discharge ??
                 Pre_Charge_Off();                               //follow Pre-charge pin
                 Contactor_Off();                                //turn off contactor
-                Aux_Supply_12V_Off();
+
                 //add reset function
                 break;
             }
@@ -313,6 +313,16 @@ __interrupt void can_rx_isr(void)
         union bits32 Data;
 
         PDO_Command = ECanaMboxes.MBOX5.MDL.all & 0xFF;
+
+        if((PDO_Command>>1 & 0x1) == 1)
+                   {
+                       Aux_Supply_12V_On();                            //Aux_Supply_20A = On;
+                   }
+                   else
+                   {
+                       Aux_Supply_12V_Off();                            //Aux_Supply_20A = Off;
+                   }
+
 
         if(NMT_State == 0x5)                                    //ensure system is in operational state
         {
