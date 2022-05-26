@@ -5,6 +5,27 @@
         <connection XML_version="1.2" id="Texas Instruments XDS110 USB Debug Probe_0">
             <instance XML_version="1.2" href="drivers/tixds510c28x.xml" id="drivers" xml="tixds510c28x.xml" xmlpath="drivers"/>
             <instance XML_version="1.2" href="drivers/tixds510cla.xml" id="drivers" xml="tixds510cla.xml" xmlpath="drivers"/>
+            <property Type="choicelist" Value="0" id="Power Selection">
+                <choice Name="Target supplied power" value="0">
+                    <property Type="choicelist" Value="0" id="Voltage Selection">
+                        <choice Name="User specified value" value="1">
+                            <property Type="stringfield" Value="3.3V" id="Voltage Level"/>
+                        </choice>
+                    </property>
+                </choice>
+            <choice Name="Probe supplied power" value="1">
+                    <property Type="stringfield" Value="3.3V" id="Voltage Level"/>
+                </choice>
+            </property>
+            <property Type="choicelist" Value="0" id="SWD Mode Settings"/>
+            <property Type="choicelist" Value="0" id="The JTAG TCLK Frequency (MHz)">
+                <choice Name="Fixed with user selected faster value" value="SPECIFIC">
+                    <property Type="choicelist" Value="2" id="Select TCK Setting"/>
+                </choice>
+            <choice Name="Fixed with user specified value" value="SPECIFIC">
+                    <property Type="stringfield" Value="1MHz" id="-- Enter a value from 100.0kHz to 2.5MHz"/>
+                </choice>
+            </property>
             <platform XML_version="1.2" id="platform_0">
                 <instance XML_version="1.2" desc="TMS320F28035_0" href="devices/f28035.xml" id="TMS320F28035_0" xml="f28035.xml" xmlpath="devices"/>
             </platform>

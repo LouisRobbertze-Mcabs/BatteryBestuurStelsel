@@ -217,11 +217,11 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
         if(ChgStatus == 0 || ChgStatus == 0x08)                                             //Charger ready to charge || Charger Starting State
         {
             Charger_status = 1;                                                             //0 - not plugged in, 1 -plugged in, 2 - plugged in and charging ?????                                          //charger connected
-            if(flagCurrent == 0 && flagTemp_Charge == 0 && flagOverVoltage == 0 && NMT_State != 5)    //check flags to ensure charging is allowed
+            if(NMT_State != 5)    //check flags to ensure charging is allowed
             {
                 if(ChgVoltage < (0.8*Voltage_total))
                 {
-                    CANTransmit(0x618, 1, ChgCalculator(48, 0), 8, 0);             //do standby
+                    CANTransmit(0x618, 1, ChgCalculator(56, 0), 8, 0);             //do standby
                     CHG_Contactor_On();
                     delay++;
                 }
@@ -236,7 +236,7 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
                     else if(Current_max > 25)
                         Current_max = 25;
 
-                    if(Voltage_high> balancing_upper_level && Voltage_low < balancing_bottom_level) //determine if balancing should start                                   //balancing upper level & balancing lower level
+                    /*if(Voltage_high> balancing_upper_level && Voltage_low < balancing_bottom_level) //determine if balancing should start                                   //balancing upper level & balancing lower level
                     {
                         balance = 1;
                     }
@@ -245,25 +245,26 @@ void CANChargerReception(Uint32 RxDataL, Uint32 RxDataH)
                         flagCharged = 1;
                         SOC = 100;                                                          //Hierdie is toets fase om SOC by 100 te kry!
                     }
+                    */
 
                     if(ChargerCurrent > 0)                                               //flagCharged == 1
                         Charging_animation = 1;
                     else
                         Charging_animation = 0;                                             //0 - not plugged in, 1 -plugged in
 
-                    CANTransmit(0x618, 0, ChgCalculator(52.5, Current_max), 8, 0);             //charging started
+                    CANTransmit(0x618, 0, ChgCalculator(56, Current_max), 8, 0);             //charging started
                 }
             }
             else                                                                            //BMS flag high. Stop charging and disconnect blah blah
             {
                 if(delay > 0)                                                              //sit miskien check in om met die charger Vbat te meet
                 {
-                    CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                            //disconnect charger
+                    CANTransmit(0x618,1,ChgCalculator(56, 0),8, 0);                            //disconnect charger
                     delay--;
                 }
                 else if(delay == 0)
                 {                                                                             //turn off contactor
-                    CANTransmit(0x618,1,ChgCalculator(52.5, 0),8, 0);                            //disconnect charger
+                    CANTransmit(0x618,1,ChgCalculator(56, 0),8, 0);                            //disconnect charger
                     CHG_Contactor_Off();                                                        //turn off contactor
                     Charging_animation = 0;
                 }
