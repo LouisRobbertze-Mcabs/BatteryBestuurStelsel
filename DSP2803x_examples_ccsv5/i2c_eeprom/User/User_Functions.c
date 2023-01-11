@@ -547,12 +547,12 @@ void Read_Temperatures(void)
 void Process_Temperatures(void)
 {
     if(Temperature_high > 55 || Temperature_low < -10 || Temperatures_CS > 70)
-        flagTemp_Discharge = 1;
+        flagTemp_Discharge = 0;     //bypassed temperatures, set to 0
     else
         flagTemp_Discharge = 0;
 
     if(Temperature_high > 50 || Temperature_low < 0)
-        flagTemp_Charge = 1;
+        flagTemp_Charge = 0;    //bypassed temperatures, set to 0
     else
         flagTemp_Charge = 0;
 }
